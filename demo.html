@@ -96,13 +96,14 @@
 <div id="portal"></div>
 <div id="warpHud"><div class="wl">TRAVELLING INTO YOUR FUTURE</div><div id="wDate">Today</div><div id="wDay">DAY 0</div><div class="wbar"><i id="wFill"></i></div></div>
 <div id="flash"></div>
+<div id="blackout"></div>
 
 <!-- ================= STORY UI ================= -->
 <div id="story">
   <header class="sbar">
     <a class="logo" href="/demo">Booked Jobs <b>Co.</b></a>
     <div class="dots" id="dots"></div>
-    <div class="sright"><button class="icon" id="mute" aria-label="Sound">♪</button><a class="pill-btn book sm" href="#" target="_blank" rel="noopener">Book a call</a></div>
+    <div class="sright"><button class="icon" id="mute" aria-label="Sound">♪</button><a class="pill-btn book sm" href="#" target="_blank" rel="noopener">Book a call</a><button class="icon" id="exit" aria-label="Exit demo" title="Exit">✕</button></div>
   </header>
   <div class="caption" id="caption">
     <div class="cmeta" id="cMeta"></div>
@@ -114,6 +115,8 @@
     </div>
   </div>
   <div id="prompt"></div>
+  <div id="timer"><small>SINCE SARAH HIT SEND</small><b id="tClock">0:00</b></div>
+  <div id="sms"></div>
   <div id="hint">Drag to look around</div>
 </div>
 
@@ -126,8 +129,9 @@
   <div class="ptip" id="pTip">Tap the ad, like Sarah would.</div>
 </div>
 
+<div id="panel"></div>
 <div id="endcard"></div>
-<div id="loader"><div class="lspin"></div><div>Building your town…</div></div>
-<script type="module" src="/x3d/app.bundle.js?v=1"></script>
+<div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
+<script type="module" src="/x3d/app.bundle.js?v=4"></script>
 </body>
 </html>
