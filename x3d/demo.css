@@ -222,3 +222,11 @@ body.in-show #veil{opacity:0}
 .fin{text-align:center}
 .fin h2{font-size:clamp(28px,4vw,44px);margin:6px 0 8px}
 @media(max-width:760px){.kp{grid-template-columns:1fr 1fr}.roi{grid-template-columns:1fr}.cal{grid-template-columns:44px repeat(5,1fr);gap:4px}.slot{height:44px;font-size:10px}#sms{right:12px;top:118px}#timer{top:58px}#timer b{font-size:26px}#panel{padding:60px 10px 140px}.glass{padding:16px}}
+#dip{position:fixed;inset:0;background:#000;z-index:11;opacity:0;pointer-events:none;transition:opacity .3s ease}
+#dip.on{opacity:1}
+.anyonly{display:none!important}
+body[data-mode="any"] .anyonly{display:flex!important}
+#who select{width:230px;font:inherit;font-size:15px;color:#fff;background:rgba(6,17,13,.75);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:12px 14px;outline:none}
+#who select option{color:#000}
+body[data-mode="any"] #who{max-width:980px}
+@media(max-width:560px){#who select{width:calc(50vw - 26px)}}
