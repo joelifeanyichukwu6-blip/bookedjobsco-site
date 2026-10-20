@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Your Next 30 Days | Booked Jobs Co.</title>
+<meta name="description" content="Step into the future and watch your 30-day septic pilot run in 3D, from the first ad to booked jobs on your calendar.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b1a14;--glass:rgba(9,24,19,.78);--line:rgba(255,255,255,.12);--brand:#2f8f6a;--brand2:#45b386;--orange:#f39a3d;--txt:#eef6f1;--mute:#a9c2b6}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#02030a;color:var(--txt);font-family:Inter,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+canvas#c.drag{cursor:grabbing}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5;transition:opacity .8s,transform .8s}
+.screen.gone{opacity:0;transform:scale(1.06);pointer-events:none}
+.intro-card{max-width:640px;text-align:center}
+.pill{display:inline-flex;gap:8px;align-items:center;font-size:12px;letter-spacing:.04em;color:#cfe9dd;border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:7px 14px;background:rgba(255,255,255,.04);backdrop-filter:blur(6px)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--brand2);box-shadow:0 0 10px var(--brand2);animation:bl 1.6s infinite}
+@keyframes bl{50%{opacity:.3}}
+h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(34px,6.4vw,64px);line-height:1.04;margin:22px 0 16px;letter-spacing:-.01em}
+h1 em{font-style:italic;background:linear-gradient(90deg,#ffd29a,var(--orange) 40%,#ff7a59);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro-card p{color:#c4d6cd;font-size:clamp(15px,2vw,17px);line-height:1.6;max-width:540px;margin:0 auto}
+form#f{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:28px auto 10px;max-width:620px;text-align:left}
+form#f label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);display:flex;flex-direction:column;gap:6px}
+form#f input{font:inherit;font-size:15px;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:13px 14px;outline:none;transition:border .2s,background .2s}
+form#f input:focus{border-color:var(--brand2);background:rgba(69,179,134,.08)}
+.go{align-self:end;border:0;border-radius:12px;padding:14px 20px;font-weight:700;color:#1d1206;background:linear-gradient(135deg,#ffc27a,var(--orange));box-shadow:0 10px 40px rgba(243,154,61,.35);white-space:nowrap;transition:transform .15s,box-shadow .2s}
+.go:hover{transform:translateY(-2px);box-shadow:0 14px 50px rgba(243,154,61,.5)}
+.tiny{font-size:12px;color:#86a396;margin-top:10px}
+.tiny a{color:#b9d8ca}
+@media(max-width:620px){form#f{grid-template-columns:1fr}.go{width:100%}}
+#warpHud{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:6;opacity:0;transition:opacity .5s}
+#warpHud.on{opacity:1}
+.wl{font-size:12px;letter-spacing:.38em;color:#9fd9c1;margin-bottom:14px}
+#wDate{font-family:Fraunces,serif;font-size:clamp(40px,8vw,84px);font-weight:700;text-shadow:0 0 40px rgba(120,200,255,.6)}
+#wDay{margin-top:8px;font-size:14px;letter-spacing:.3em;color:#ffd29a}
+.wbar{margin-top:22px;width:min(380px,70vw);height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.wbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand2),#9ad7ff,var(--orange))}
+#flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:7;transition:opacity .9s ease}
+#ui{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .8s}
+#ui.on{opacity:1}
+#ui > *{pointer-events:auto}
+.top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(180deg,rgba(6,16,12,.55),transparent)}
+.brand{font-weight:800;font-size:16px;color:#fff;white-space:nowrap;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.brand b{color:var(--orange)}
+.chips{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;justify-content:center}
+.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid rgba(255,255,255,.22);background:rgba(8,22,17,.55);color:#dbece4;border-radius:99px;padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap;backdrop-filter:blur(8px);transition:all .2s}
+.chip.on{background:#fff;color:#0b1a14;border-color:#fff}
+.chip.done{border-color:rgba(69,179,134,.7)}
+.right{display:flex;gap:8px;align-items:center}
+.icon{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(8,22,17,.55);color:#fff;backdrop-filter:blur(8px);font-size:14px}
+.cta{background:linear-gradient(135deg,#ffc27a,var(--orange));color:#1d1206;text-decoration:none;font-weight:700;font-size:13px;padding:10px 14px;border-radius:99px;white-space:nowrap;box-shadow:0 6px 24px rgba(243,154,61,.35)}
+#card{position:absolute;left:22px;bottom:22px;width:min(410px,calc(100vw - 44px));max-height:calc(100vh - 110px);overflow:auto;background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:22px 22px 16px;backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);box-shadow:0 30px 80px rgba(0,0,0,.35);transition:transform .5s,opacity .5s}
+#card.swap{transform:translateY(14px);opacity:0}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#ffd29a;background:rgba(243,154,61,.14);border:1px solid rgba(243,154,61,.35);border-radius:99px;padding:5px 10px}
+#card h2{font-family:Fraunces,serif;font-size:27px;line-height:1.12;margin:12px 0 8px}
+#card p{color:#c9dbd2;font-size:14.5px;line-height:1.6}
+#cWidget{margin-top:14px}
+.nav{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.nav button{flex:0 0 auto;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:12px;padding:10px 14px;font-weight:600;font-size:13px;transition:background .2s}
+.nav button:hover{background:rgba(255,255,255,.12)}
+.nav #next{margin-left:auto;background:var(--brand);border-color:var(--brand)}
+.nav #tour.on{background:rgba(243,154,61,.2);border-color:var(--orange)}
+#hint{position:absolute;right:22px;bottom:22px;font-size:12px;color:#fff;background:rgba(8,22,17,.5);border:1px solid var(--line);padding:8px 12px;border-radius:99px;backdrop-filter:blur(8px);transition:opacity 1s}
+#toast{position:absolute;left:50%;top:76px;transform:translate(-50%,-20px);opacity:0;background:#fff;color:#0b1a14;font-weight:700;font-size:14px;padding:10px 16px;border-radius:99px;box-shadow:0 12px 40px rgba(0,0,0,.25);transition:all .4s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+/* widgets */
+.btn-w{border:0;border-radius:12px;padding:11px 14px;font-weight:700;font-size:14px;background:var(--brand);color:#fff}
+.btn-w.o{background:linear-gradient(135deg,#ffc27a,var(--orange));color:#1d1206}
+.btn-w.g{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff}
+.checks{list-style:none;display:grid;gap:7px}
+.checks li{display:flex;gap:10px;align-items:center;font-size:14px;color:#9fb5ab;transition:color .3s}
+.checks li b{width:22px;height:22px;flex:0 0 22px;border-radius:50%;border:2px solid rgba(255,255,255,.25);display:grid;place-items:center;font-size:12px;transition:all .3s}
+.checks li.ok{color:#fff}.checks li.ok b{background:var(--brand2);border-color:var(--brand2);color:#062016}
+.ad{background:#fff;color:#1c1e21;border-radius:14px;overflow:hidden;font-size:13px}
+.ad .h{display:flex;gap:8px;align-items:center;padding:10px 12px}
+.ad .av{width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}
+.ad .sp{font-size:11px;color:#65676b}
+.ad .t{padding:0 12px 10px;line-height:1.45}
+.ad .f{display:flex;justify-content:space-between;align-items:center;background:#f0f2f5;padding:10px 12px;gap:8px}
+.ad .f button{border:0;background:#e4e6eb;border-radius:8px;padding:8px 12px;font-weight:700;font-size:13px}
+.ad .f button.pulse{animation:pu 1.4s infinite}
+@keyframes pu{50%{box-shadow:0 0 0 6px rgba(47,143,106,.25);background:#d7efe4}}
+.opts{display:grid;gap:6px;padding:10px 12px}
+.opts button{text-align:left;border:1px solid #dadde1;background:#fff;border-radius:10px;padding:9px 11px;font-size:13px}
+.opts button:hover{border-color:var(--brand);background:#f1faf6}
+.lead{background:#fff;color:#0b1a14;border-radius:14px;padding:14px;display:grid;gap:4px;font-size:13px;box-shadow:0 0 0 3px rgba(243,154,61,.35)}
+.lead .k{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--brand)}
+.lead .n{font-weight:800;font-size:16px}
+.sw{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sw .clock{font-family:'Fraunces',serif;font-size:34px;font-weight:700;color:#fff;min-width:96px}
+.sw .lab{font-size:12px;color:var(--mute)}
+.thread{display:grid;gap:6px}
+.bub{max-width:88%;padding:9px 12px;border-radius:16px;font-size:13px;line-height:1.4;animation:bi .35s ease}
+.bub.me{background:var(--brand);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.bub.them{background:#fff;color:#111;justify-self:start;border-bottom-left-radius:4px}
+.bub.sys{justify-self:center;background:rgba(243,154,61,.18);color:#ffd29a;font-weight:700;font-size:12px}
+@keyframes bi{from{opacity:0;transform:translateY(6px) scale(.97)}}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slots button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#fff;border-radius:12px;padding:12px 6px;font-weight:700;font-size:13px;line-height:1.3}
+.slots button small{display:block;font-weight:500;color:var(--mute);font-size:11px}
+.slots button:hover,.slots button.on{background:var(--brand);border-color:var(--brand2)}
+.slots button.on small{color:#d9f3e8}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:12px}
+.kpi b{display:block;font-family:Fraunces,serif;font-size:26px}
+.kpi span{font-size:12px;color:var(--mute)}
+.ex{font-size:11px;color:#86a396;margin-top:8px}
+.roi label{display:block;font-size:12px;color:var(--mute);margin:8px 0 4px}
+.roi label b{float:right;color:#fff}
+.roi input[type=range]{width:100%;accent-color:var(--orange)}
+.roi .out{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.roi .out div{background:rgba(255,255,255,.06);border-radius:12px;padding:9px;text-align:center}
+.roi .out b{display:block;font-size:19px;font-family:Fraunces,serif}
+.roi .out span{font-size:11px;color:var(--mute)}
+.ctas{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ctas a{text-decoration:none;display:inline-block}
+#nogl{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;text-align:center;padding:24px;background:#071510}
+#nogl.on{display:flex}
+@media(max-width:760px){
+  .top{padding:10px 12px;gap:8px;flex-wrap:wrap}
+  .chips{order:3;flex-basis:100%;justify-content:flex-start}
+  .cta{font-size:12px;padding:9px 12px}
+  #card{left:10px;right:10px;bottom:10px;width:auto;max-height:50vh;padding:16px 16px 12px;border-radius:18px}
+  #card h2{font-size:22px}
+  #card p{font-size:14px}
+  #hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation:none!important}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="intro" class="screen">
+  <div class="intro-card">
+    <div class="pill"><i></i> Interactive 3D preview · about 3 minutes</div>
+    <h1>See your next 30 days<br><em>before they happen.</em></h1>
+    <p>Type your company name and town, then step into the future. Watch the 30-day septic pilot run in your area, from the first ad your neighbors see to booked jobs on your calendar.</p>
+    <form id="f" autocomplete="off">
+      <label>Your company<input id="iCo" maxlength="28" placeholder="e.g. Laney Septic"></label>
+      <label>Main town<input id="iTown" maxlength="28" placeholder="e.g. Monroe, NC"></label>
+      <button class="go" type="submit">Take me to Day 30 →</button>
+    </form>
+    <div class="tiny">Nothing you type is saved or sent. Leave it blank to use an example company.</div>
+    <div class="tiny">Sound on for the full ride · <a href="/pilot">prefer the simple 2D version?</a></div>
+  </div>
+</div>
+
+<div id="warpHud"><div class="wl">TRAVELLING INTO YOUR FUTURE</div><div id="wDate">Today</div><div id="wDay">DAY 0</div><div class="wbar"><i id="wFill"></i></div></div>
+<div id="flash"></div>
+
+<div id="ui">
+  <header class="top">
+    <div class="brand">Booked Jobs <b>Co.</b></div>
+    <nav class="chips" id="chips"></nav>
+    <div class="right"><button class="icon" id="mute" title="Sound on/off" aria-label="Sound on or off">♪</button><a class="cta book" href="#" target="_blank" rel="noopener">Book a 15-min call</a></div>
+  </header>
+  <section id="card" aria-live="polite">
+    <span class="tag" id="cTag"></span>
+    <h2 id="cTitle"></h2>
+    <p id="cText"></p>
+    <div id="cWidget"></div>
+    <div class="nav"><button id="prev" aria-label="Back">←</button><button id="tour">▶ Auto tour</button><button id="next">Next →</button></div>
+  </section>
+  <div id="hint">Drag to look around · ← → keys work too</div>
+  <div id="toast"></div>
+</div>
+
+<div id="nogl"><div><h1 style="font-size:34px">Your browser can't show 3D.</h1><p style="color:#c4d6cd;margin:10px 0 20px">No problem. The same tour works in 2D.</p><a class="go" style="text-decoration:none;display:inline-block" href="/pilot">Open the 2D demo →</a></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---------- config ---------- */
+const CAL_URL='https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat';
+document.querySelectorAll('a.book').forEach(a=>a.href=CAL_URL);
+const $=s=>document.querySelector(s);
+const qs=new URLSearchParams(location.search);
+let CO=(qs.get('co')||'').trim(), TOWN=(qs.get('town')||'').trim();
+if(CO) $('#iCo').value=CO; if(TOWN) $('#iTown').value=TOWN;
+const co=()=>CO||'Laney Septic', town=()=>TOWN||'Monroe, NC', townShort=()=>town().split(',')[0];
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const fmt=d=>d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+const TODAY=new Date(), START=addDays(TODAY,7), D30=addDays(START,30);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+if(!window.THREE){ $('#nogl').classList.add('on'); return; }
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true,powerPreference:'high-performance'}); }
+catch(e){ $('#nogl').classList.add('on'); return; }
+const MOBILE=matchMedia('(max-width:760px)').matches;
+renderer.setPixelRatio(Math.min(devicePixelRatio,MOBILE?1.75:2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const camera=new THREE.PerspectiveCamera(45,1,.1,3000);
+
+/* ---------- sound ---------- */
+let AC=null, muted=false;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){} } if(AC&&AC.state==='suspended')AC.resume(); return AC; }
+function whoosh(dur){ const a=ac(); if(!a||muted)return; const t=a.currentTime, n=Math.floor(a.sampleRate*dur), b=a.createBuffer(1,n,a.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const s=a.createBufferSource(); s.buffer=b; const f=a.createBiquadFilter(); f.type='bandpass'; f.Q.value=.9;
+  f.frequency.setValueAtTime(180,t); f.frequency.exponentialRampToValueAtTime(2600,t+dur*.92);
+  const g=a.createGain(); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.32,t+dur*.88); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(f); f.connect(g); g.connect(a.destination); s.start(t); s.stop(t+dur);
+  const o=a.createOscillator(), og=a.createGain(); o.type='sawtooth'; o.frequency.setValueAtTime(55,t); o.frequency.exponentialRampToValueAtTime(220,t+dur);
+  const lp=a.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=600;
+  og.gain.setValueAtTime(.0001,t); og.gain.exponentialRampToValueAtTime(.08,t+dur*.8); og.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(lp); lp.connect(og); og.connect(a.destination); o.start(t); o.stop(t+dur);
+}
+function tone(freq,dur,type,vol,delay){ const a=ac(); if(!a||muted)return; const t=a.currentTime+(delay||0); const o=a.createOscillator(), g=a.createGain();
+  o.type=type||'sine'; o.frequency.setValueAtTime(freq,t); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol||.12,t+.015); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+.05); }
+const ping=()=>{tone(880,.25);tone(1320,.35,'sine',.08,.09)};
+const pop=()=>tone(520,.12,'triangle',.08);
+const chime=()=>{[523,659,784,1047].forEach((f,i)=>tone(f,.5,'sine',.09,i*.09))};
+const ring=()=>{for(let i=0;i<3;i++){tone(1180,.12,'square',.035,i*.32);tone(1480,.12,'square',.035,i*.32+.12)}};
+$('#mute').onclick=()=>{muted=!muted; $('#mute').textContent=muted?'×':'♪'; $('#mute').style.opacity=muted?.6:1};
+
+/* ---------- canvas texture helpers ---------- */
+function canvasTex(w,h,draw){ const c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d'); draw(x,w,h); const t=new THREE.CanvasTexture(c); t.anisotropy=4; return t; }
+function rr(x,X,Y,W,H,R){ x.beginPath(); x.moveTo(X+R,Y); x.arcTo(X+W,Y,X+W,Y+H,R); x.arcTo(X+W,Y+H,X,Y+H,R); x.arcTo(X,Y+H,X,Y,R); x.arcTo(X,Y,X+W,Y,R); x.closePath(); }
+function wrap(x,text,X,Y,maxW,lh){ const words=text.split(' '); let line=''; for(const w of words){ const t=line?line+' '+w:w; if(x.measureText(t).width>maxW&&line){ x.fillText(line,X,Y); line=w; Y+=lh; } else line=t; } x.fillText(line,X,Y); return Y; }
+const F='Inter, Helvetica, Arial, sans-serif';
+function labelSprite(lines,o){ o=Object.assign({bg:'#ffffff',fg:'#0b1a14',accent:'#2f8f6a',h:1.6,w:null},o||{});
+  const pad=34, fs=[46,34,30];
+  const meas=document.createElement('canvas').getContext('2d'); let W=0;
+  lines.forEach((l,i)=>{ meas.font=`${i?500:800} ${fs[Math.min(i,2)]}px ${F}`; W=Math.max(W,meas.measureText(l).width); });
+  W=Math.ceil(W+pad*2+(o.dot?40:0)); const H=Math.ceil(pad*1.6+lines.reduce((s,l,i)=>s+fs[Math.min(i,2)]*1.3,0));
+  const tex=canvasTex(W,H+16,(x)=>{ x.shadowColor='rgba(0,0,0,.25)'; x.shadowBlur=14; x.shadowOffsetY=4; x.fillStyle=o.bg; rr(x,6,4,W-12,H-4,Math.min(40,H/2.4)); x.fill(); x.shadowColor='transparent';
+    let y=pad*0.8; lines.forEach((l,i)=>{ const f=fs[Math.min(i,2)]; x.font=`${i?500:800} ${f}px ${F}`; x.fillStyle=i?(o.sub||'#4a5d55'):o.fg; x.textBaseline='top';
+      let X=pad; if(o.dot&&i===0){ x.fillStyle=o.accent; x.beginPath(); x.arc(pad+12,y+f*.55,12,0,7); x.fill(); X+=40; x.fillStyle=o.fg; }
+      x.fillText(l,X,y); y+=f*1.3; }); });
+  const m=new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}); const s=new THREE.Sprite(m); const k=o.h/(H+16); s.userData.base=new THREE.Vector3((W)*k,o.h,1); s.scale.set(.001,.001,1); s.renderOrder=10; s.userData.on=0; s.userData.cur=0; return s; }
+function checkSprite(){ const tex=canvasTex(128,128,(x)=>{ x.fillStyle='#2fbf7f'; x.shadowColor='rgba(0,0,0,.3)'; x.shadowBlur=8; x.beginPath(); x.arc(64,62,52,0,7); x.fill(); x.shadowColor='transparent'; x.strokeStyle='#fff'; x.lineWidth=13; x.lineCap='round'; x.lineJoin='round'; x.beginPath(); x.moveTo(38,64); x.lineTo(56,82); x.lineTo(90,44); x.stroke(); });
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true})); s.userData.base=new THREE.Vector3(2,2,1); s.scale.set(.001,.001,1); s.renderOrder=9; s.userData.on=0; s.userData.cur=0; return s; }
+function glowTex(c1){ return canvasTex(128,128,(x)=>{ const g=x.createRadialGradient(64,64,0,64,64,64); g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(.25,c1); g.addColorStop(1,'rgba(0,0,0,0)'); x.fillStyle=g; x.fillRect(0,0,128,128); }); }
+
+/* ---------- animated visibility registry ---------- */
+const poppers=[];
+function reg(o){ poppers.push(o); return o; }
+function show(o,on){ if(o) o.userData.on=on?1:0; }
+function updatePoppers(dt){ for(const o of poppers){ const u=o.userData; const k=1-Math.exp(-dt*(u.on?9:12)); u.cur+= (u.on-u.cur)*k; const s=Math.max(.0001,u.cur<.001?0.0001:u.cur*(u.on?1+Math.sin(Math.min(1,u.cur)*Math.PI)*0.12:1));
+    o.scale.set(u.base.x*s,u.base.y*s,u.base.z*s); o.visible=u.cur>.002; } }
+
+/* =========================================================
+   WARP SCENE (intro background + time travel)
+   ========================================================= */
+const warpScene=new THREE.Scene(); warpScene.background=new THREE.Color(0x02030a);
+const warpCam=new THREE.PerspectiveCamera(70,1,.1,2000);
+const NST=MOBILE?1000:1700, DEPTH=900;
+const stars=[]; const sPos=new Float32Array(NST*6), sCol=new Float32Array(NST*6), hPos=new Float32Array(NST*3), hCol=new Float32Array(NST*3);
+const palette=[[.75,.85,1],[1,1,1],[.55,1,.85],[1,.8,.55],[.8,.7,1]];
+function resetStar(s,z){ const a=Math.random()*Math.PI*2, r=2.5+Math.pow(Math.random(),.6)*70; s.x=Math.cos(a)*r; s.y=Math.sin(a)*r; s.z=z; s.c=palette[(Math.random()*palette.length)|0]; }
+for(let i=0;i<NST;i++){ const s={}; resetStar(s,-Math.random()*DEPTH); stars.push(s); }
+const sGeo=new THREE.BufferGeometry(); sGeo.setAttribute('position',new THREE.BufferAttribute(sPos,3)); sGeo.setAttribute('color',new THREE.BufferAttribute(sCol,3));
+const sLines=new THREE.LineSegments(sGeo,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); warpScene.add(sLines);
+const hGeo=new THREE.BufferGeometry(); hGeo.setAttribute('position',new THREE.BufferAttribute(hPos,3)); hGeo.setAttribute('color',new THREE.BufferAttribute(hCol,3));
+const hPts=new THREE.Points(hGeo,new THREE.PointsMaterial({size:1.6,map:glowTex('rgba(160,210,255,.6)'),vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); warpScene.add(hPts);
+// nebula glow at center
+const neb=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex('rgba(90,140,255,.35)'),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:.5})); neb.position.set(0,0,-700); neb.scale.set(500,500,1); warpScene.add(neb);
+let warpSpeed=14;
+function updateStars(dt){ const len=clamp(warpSpeed*.055,.4,140);
+  for(let i=0;i<NST;i++){ const s=stars[i]; s.z+=warpSpeed*dt; if(s.z>2) resetStar(s,s.z-DEPTH);
+    const j=i*6; sPos[j]=s.x; sPos[j+1]=s.y; sPos[j+2]=s.z; sPos[j+3]=s.x; sPos[j+4]=s.y; sPos[j+5]=s.z-len;
+    const fade=clamp((s.z+DEPTH)/DEPTH,0,1); sCol[j]=s.c[0]*fade; sCol[j+1]=s.c[1]*fade; sCol[j+2]=s.c[2]*fade; sCol[j+3]=0; sCol[j+4]=0; sCol[j+5]=0;
+    hPos[i*3]=s.x; hPos[i*3+1]=s.y; hPos[i*3+2]=s.z; hCol[i*3]=s.c[0]*fade; hCol[i*3+1]=s.c[1]*fade; hCol[i*3+2]=s.c[2]*fade; }
+  sGeo.attributes.position.needsUpdate=true; sGeo.attributes.color.needsUpdate=true; hGeo.attributes.position.needsUpdate=true; hGeo.attributes.color.needsUpdate=true; }
+// date markers that fly past during the warp
+const dateSprites=[];
+function buildDateSprites(){ for(let i=1;i<=30;i++){ const d=addDays(START,i); const sp=labelSprite([fmt(d).toUpperCase(),'Day '+i],{bg:'rgba(10,30,60,.55)',fg:'#d8ecff',sub:'#ffd29a',h:3.2}); sp.material.depthTest=true;
+    const a=(i*2.399)%(Math.PI*2), r=7+((i*7)%5); sp.userData.ang=a; sp.userData.r=r; sp.userData.i=i; sp.position.set(Math.cos(a)*r,Math.sin(a)*r*.7,-9999); sp.scale.copy(sp.userData.base); warpScene.add(sp); dateSprites.push(sp); } }
+
+/* =========================================================
+   WORLD SCENE (toy diorama of the client's town)
+   ========================================================= */
+const scene=new THREE.Scene();
+scene.fog=new THREE.Fog(0xd7eafc,95,260);
+const sky=new THREE.Mesh(new THREE.SphereGeometry(900,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,
+  uniforms:{top:{value:new THREE.Color(0x4f9ff0)},mid:{value:new THREE.Color(0xa9d6ff)},bot:{value:new THREE.Color(0xe3f1ff)}},
+  vertexShader:'varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform vec3 top;uniform vec3 mid;uniform vec3 bot;varying vec3 vP;void main(){float h=vP.y;vec3 c=h>0.?mix(mid,top,smoothstep(0.,.6,h)):mix(mid,bot,smoothstep(0.,-.35,h));gl_FragColor=vec4(c,1.);}'}));
+scene.add(sky);
+scene.add(new THREE.HemisphereLight(0xffffff,0x7aa36a,.75));
+const sun=new THREE.DirectionalLight(0xfff1dc,.95); sun.position.set(30,55,26); sun.castShadow=true;
+sun.shadow.mapSize.set(MOBILE?1024:2048,MOBILE?1024:2048); Object.assign(sun.shadow.camera,{left:-34,right:34,top:34,bottom:-34,near:1,far:150}); sun.shadow.bias=-.0006; scene.add(sun);
+const amb=new THREE.AmbientLight(0xffffff,.18); scene.add(amb);
+const world=new THREE.Group(); scene.add(world);
+const std=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.78,metalness:0,flatShading:true},o||{}));
+function M(geo,mat,x,y,z,parent,noShadow){ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); if(!noShadow){m.castShadow=true;m.receiveShadow=true;} (parent||world).add(m); return m; }
+
+const houses=[]; let hero, office, truck, truckCurve, billboard, rings=[], holoCards=[], board, boardTiles=[], bookedTile, chart, chartBars=[], beam, trail=[], notif, smsSprite, callSprite, heroHand, bookedLabel, officeRing, confetti, clouds=[], chartLabel, adTex;
+const HC=[0xf6d8a8,0xf3b6a0,0xbfe0f2,0xfaf3e0,0xd7e8c5,0xf2c9d6,0xe9d6f5,0xffe3a3];
+const RC=[0xc2554a,0x4d6c8f,0x6b4f3a,0x3f7d5a,0x8a4b6a];
+const BOOKED=[0,2,4,6,7,9,11,13,15]; // house indexes that get booked by day 30 (9 booked)
+
+function buildWorld(){
+  // island
+  M(new THREE.CylinderGeometry(26,26,1,72),std(0x86cf6e),0,-.5,0);
+  M(new THREE.CylinderGeometry(26,19,5,72,1),std(0xb07c4f),0,-3.5,0,null,true);
+  M(new THREE.CylinderGeometry(19,8,7,40,1),std(0x8a5a36),0,-9.5,0,null,true);
+  M(new THREE.ConeGeometry(8,8,24),std(0x6d4429),0,-17,0,null,true).rotation.x=Math.PI;
+  // studs (toy brick feel)
+  const sg=new THREE.CylinderGeometry(.27,.27,.16,10), sm=std(0x93d77b,{flatShading:false}), pts=[];
+  for(let x=-25;x<=25;x+=1.7) for(let z=-25;z<=25;z+=1.7){ if(x*x+z*z>24.6*24.6) continue; if(Math.abs(z)<2.6) continue; pts.push([x,z]); }
+  const studs=new THREE.InstancedMesh(sg,sm,pts.length); const dm=new THREE.Object3D();
+  pts.forEach((p,i)=>{ dm.position.set(p[0],.08,p[1]); dm.updateMatrix(); studs.setMatrixAt(i,dm.matrix); }); studs.receiveShadow=true; world.add(studs);
+  // road
+  M(new THREE.BoxGeometry(51.2,.14,4.6),std(0x59606e),0,.07,0);
+  for(let x=-23;x<=23;x+=3.2) M(new THREE.BoxGeometry(1.6,.16,.22),std(0xf7f1df),x,.08,0,null,true);
+  // houses
+  const spots=[[-19,-6.6,0],[-12,-6.6,0],[-5,-6.6,0],[2,-6.6,0],[-15,-15.2,0],[-7,-15.2,0],[1,-15.2,0],
+               [-19,6.6,1],[-12,6.6,1],[-5,6.6,1],[2,6.6,1],[9,6.6,1],[16,6.6,1],[-10,15.2,1],[-2,15.2,1],[6,15.2,1]];
+  spots.forEach((s,i)=>houses.push(makeHouse(s[0],s[1],s[2]?Math.PI:0,i)));
+  hero=houses[8];
+  // hero yard puddle (the problem)
+  const pud=M(new THREE.CylinderGeometry(1.1,1.1,.05,20),new THREE.MeshStandardMaterial({color:0x5b8fb8,roughness:.15,metalness:.1,transparent:true,opacity:.85}),-10.2,.05,3.4,null,true); pud.scale.z=.6;
+  // office
+  office=new THREE.Group(); office.position.set(14,0,-9.5); world.add(office);
+  M(new THREE.BoxGeometry(9,4.6,6.2),std(0xf4efe6),0,2.3,0,office);
+  M(new THREE.BoxGeometry(9.4,.4,6.6),std(0x3b4a44),0,4.8,0,office);
+  M(new THREE.BoxGeometry(3.2,2.8,.12),std(0xb9c2c9),-2,1.4,3.12,office);
+  for(let i=0;i<5;i++) M(new THREE.BoxGeometry(3.1,.06,.14),std(0x9aa4ac),-2,.4+i*.55,3.16,office,true);
+  M(new THREE.BoxGeometry(1,2,.12),std(0x2f8f6a),1.6,1,3.12,office);
+  const ow=std(0xfff6d5,{emissive:0x000000}); office.userData.win=ow;
+  M(new THREE.BoxGeometry(1.4,1,.1),ow,3.3,2.6,3.12,office); M(new THREE.BoxGeometry(1.4,1,.1),ow,1.6,3.3,3.12,office);
+  const signTex=canvasTex(1024,200,(x,w,h)=>{ x.fillStyle='#2f8f6a'; rr(x,0,0,w,h,28); x.fill(); x.fillStyle='#fff'; x.textAlign='center'; x.textBaseline='middle'; let fs=96; x.font=`800 ${fs}px ${F}`; while(x.measureText(co().toUpperCase()).width>w-80&&fs>40){fs-=4;x.font=`800 ${fs}px ${F}`;} x.fillText(co().toUpperCase(),w/2,h/2+4); });
+  const sign=M(new THREE.BoxGeometry(8,1.56,.25),[std(0x2f8f6a),std(0x2f8f6a),std(0x2f8f6a),std(0x2f8f6a),new THREE.MeshStandardMaterial({map:signTex,roughness:.6}),std(0x2f8f6a)],0,6,2.6,office);
+  M(new THREE.BoxGeometry(.2,1.2,.2),std(0x3b4a44),-3,5.2,2.6,office); M(new THREE.BoxGeometry(.2,1.2,.2),std(0x3b4a44),3,5.2,2.6,office);
+  M(new THREE.BoxGeometry(6,.1,3.2),std(0xc9c6bd),-.5,.06,4.7,office,true);
+  // truck
+  truck=makeTruck(); world.add(truck);
+  truckCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(11.8,0,-5.1),new THREE.Vector3(11.4,0,-2.4),new THREE.Vector3(9,0,-1),new THREE.Vector3(2,0,-1.05),new THREE.Vector3(-8,0,-1.05),new THREE.Vector3(-11,0,-.2),new THREE.Vector3(-12.6,0,2.4),new THREE.Vector3(-13.6,0,3.6)]);
+  placeTruck(0);
+  // trees
+  [[8,-15],[15,-17.5],[-21,-13],[21,9.5],[-22.5,11],[12,16],[19.5,15.5],[-1,-21.5],[10,21],[-16,18.5],[22,-6],[-23.5,-4],[7,-21],[-6.5,21.5]].forEach((p,i)=>tree(p[0],p[1],i));
+  // fences / bushes near hero
+  for(let i=0;i<5;i++) M(new THREE.IcosahedronGeometry(.55,0),std(0x4fa35a),-14.6+i*1.3,.45,9.9);
+  // clouds
+  for(let i=0;i<14;i++){ const g=new THREE.Group(); const a=i/14*Math.PI*2+Math.random()*.3, r=36+Math.random()*30; g.position.set(Math.cos(a)*r,-6+Math.random()*26,Math.sin(a)*r);
+    for(let k=0;k<4;k++) M(new THREE.IcosahedronGeometry(2+Math.random()*1.8,1),new THREE.MeshStandardMaterial({color:0xffffff,roughness:1,flatShading:true,transparent:true,opacity:.95}),k*2.4-3.6,Math.random()*1.2,Math.random()*1.5,g,true);
+    g.userData.sp=.3+Math.random()*.5; g.userData.a=a; g.userData.r=r; world.add(g); clouds.push(g); }
+  // billboard phone (the ad)
+  billboard=new THREE.Group(); billboard.position.set(0,9.5,-3); world.add(billboard);
+  M(new THREE.BoxGeometry(5.2,10.2,.5),std(0x16191d,{flatShading:false,roughness:.35}),0,0,0,billboard);
+  adTex=makeAdTexture(); M(new THREE.PlaneGeometry(4.8,9.7),new THREE.MeshBasicMaterial({map:adTex}),0,0,.26,billboard,true);
+  const bglow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex('rgba(120,190,255,.35)'),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); bglow.scale.set(20,20,1); bglow.position.z=-1; billboard.add(bglow);
+  billboard.userData.base=new THREE.Vector3(1,1,1); billboard.userData.on=0; billboard.userData.cur=0; reg(billboard);
+  for(let i=0;i<3;i++){ const r=new THREE.Mesh(new THREE.RingGeometry(.92,1,64),new THREE.MeshBasicMaterial({color:0xf39a3d,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false})); r.rotation.x=-Math.PI/2; r.position.set(0,.3,-1.5); r.userData.ph=i/3; world.add(r); rings.push(r); }
+  // holo cards (what we build)
+  const cards=[['Facebook ad','Shows only in '+townShort(),'ad'],['Lead form','3 taps, 20 seconds','form'],['Instant text','Sent in under 60 sec','sms'],['Call script','Real call in 5 min','call'],['Your calendar','Visits book themselves','cal']];
+  cards.forEach((c,i)=>{ const t=makeHoloTex(i+1,c[0],c[1],c[2]); const m=new THREE.Mesh(new THREE.PlaneGeometry(5,3.46),new THREE.MeshBasicMaterial({map:t,transparent:true,side:THREE.DoubleSide,depthWrite:false}));
+    const a=(i-2)*.36; m.userData.home=new THREE.Vector3(Math.sin(a)*13,8.4+(i%2)*.9,-Math.cos(a)*13+14); m.position.copy(m.userData.home); m.lookAt(0,10,30); m.userData.rotHome=m.rotation.y; m.renderOrder=5;
+    m.userData.base=new THREE.Vector3(1,1,1); m.userData.on=0; m.userData.cur=0; reg(m); world.add(m); holoCards.push(m); });
+  // calendar board
+  board=new THREE.Group(); board.position.set(5,8,-1); world.add(board); board.userData.base=new THREE.Vector3(1,1,1); board.userData.on=0; board.userData.cur=0; reg(board);
+  const bt=canvasTex(1100,760,(x,w,h)=>{ x.fillStyle='#ffffff'; rr(x,0,0,w,h,40); x.fill(); x.fillStyle='#0b1a14'; x.font=`800 50px ${F}`; x.fillText('Your calendar · next week',44,74);
+    const days=['MON','TUE','WED','THU','FRI']; x.font=`700 30px ${F}`; x.fillStyle='#5d7069'; days.forEach((d,i)=>x.fillText(d,200+i*176,140)); ['8 AM','10 AM','1 PM','3 PM'].forEach((t,i)=>x.fillText(t,44,222+i*140)); });
+  M(new THREE.BoxGeometry(11,7.6,.3),[std(0xffffff),std(0xffffff),std(0xffffff),std(0xffffff),new THREE.MeshStandardMaterial({map:bt,roughness:.7}),std(0xffffff)],0,0,0,board);
+  const busy=[[0,0],[0,2],[1,1],[1,3],[2,0],[2,2],[3,3],[4,1],[4,3],[1,0]];
+  for(let c=0;c<5;c++) for(let r=0;r<4;r++){ const b=busy.some(p=>p[0]===c&&p[1]===r); const tile=M(new THREE.BoxGeometry(1.45,1.05,.25),std(b?0x93a1ad:0xffffff),-2.75+c*1.76+.4,1.55-r*1.4,.27,board); tile.userData.c=c; tile.userData.r=r; tile.userData.busy=b; boardTiles.push(tile); }
+  const bk=canvasTex(256,180,(x,w,h)=>{ x.fillStyle='#2f8f6a'; rr(x,0,0,w,h,24); x.fill(); x.fillStyle='#fff'; x.font=`800 44px ${F}`; x.fillText('Sarah M.',22,78); x.font=`500 30px ${F}`; x.fillText('Septic check',22,128); });
+  bookedTile=M(new THREE.BoxGeometry(1.5,1.08,.34),[std(0x2f8f6a),std(0x2f8f6a),std(0x2f8f6a),std(0x2f8f6a),new THREE.MeshStandardMaterial({map:bk}),std(0x2f8f6a)],0,0,.4,board); bookedTile.visible=false;
+  // report island
+  chart=new THREE.Group(); chart.position.set(44,-1,-8); world.add(chart);
+  M(new THREE.CylinderGeometry(9,9,1,48),std(0x86cf6e),0,-.5,0,chart); M(new THREE.CylinderGeometry(9,4,5,48),std(0xb07c4f),0,-3.5,0,chart,true); M(new THREE.ConeGeometry(4,5,20),std(0x8a5a36),0,-8.5,0,chart,true).rotation.x=Math.PI;
+  M(new THREE.BoxGeometry(12,.3,5),std(0xffffff),0,.15,0,chart);
+  const leads=[3,5,6,7], booked=[1,2,3,3];
+  leads.forEach((l,i)=>{ const x=-4.2+i*2.8; const g=new THREE.Group(); g.position.set(x,.3,0); chart.add(g);
+    const b1=M(new THREE.BoxGeometry(1.7,1,1.7),std(0x45b386),0,.5,0,g); const b2=M(new THREE.BoxGeometry(1.74,1,1.74),std(0xf39a3d),0,.5,0,g);
+    const lab=labelSprite(['Week '+(i+1),l+' leads · '+booked[i]+' booked'],{h:1.3}); lab.position.set(0,l*.9+2,0); g.add(lab); reg(lab);
+    g.userData={lead:l*.9,book:booked[i]*.9,b1,b2,lab,cur:0}; chartBars.push(g); });
+  chartLabel=labelSprite(['Weekly report · example data','21 leads · 9 booked · $58 per booked visit'],{h:2,dot:1}); chartLabel.position.set(0,10.5,0); chart.add(chartLabel); reg(chartLabel);
+  // lead beam + trail
+  beam=new THREE.Group(); world.add(beam); beam.visible=false;
+  M(new THREE.SphereGeometry(.45,16,12),new THREE.MeshBasicMaterial({color:0xffc06a}),0,0,0,beam,true);
+  const bg=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex('rgba(255,170,70,.6)'),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); bg.scale.set(4,4,1); beam.add(bg);
+  for(let i=0;i<16;i++){ const t=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex('rgba(255,170,70,.5)'),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:1-i/16})); t.scale.setScalar(1.6*(1-i/18)); t.visible=false; world.add(t); trail.push(t); }
+  // sprites
+  heroHand=labelSprite(['Request sent','Slow drains, wet spot in yard'],{h:2.4,dot:1,accent:'#f39a3d'}); heroHand.position.set(-12,7.3,6.6); world.add(heroHand); reg(heroHand);
+  notif=labelSprite(['New lead · Sarah M.','Mill Creek Rd · septic backup'],{h:2.6,dot:1,accent:'#f39a3d'}); notif.position.set(14,10.2,-9.5); world.add(notif); reg(notif);
+  smsSprite=labelSprite(['Hi Sarah, it\'s '+co()+'.','Got your request. Calling you now.'],{bg:'#2f8f6a',fg:'#ffffff',sub:'#d9f3e8',h:2.3}); world.add(smsSprite); reg(smsSprite);
+  callSprite=labelSprite(['Calling Sarah…','From your business line'],{h:2.3,dot:1,accent:'#2fbf7f'}); callSprite.position.set(14,10.2,-9.5); world.add(callSprite); reg(callSprite);
+  bookedLabel=labelSprite(['Booked · septic check','Truck on site · example job'],{h:2.3,dot:1}); bookedLabel.position.set(-12,9.6,6.6); world.add(bookedLabel); reg(bookedLabel);
+  officeRing=new THREE.Mesh(new THREE.TorusGeometry(1,.08,8,48),new THREE.MeshBasicMaterial({color:0x2fbf7f,transparent:true,opacity:0})); officeRing.rotation.x=-Math.PI/2; officeRing.position.set(14,.3,-9.5); world.add(officeRing);
+  // confetti
+  const CN=MOBILE?220:420, cp=new Float32Array(CN*3), cc=new Float32Array(CN*3), cv=[];
+  const cols=[[.95,.6,.24],[.27,.7,.53],[1,1,1],[.5,.75,1],[1,.85,.4]];
+  for(let i=0;i<CN;i++){ cp[i*3]=(Math.random()-.5)*50; cp[i*3+1]=30+Math.random()*30; cp[i*3+2]=(Math.random()-.5)*50; const c=cols[i%5]; cc.set(c,i*3); cv.push(.7+Math.random()*1.4); }
+  const cgeo=new THREE.BufferGeometry(); cgeo.setAttribute('position',new THREE.BufferAttribute(cp,3)); cgeo.setAttribute('color',new THREE.BufferAttribute(cc,3));
+  confetti=new THREE.Points(cgeo,new THREE.PointsMaterial({size:.5,vertexColors:true,transparent:true,opacity:0,depthWrite:false})); confetti.userData.v=cv; world.add(confetti);
+}
+function makeHouse(x,z,ry,i){
+  const g=new THREE.Group(); g.position.set(x,0,z); g.rotation.y=ry; world.add(g);
+  const W=4.2,D=3.6,H=2.7;
+  M(new THREE.BoxGeometry(W,H,D),std(HC[i%HC.length]),0,H/2,0,g);
+  const sh=new THREE.Shape(); sh.moveTo(-D/2-.35,0); sh.lineTo(D/2+.35,0); sh.lineTo(0,1.9); sh.closePath();
+  const rg=new THREE.ExtrudeGeometry(sh,{depth:W+.5,bevelEnabled:false}); rg.translate(0,0,-(W+.5)/2); rg.rotateY(Math.PI/2);
+  M(rg,std(RC[i%RC.length]),0,H,0,g);
+  if(i%3===0) M(new THREE.BoxGeometry(.6,1.3,.6),std(0x8c6f60),1.1,H+1.2,-.5,g);
+  M(new THREE.BoxGeometry(.9,1.55,.1),std(0x7a4a2b),0,.78,D/2+.03,g);
+  const wm=std(0xfff6d5,{emissive:0xffb347,emissiveIntensity:0});
+  M(new THREE.BoxGeometry(.85,.75,.08),wm,-1.35,1.65,D/2+.03,g); M(new THREE.BoxGeometry(.85,.75,.08),wm,1.35,1.65,D/2+.03,g);
+  M(new THREE.BoxGeometry(.9,.05,1.7),std(0xd9d2c3),0,.03,D/2+.85,g,true);
+  M(new THREE.CylinderGeometry(.42,.42,.12,16),std(0x2f5e45),1.6,.07,D/2+1.5,g); // septic lid
+  const ck=checkSprite(); ck.position.set(0,H+3.3,0); g.add(ck); reg(ck);
+  g.userData={win:wm,glow:0,check:ck,i};
+  return g;
+}
+function tree(x,z,i){ const g=new THREE.Group(); g.position.set(x,0,z); world.add(g); const s=.8+((i*37)%10)/14;
+  M(new THREE.CylinderGeometry(.22,.28,1.5*s,7),std(0x8b5e3c),0,.75*s,0,g);
+  if(i%2) M(new THREE.ConeGeometry(1.3*s,2.8*s,7),std([0x3f9a4f,0x2e8b57][i%2]),0,2.6*s,0,g);
+  else M(new THREE.IcosahedronGeometry(1.35*s,0),std([0x56b35d,0x6cc069][i%2]),0,2.4*s,0,g);
+  g.userData.s=Math.random()*6; return g; }
+function makeTruck(){ const g=new THREE.Group(); const tankCol=0xeef2f5;
+  M(new THREE.BoxGeometry(5.2,.45,1.9),std(0x2c3136),0,.75,0,g);
+  M(new THREE.BoxGeometry(1.7,1.6,1.9),std(0xffffff),1.85,1.75,0,g);
+  M(new THREE.BoxGeometry(.08,.7,1.6),std(0x274a6b,{roughness:.2}),2.72,2.1,0,g);
+  M(new THREE.BoxGeometry(1.2,.12,.5),std(0xf39a3d,{emissive:0xf39a3d,emissiveIntensity:.4}),1.85,2.62,0,g);
+  const tank=M(new THREE.CylinderGeometry(.92,.92,3.3,20),std(tankCol,{flatShading:false,roughness:.4,metalness:.2}),-.75,1.92,0,g); tank.rotation.z=Math.PI/2;
+  M(new THREE.CylinderGeometry(.95,.95,.12,20),std(0x2f8f6a,{flatShading:false}),-.75,1.92,0,g).rotation.z=Math.PI/2;
+  const tt=canvasTex(512,128,(x,w,h)=>{ x.fillStyle='#2f8f6a'; x.textAlign='center'; x.textBaseline='middle'; let fs=64; x.font=`900 ${fs}px ${F}`; while(x.measureText(co().toUpperCase()).width>w-30&&fs>26){fs-=3;x.font=`900 ${fs}px ${F}`;} x.fillText(co().toUpperCase(),w/2,h/2); });
+  const dm=new THREE.MeshBasicMaterial({map:tt,transparent:true});
+  M(new THREE.PlaneGeometry(2.9,.72),dm,-.75,1.92,.94,g,true); const back=M(new THREE.PlaneGeometry(2.9,.72),dm,-.75,1.92,-.94,g,true); back.rotation.y=Math.PI;
+  [[1.7,.95],[1.7,-.95],[-1.5,.95],[-1.5,-.95]].forEach(p=>{ const w=M(new THREE.CylinderGeometry(.45,.45,.32,14),std(0x1c1f22),p[0],.45,p[1],g); w.rotation.x=Math.PI/2; });
+  M(new THREE.CylinderGeometry(.12,.12,1.2,8),std(0x2c3136),-2.6,1.4,.6,g).rotation.z=Math.PI/2;
+  g.scale.setScalar(.82); return g; }
+function placeTruck(t){ t=clamp(t,0,1); const a=Math.min(t,.985), p=truckCurve.getPointAt(a), q=truckCurve.getPointAt(a+.012); truck.position.copy(truckCurve.getPointAt(t));
+  const dx=q.x-p.x, dz=q.z-p.z; if(dx*dx+dz*dz>1e-8) truck.rotation.y=Math.atan2(-dz,dx); truck.userData.t=t; }
+function makeAdTexture(){ return canvasTex(512,1024,(x,w,h)=>{ x.fillStyle='#fff'; x.fillRect(0,0,w,h);
+  x.fillStyle='#1877f2'; x.fillRect(0,0,w,74); x.fillStyle='#fff'; x.font=`800 38px ${F}`; x.fillText('facebook',26,50);
+  x.fillStyle='#2f8f6a'; x.beginPath(); x.arc(56,130,32,0,7); x.fill(); x.fillStyle='#fff'; x.font=`800 26px ${F}`; x.textAlign='center'; x.fillText(co().split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),56,140); x.textAlign='left';
+  x.fillStyle='#050505'; x.font=`800 28px ${F}`; x.fillText(co(),102,124); x.fillStyle='#65676b'; x.font=`500 22px ${F}`; x.fillText('Sponsored',102,154);
+  x.fillStyle='#050505'; x.font=`500 27px ${F}`; wrap(x,'Slow drains or a soggy spot in the yard? '+townShort()+' homeowners, we can check your septic this week. Local, licensed, on time.',26,212,460,36);
+  const iy=360; const g=x.createLinearGradient(0,iy,0,iy+420); g.addColorStop(0,'#9fd3ff'); g.addColorStop(1,'#e8f6ff'); x.fillStyle=g; x.fillRect(0,iy,w,420);
+  x.fillStyle='#7cc56b'; x.fillRect(0,iy+290,w,130); x.fillStyle='#f3d6a4'; x.fillRect(250,iy+170,190,125); x.fillStyle='#c2554a'; x.beginPath(); x.moveTo(232,iy+175); x.lineTo(345,iy+95); x.lineTo(458,iy+175); x.fill();
+  x.fillStyle='#7a4a2b'; x.fillRect(328,iy+228,36,66); x.fillStyle='#5b8fb8'; x.beginPath(); x.ellipse(150,iy+340,80,22,0,0,7); x.fill(); x.fillStyle='#2f5e45'; x.beginPath(); x.ellipse(110,iy+320,20,8,0,0,7); x.fill();
+  x.fillStyle='rgba(0,0,0,.55)'; rr(x,22,iy+20,250,48,24); x.fill(); x.fillStyle='#fff'; x.font=`700 24px ${F}`; x.fillText('Septic check this week',38,iy+52);
+  x.fillStyle='#f0f2f5'; x.fillRect(0,iy+420,w,140); x.fillStyle='#65676b'; x.font=`500 20px ${F}`; x.fillText(townShort().toUpperCase()+' · LOCAL SEPTIC',26,iy+462); x.fillStyle='#050505'; x.font=`800 26px ${F}`; x.fillText('Book a septic check',26,iy+500);
+  x.fillStyle='#2f8f6a'; rr(x,330,iy+460,160,56,12); x.fill(); x.fillStyle='#fff'; x.font=`800 24px ${F}`; x.fillText('Get quote',350,iy+496);
+  x.fillStyle='#65676b'; x.font=`500 22px ${F}`; x.fillText('Like        Comment        Share',26,h-40); }); }
+function makeHoloTex(n,title,sub,kind){ return canvasTex(560,388,(x,w,h)=>{ x.fillStyle='rgba(8,32,25,.86)'; rr(x,4,4,w-8,h-8,30); x.fill(); x.strokeStyle='rgba(120,230,180,.85)'; x.lineWidth=4; rr(x,4,4,w-8,h-8,30); x.stroke();
+  x.fillStyle='#f39a3d'; x.beginPath(); x.arc(52,54,24,0,7); x.fill(); x.fillStyle='#1d1206'; x.font=`900 26px ${F}`; x.textAlign='center'; x.fillText(n,52,64); x.textAlign='left';
+  x.fillStyle='#fff'; x.font=`800 36px ${F}`; x.fillText(title,92,66); x.fillStyle='#a9e4c9'; x.font=`500 25px ${F}`; x.fillText(sub,92,102);
+  x.fillStyle='rgba(255,255,255,.1)'; rr(x,30,130,w-60,h-170,18); x.fill(); x.fillStyle='rgba(255,255,255,.7)';
+  if(kind==='ad'){ x.fillStyle='#9fd3ff'; rr(x,50,150,200,170,12); x.fill(); x.fillStyle='rgba(255,255,255,.65)'; [160,200,240].forEach((y,i)=>{rr(x,280,y,220-i*40,18,9);x.fill()}); x.fillStyle='#45b386'; rr(x,280,280,130,32,10); x.fill(); }
+  if(kind==='form'){ ['Septic pumping','Backup / slow drains','Inspection'].forEach((t,i)=>{ x.strokeStyle='rgba(255,255,255,.6)'; x.lineWidth=2; rr(x,50,150+i*54,460,42,10); x.stroke(); x.fillStyle='#fff'; x.font=`500 22px ${F}`; x.fillText(t,68,178+i*54); }); }
+  if(kind==='sms'){ x.fillStyle='#45b386'; rr(x,180,150,320,56,20); x.fill(); x.fillStyle='#fff'; x.font=`600 21px ${F}`; x.fillText('Hi Sarah, got your request!',196,185); x.fillStyle='#fff'; rr(x,50,222,260,56,20); x.fill(); x.fillStyle='#111'; x.fillText('Great, thank you',66,257); x.fillStyle='#ffd29a'; x.font=`800 22px ${F}`; x.fillText('0:42',440,310); }
+  if(kind==='call'){ x.fillStyle='#fff'; x.font=`500 22px ${F}`; ['"Hi, this is '+co().split(' ')[0]+'…','…is the yard wet near the tank?"','→ Offer the next open slot'].forEach((t,i)=>x.fillText(t,52,180+i*42)); }
+  if(kind==='cal'){ for(let c=0;c<5;c++)for(let r=0;r<3;r++){ x.fillStyle=(c+r)%3===0?'rgba(255,255,255,.25)':(c===3&&r===1?'#45b386':'rgba(255,255,255,.7)'); rr(x,50+c*94,150+r*58,80,46,8); x.fill(); } }
+}); }
+
+/* =========================================================
+   CHAPTERS
+   ========================================================= */
+let run=0; const alive=id=>id===run;
+const sleep=(ms,id)=>new Promise(r=>setTimeout(()=>r(alive(id)),ms));
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+let camGoal={p:V(34,28,40),t:V(0,0,0)}, orbit=0;
+const S={glowAll:0,pulses:false,beamT:-1,smsT:-1,truckGoal:0,truckSpeed:0,bars:0,confetti:false,officeRing:0,ringing:false,boardDrop:-1,holoSpin:0};
+const fresh=()=>({picked:false,arrived:false,glowAll:0,pulses:false,beamT:-1,smsT:-1,truckSpeed:0,bars:0,confetti:false,officeRing:0,ringing:false,boardDrop:-1});
+function setChecks(list){ houses.forEach((h,i)=>show(h.userData.check,list.includes(i))); }
+function hideAllSprites(){ [heroHand,notif,smsSprite,callSprite,bookedLabel].forEach(s=>show(s,0)); }
+const CH=[
+ {chip:'Day 30',tag:()=>'Day 30 · '+fmt(D30),title:()=>'Welcome to the future.',
+  text:()=>`This is ${esc(co())} in ${esc(town())}, 30 days after your pilot starts. Every green check is a septic job booked from a neighbor who found you on Facebook. Let's rewind to Day 0 and see how you got here.`,
+  cam:{p:V(28,24,33),t:V(4,0,-2)},orbit:true,
+  setup(){ setChecks(BOOKED); show(billboard,0); show(board,0); holoCards.forEach(c=>show(c,0)); S.bars=1; placeTruck(1); S.truckGoal=1; },
+  widget:()=>`<button class="btn-w o" data-act="next">⟲ Rewind to Day 0</button>`,
+  async play(id){ await sleep(9000,id); return true; }},
+ {chip:'Build',tag:()=>'Day 0 to 3 · '+fmt(START),title:()=>'We build everything for you.',
+  text:()=>`You tell us the towns you serve and your prices. We build the ad, the form, the instant text, the call script and the booking calendar. You don't touch any tech.`,
+  cam:{p:V(0,12,27),t:V(0,8,0)},
+  setup(){ setChecks([]); show(billboard,0); show(board,0); S.bars=0; placeTruck(0); S.truckGoal=0; holoCards.forEach(c=>show(c,0)); },
+  widget:()=>`<ul class="checks" id="wl">${['Facebook ad for '+esc(townShort()),'Lead form (3 taps)','Instant text reply','Call script','Booking calendar'].map(t=>`<li><b>✓</b>${t}</li>`).join('')}</ul>`,
+  async play(id){ for(let i=0;i<5;i++){ if(!await sleep(i?850:500,id))return; show(holoCards[i],1); holoCards[i].rotation.y=holoCards[i].userData.rotHome+Math.PI*1.5; pop(); const li=document.querySelectorAll('#wl li')[i]; li&&li.classList.add('ok'); }
+    if(!await sleep(700,id))return; toast('Ready to launch'); chime(); return await sleep(2600,id); }},
+ {chip:'Ads',tag:()=>'Day 4 · Ads go live',title:()=>`Your neighbors in ${esc(townShort())} see your ad.`,
+  text:()=>`We run local Facebook and Instagram ads only in the towns you serve. Each pulse is your ad reaching another street. Tap the ad below to see what a homeowner sees.`,
+  cam:{p:V(0,15,30),t:V(0,6,-3)},
+  setup(){ holoCards.forEach(c=>show(c,0)); show(billboard,1); S.pulses=true; setChecks([]); placeTruck(0); },
+  widget:()=>`<div class="ad" id="adw"><div class="h"><div class="av">${esc(co().split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase())}</div><div><b>${esc(co())}</b><div class="sp">Sponsored</div></div></div><div class="t">Slow drains or a soggy spot in the yard? ${esc(townShort())} homeowners, we can check your septic this week.</div><div class="f"><span><b>Book a septic check</b></span><button class="pulse" data-act="form">Get quote</button></div></div>`,
+  async play(id){ if(!touring){ while(alive(id)&&!S.picked) if(!await sleep(300,id))return; return await sleep(1800,id); } if(!await sleep(4200,id))return; formOpen(); if(!await sleep(1600,id))return; formPick('Backup or slow drains'); return await sleep(2600,id); }},
+ {chip:'Lead',tag:()=>'Day 4 · 7:42 PM',title:()=>'A homeowner raises her hand.',
+  text:()=>`Sarah on Mill Creek Rd has slow drains and a wet spot in her yard. She fills in the form in 20 seconds. Her request flies straight to you.`,
+  cam:{p:V(1,26,38),t:V(0,2,-1)},
+  setup(){ show(billboard,0); S.pulses=false; hero.userData.glow=1; },
+  widget:()=>`<div class="lead"><span class="k">● NEW LEAD · 7:42 PM</span><span class="n">Sarah M.</span><span>Mill Creek Rd, ${esc(townShort())}</span><span>"Slow drains and a wet spot in the yard."</span><span style="color:#5d7069;font-size:12px">Example lead for this demo</span></div>`,
+  async play(id){ show(heroHand,1); pop(); if(!await sleep(1300,id))return; S.beamT=0; whooshShort(); if(!await sleep(2300,id))return; show(heroHand,0); show(notif,1); ping(); bounce(office); return await sleep(3200,id); }},
+ {chip:'60 sec',tag:()=>'7:42 PM, plus 52 seconds',title:()=>'She hears back in under a minute.',
+  text:()=>`An instant text goes out in your company's name, then a real call follows within 5 minutes. Most homeowners book the first company that gets back to them. Now that's you.`,
+  cam:{p:V(1,25,37),t:V(0,3,-1)},
+  setup(){ show(notif,0); hero.userData.glow=1; },
+  widget:()=>`<div class="sw"><div class="clock" id="clk">0:00</div><div class="lab">from form sent<br>to first reply</div></div><div class="thread" id="thr"></div>`,
+  async play(id){ const t0=performance.now(); let stop=false; const tick=()=>{ if(!alive(id)||stop)return; const s=Math.min(52,Math.floor((performance.now()-t0)/1000*6)); const el=$('#clk'); if(el) el.textContent='0:'+String(s).padStart(2,'0'); if(s<52) requestAnimationFrame(tick); }; tick();
+    if(!await sleep(900,id))return; S.smsT=0; show(smsSprite,1); pop(); addBub('me',`Hi Sarah, it's ${esc(co())}. Got your request about the slow drains. I'll call you in a few minutes.`);
+    if(!await sleep(2200,id))return; addBub('them','Thank you! That was fast 🙏'); tone(660,.15); if(!await sleep(1700,id))return; show(smsSprite,0); S.ringing=true; show(callSprite,1); ring();
+    if(!await sleep(4500,id))return; stop=true; S.ringing=false; show(callSprite,0); addBub('sys','✓ Called and connected in 0:52'); const el=$('#clk'); if(el) el.textContent='0:52'; chime(); return await sleep(2600,id); }},
+ {chip:'Booked',tag:()=>'Day 5 · '+fmt(addDays(START,1)),title:()=>`She's on your calendar.`,
+  text:()=>`Pick a time for Sarah's visit below. It lands straight on your calendar, and your truck rolls out.`,
+  cam:{p:V(5,9.5,19),t:V(5,7,-1)},
+  setup(){ show(callSprite,0); show(smsSprite,0); show(board,1); bookedTile.visible=false; S.boardDrop=-1; placeTruck(0); S.truckGoal=0; S.truckSpeed=0; show(bookedLabel,0); setChecks([]); },
+  widget:()=>`<div class="slots" id="slots"><button data-slot="3,1">Thu<small>10:00 AM</small></button><button data-slot="3,2">Thu<small>1:00 PM</small></button><button data-slot="4,0">Fri<small>8:00 AM</small></button></div><div class="ex" id="slotHint">Tap a time. Busy slots are already blocked.</div>`,
+  async play(id){ if(touring){ if(!await sleep(2600,id))return; if(S.boardDrop<0) book(3,1); } while(alive(id)&&!S.arrived) if(!await sleep(300,id))return; return await sleep(2600,id); }},
+ {chip:'Report',tag:()=>'Every Friday',title:()=>'A plain-English report, every week.',
+  text:()=>`Leads, how fast each one was reached, what got booked, and what each booked visit cost. No jargon, no logins. The numbers below are example data.`,
+  cam:{p:V(44,7,12),t:V(44,4,-8)},
+  setup(){ show(board,0); setChecks([8]); placeTruck(1); S.truckGoal=1; S.truckSpeed=0; show(bookedLabel,0); S.bars=0; },
+  widget:()=>`<div class="kpis"><div class="kpi"><b data-n="21">0</b><span>leads this month</span></div><div class="kpi"><b data-n="94" data-s="%">0</b><span>reached in under 5 min</span></div><div class="kpi"><b data-n="9">0</b><span>visits booked</span></div><div class="kpi"><b data-n="58" data-p="$">0</b><span>cost per booked visit</span></div></div><div class="ex">Example numbers to show the format. Your real numbers depend on your area and budget.</div>`,
+  async play(id){ if(!await sleep(600,id))return; S.bars=1; countUp(); chime(); return await sleep(6500,id); }},
+ {chip:'Decide',tag:()=>'Day 30 · '+fmt(D30),title:()=>'Now you decide.',
+  text:()=>`After 30 days you look at real booked jobs, not promises. Keep going, or walk away. No long contract. Play with the numbers to see what could work for you.`,
+  cam:{p:V(38,32,46),t:V(8,0,-3)},orbit:true,
+  setup(){ setChecks(BOOKED); S.bars=1; S.confetti=true; resetConfetti(); placeTruck(1); },
+  widget:()=>`<div class="roi"><label>Monthly ad budget <b id="rb">$1,200</b></label><input type="range" id="rB" min="500" max="3000" step="100" value="1200"><label>Average job value <b id="rj">$450</b></label><input type="range" id="rJ" min="250" max="900" step="25" value="450">
+   <div class="out"><div><b id="oV">0</b><span>booked visits</span></div><div><b id="oJ">0</b><span>jobs won</span></div><div><b id="oR">$0</b><span>est. revenue</span></div></div>
+   <div class="ex">Example math: about $40 per lead, 40% book a visit, 70% become jobs. Not a promise. Real results depend on your area, offer and how fast you answer.</div></div>
+   <div class="ctas"><a class="btn-w o" href="${CAL_URL}" target="_blank" rel="noopener">Book a 15-min call</a><button class="btn-w g" data-act="replay">↺ Replay</button></div>`,
+  async play(id){ chime(); return false; }}
+];
+let cur=0, touring=false;
+const chips=$('#chips');
+CH.forEach((c,i)=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=(i+1)+'. '+c.chip; b.onclick=()=>{ stopTour(); go(i); }; chips.appendChild(b); });
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('on'),2200); }
+function addBub(k,t){ const th=$('#thr'); if(!th)return; const d=document.createElement('div'); d.className='bub '+k; d.innerHTML=t; th.appendChild(d); }
+function whooshShort(){ const a=ac(); if(!a||muted)return; tone(300,.6,'sine',.05); tone(600,.5,'sine',.04,.2); }
+function bounce(o){ o.userData.bounce=1; }
+function countUp(){ document.querySelectorAll('[data-n]').forEach(el=>{ const n=+el.dataset.n, p=el.dataset.p||'', s=el.dataset.s||''; const t0=performance.now(); const f=()=>{ const k=Math.min(1,(performance.now()-t0)/1400); el.textContent=p+Math.round(n*ease(k))+s; if(k<1)requestAnimationFrame(f); }; f(); }); }
+function formOpen(){ const w=$('#adw'); if(!w||w.dataset.open)return; w.dataset.open=1; pop(); w.insertAdjacentHTML('beforeend',`<div class="opts" id="opts"><div style="font-weight:700;margin-bottom:2px">What do you need help with?</div>${['Septic pumping','Backup or slow drains','Inspection for a home sale'].map(o=>`<button data-pick="${o}">${o}</button>`).join('')}</div>`); const b=w.querySelector('.f button'); b&&b.classList.remove('pulse'); }
+function formPick(o){ const op=$('#opts'); if(!op)return; op.innerHTML=`<div style="padding:6px 0;font-weight:700;color:#2f8f6a">✓ Sent. ${esc(co())} will text you in under a minute.</div><div style="font-size:12px;color:#65676b">You picked: ${esc(o)}</div>`; chime(); hero.userData.glow=1; S.picked=true; toast('A homeowner just raised her hand'); }
+function book(c,r){ if(S.boardDrop>=0)return; const tile=boardTiles.find(t=>t.userData.c===c&&t.userData.r===r); if(!tile)return; S.boardDrop=0; bookedTile.visible=true; bookedTile.userData.to=tile.position.clone(); bookedTile.position.set(tile.position.x,tile.position.y+6,1.2);
+  document.querySelectorAll('#slots button').forEach(b=>{ if(b.dataset.slot===c+','+r) b.classList.add('on'); b.disabled=true; }); const h=$('#slotHint'); if(h) h.innerHTML='<b style="color:#a9e4c9">✓ Booked. Your truck is on the way.</b>';
+  const id=run; pop(); setTimeout(()=>{ if(!alive(id))return; chime(); toast('Booked on your calendar'); },700);
+  setTimeout(()=>{ if(!alive(id))return; camGoal={p:V(-4,15,24),t:V(-3,0,1)}; show(board,0); S.truckSpeed=.2; S.truckGoal=1; },2300); }
+function resetConfetti(){ const p=confetti.geometry.attributes.position.array; for(let i=0;i<p.length;i+=3){ p[i]=(Math.random()-.5)*50; p[i+1]=26+Math.random()*34; p[i+2]=(Math.random()-.5)*50; } confetti.geometry.attributes.position.needsUpdate=true; }
+
+$('#cWidget').addEventListener('click',e=>{ const a=e.target.closest('[data-act],[data-pick],[data-slot]'); if(!a)return;
+  if(a.dataset.act==='next'){ stopTour(); go(cur+1); }
+  if(a.dataset.act==='replay'){ stopTour(); go(0); }
+  if(a.dataset.act==='form'){ formOpen(); }
+  if(a.dataset.pick){ formPick(a.dataset.pick); }
+  if(a.dataset.slot){ const [c,r]=a.dataset.slot.split(',').map(Number); book(c,r); } });
+$('#cWidget').addEventListener('input',e=>{ if(e.target.id==='rB'||e.target.id==='rJ') roi(); });
+function roi(){ const b=+($('#rB')||{}).value||1200, j=+($('#rJ')||{}).value||450; const leads=b/40, visits=leads*.4, jobs=visits*.7, rev=jobs*j;
+  $('#rb').textContent='$'+b.toLocaleString(); $('#rj').textContent='$'+j; $('#oV').textContent=Math.round(visits); $('#oJ').textContent=Math.round(jobs); $('#oR').textContent='$'+(Math.round(rev/100)*100).toLocaleString(); }
+
+function go(i,fromTour){ i=clamp(i,0,CH.length-1); const prevI=cur; cur=i; run++; const id=run; const c=CH[i];
+  Object.assign(S,fresh()); hideAllSprites(); houses.forEach(h=>h.userData.glow=0); bookedTile.visible=false; beam.visible=false; trail.forEach(t=>t.visible=false);
+  if(prevI===0&&i===1){ toast('⟲ Rewinding to Day 0'); whooshRewind(); }
+  holoCards.forEach(h=>show(h,0)); show(billboard,0); show(board,0); setChecks([]); S.bars=0; placeTruck(0); S.truckGoal=0;
+  c.setup(); camGoal={p:c.cam.p.clone(),t:c.cam.t.clone()}; orbit=0; userYawT=0; userPitchT=0;
+  const card=$('#card'); card.classList.add('swap');
+  setTimeout(()=>{ if(!alive(id))return; $('#cTag').textContent=c.tag(); $('#cTitle').innerHTML=c.title(); $('#cText').innerHTML=c.text(); $('#cWidget').innerHTML=c.widget?c.widget():''; if(i===7) roi(); card.scrollTop=0; card.classList.remove('swap'); },260);
+  [...chips.children].forEach((b,k)=>{ b.classList.toggle('on',k===i); b.classList.toggle('done',k<i); }); const on=chips.children[i]; on&&on.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+  $('#prev').disabled=i===0; $('#next').textContent=i===CH.length-1?'Replay ↺':'Next →';
+  setTimeout(async()=>{ if(!alive(id))return; const done=await c.play(id); if(done&&touring&&alive(id)&&cur<CH.length-1) go(cur+1,true); else if(touring&&cur===CH.length-1) stopTour(); },280); }
+function whooshRewind(){ const a=ac(); if(!a||muted)return; const t=a.currentTime; const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.setValueAtTime(900,t); o.frequency.exponentialRampToValueAtTime(120,t+.7); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.08,t+.05); g.gain.exponentialRampToValueAtTime(.0001,t+.75); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+.8); }
+function stopTour(){ touring=false; $('#tour').classList.remove('on'); $('#tour').textContent='▶ Auto tour'; }
+$('#tour').onclick=()=>{ if(touring){ stopTour(); return; } touring=true; $('#tour').classList.add('on'); $('#tour').textContent='❚❚ Pause tour'; go(cur===CH.length-1?0:cur,true); };
+$('#next').onclick=()=>{ stopTour(); go(cur===CH.length-1?0:cur+1); };
+$('#prev').onclick=()=>{ stopTour(); go(cur-1); };
+addEventListener('keydown',e=>{ if(mode!=='world'||e.target.tagName==='INPUT')return; if(e.key==='ArrowRight'){stopTour();go(cur+1)} if(e.key==='ArrowLeft'){stopTour();go(cur-1)} });
+
+/* ---------- drag to look ---------- */
+let userYaw=0,userYawT=0,userPitch=0,userPitchT=0,drag=null;
+const cv=$('#c');
+cv.addEventListener('pointerdown',e=>{ if(mode!=='world')return; drag={x:e.clientX,y:e.clientY}; cv.classList.add('drag'); cv.setPointerCapture(e.pointerId); $('#hint').style.opacity=0; });
+cv.addEventListener('pointermove',e=>{ if(!drag)return; userYawT-=(e.clientX-drag.x)*.006; userPitchT=clamp(userPitchT+(e.clientY-drag.y)*.004,-.5,.6); drag={x:e.clientX,y:e.clientY}; });
+const endDrag=()=>{ drag=null; cv.classList.remove('drag'); }; cv.addEventListener('pointerup',endDrag); cv.addEventListener('pointercancel',endDrag);
+cv.addEventListener('wheel',e=>{ if(mode!=='world')return; zoomT=clamp(zoomT+e.deltaY*.0008,.6,1.5); },{passive:true});
+let zoom=1,zoomT=1;
+
+/* =========================================================
+   FLOW: intro → warp → world
+   ========================================================= */
+let mode='intro', warpT=0;
+const camP=V(36,30,42), camT=V(0,0,0);
+$('#f').addEventListener('submit',async e=>{ e.preventDefault(); if(mode!=='intro')return; CO=$('#iCo').value.trim(); TOWN=$('#iTown').value.trim(); ac(); try{ await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1200))]); }catch(_){} startWarp(); });
+function startWarp(){ if(mode!=='intro')return; buildWorld(); buildDateSprites(); $('#intro').classList.add('gone'); $('#warpHud').classList.add('on'); mode='warp'; warpT=0; whoosh(4.6); $('#wDate').textContent=fmt(TODAY); $('#wDay').textContent='TODAY';
+  try{ const u=new URL(location.href); if(CO)u.searchParams.set('co',CO); if(TOWN)u.searchParams.set('town',TOWN); history.replaceState(null,'',u); }catch(e){} }
+function arrive(){ mode='world'; $('#warpHud').classList.remove('on'); const fl=$('#flash'); fl.style.transition='none'; fl.style.opacity=1; requestAnimationFrame(()=>{ fl.style.transition='opacity 1.1s ease'; fl.style.opacity=0; });
+  camP.set(70,90,110); camT.set(0,0,0); $('#ui').classList.add('on'); go(0); chime(); }
+
+/* ---------- resize ---------- */
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); warpCam.aspect=w/h; warpCam.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+
+/* ---------- main loop ---------- */
+const clock=new THREE.Clock(); const tmp=V(0,0,0), tmp2=V(0,0,0);
+const beamCurve=new THREE.QuadraticBezierCurve3(V(-12,4.5,6.6),V(1,17,0),V(14,6,-9.5));
+const smsCurve=new THREE.QuadraticBezierCurve3(V(14,7,-9.5),V(1,13,0),V(-12,6.5,6.6));
+const hist=[];
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),.1), t=clock.elapsedTime;
+  if(mode!=='world'){
+    if(mode==='warp'){ warpT+=dt; const T=warpT;
+      warpSpeed = T<.5? lerp(14,40,T/.5) : T<3.8? lerp(40,620,ease((T-.5)/3.3)) : lerp(620,1500,clamp((T-3.8)/.5,0,1));
+      warpCam.rotation.z=Math.sin(T*.8)*.12*clamp(T/2,0,1); warpCam.fov=70+clamp((T-2.6)/1.7,0,1)*35; warpCam.updateProjectionMatrix();
+      let passed=0; dateSprites.forEach((s,i)=>{ const ti=.7+i*(3.1/30); const z=-(ti-T)*95; s.position.z=z; s.visible=z<4&&z>-260; if(z>0)passed=i+1; s.material.opacity=clamp(1-(-z-150)/110,0,1); });
+      $('#wFill').style.width=(clamp(T/4.3,0,1)*100)+'%';
+      if(passed>0){ $('#wDate').textContent=fmt(addDays(START,passed)); $('#wDay').textContent='DAY '+passed+(passed===30?' · YOUR FUTURE':''); }
+      if(T>4.3){ dateSprites.forEach(s=>s.visible=false); arrive(); }
+    } else warpSpeed=14+Math.sin(t*.4)*4;
+    updateStars(dt); neb.material.opacity=.35+clamp(warpSpeed/1500,0,1)*.5; renderer.render(warpScene,warpCam); return; }
+
+  updatePoppers(dt);
+  // camera
+  if(CH[cur].orbit) orbit+=dt*.07;
+  userYaw+= (userYawT-userYaw)*(1-Math.exp(-dt*6)); userPitch+=(userPitchT-userPitch)*(1-Math.exp(-dt*6)); zoom+=(zoomT-zoom)*(1-Math.exp(-dt*6));
+  const portrait=camera.aspect<.85, far=(portrait?clamp(.85/camera.aspect,1.3,2):camera.aspect<1.25?1.2:1)*zoom;
+  tmp.copy(camGoal.p).sub(camGoal.t); const yaw=userYaw+orbit; const cx=tmp.x*Math.cos(yaw)+tmp.z*Math.sin(yaw), cz=-tmp.x*Math.sin(yaw)+tmp.z*Math.cos(yaw); tmp.set(cx,tmp.y*(1+userPitch),cz).multiplyScalar(far).add(camGoal.t);
+  
+  const k=1-Math.exp(-dt*1.9); tmp2.copy(camGoal.t); if(portrait){ const dir=V(0,0,0).subVectors(tmp2,tmp); const dist=dir.length(); dir.normalize(); const right=V(0,0,0).crossVectors(dir,V(0,1,0)).normalize(); const up=V(0,0,0).crossVectors(right,dir).normalize().multiplyScalar(-dist*.13); tmp.add(up); tmp2.add(up); } if(!portrait&&innerWidth>760){ const dir=V(0,0,0).subVectors(tmp2,tmp); const dist=dir.length(); const right=V(0,0,0).crossVectors(dir.normalize(),V(0,1,0)).normalize().multiplyScalar(-dist*clamp((470/innerWidth)*.42,.08,.2)); tmp.add(right); tmp2.add(right); } camP.lerp(tmp,k); camT.lerp(tmp2,k);
+  camera.position.copy(camP); camera.position.y+=Math.sin(t*.6)*.15; camera.lookAt(camT);
+  // clouds
+  clouds.forEach(g=>{ g.userData.a+=dt*.01*g.userData.sp; g.position.x=Math.cos(g.userData.a)*g.userData.r; g.position.z=Math.sin(g.userData.a)*g.userData.r; });
+  // pulses
+  rings.forEach(r=>{ if(S.pulses){ const ph=(t*.33+r.userData.ph)%1; r.scale.setScalar(1+ph*30); r.material.opacity=(1-ph)*.75; } else r.material.opacity*=.9; });
+  houses.forEach(h=>{ const u=h.userData; if(S.pulses){ const d=Math.hypot(h.position.x,h.position.z+1.5); rings.forEach(r=>{ const rad=r.scale.x; if(Math.abs(rad-d)<1.2&&r.material.opacity>.1) u.glow=1; }); }
+    if(h!==hero||cur<3||cur>4) u.glow*=Math.exp(-dt*1.4); else u.glow=.8+Math.sin(t*5)*.2; u.win.emissiveIntensity=u.glow*1.6; });
+  // billboard float
+  if(billboard.visible){ billboard.position.y=9.5+Math.sin(t*1.2)*.35; billboard.rotation.y=Math.sin(t*.5)*.12; }
+  // holo cards spin in + hover
+  holoCards.forEach((c,i)=>{ c.rotation.y+=(c.userData.rotHome-c.rotation.y)*(1-Math.exp(-dt*4)); c.position.y=c.userData.home.y+Math.sin(t*1.4+i)*.18; });
+  // beam
+  if(S.beamT>=0&&S.beamT<=1){ S.beamT=Math.min(1.0001,S.beamT+dt/1.9); const p=beamCurve.getPoint(ease(Math.min(1,S.beamT))); beam.visible=S.beamT<1; beam.position.copy(p); hist.unshift(p.clone()); hist.length=Math.min(hist.length,trail.length*2);
+    trail.forEach((s,i)=>{ const hp=hist[i*2]; s.visible=!!hp&&S.beamT<1; if(hp) s.position.copy(hp); }); if(S.beamT>=1){ beam.visible=false; trail.forEach(s=>s.visible=false); hist.length=0; } }
+  // sms
+  if(S.smsT>=0&&S.smsT<=1){ S.smsT=Math.min(1,S.smsT+dt/1.5); smsSprite.position.copy(smsCurve.getPoint(ease(S.smsT))); }
+  // office ring + bounce
+  if(S.ringing){ office.position.x=14+Math.sin(t*60)*.06; const ph=(t*1.4)%1; officeRing.scale.setScalar(4+ph*8); officeRing.material.opacity=(1-ph)*.9; } else { office.position.x=14; officeRing.material.opacity*=.9; }
+  if(office.userData.bounce>0){ office.userData.bounce=Math.max(0,office.userData.bounce-dt*2.2); office.scale.y=1+Math.sin(office.userData.bounce*Math.PI*3)*.06*office.userData.bounce; } else office.scale.y=1;
+  office.userData.win.emissive.setHex(0xffb347); office.userData.win.emissiveIntensity=(cur>=3&&cur<=4)?.9+Math.sin(t*6)*.3:.15;
+  // calendar drop
+  if(bookedTile.visible&&bookedTile.userData.to&&S.boardDrop>=0){ S.boardDrop=Math.min(1,S.boardDrop+dt*1.6); const to=bookedTile.userData.to; const e=1-Math.pow(1-S.boardDrop,3); bookedTile.position.set(to.x,to.y+6*(1-e),lerp(1.2,.42,e)); bookedTile.rotation.z=(1-e)*.6; }
+  // truck
+  if(S.truckSpeed>0){ const nt=Math.min(S.truckGoal,truck.userData.t+dt*S.truckSpeed); placeTruck(nt); truck.position.y=Math.abs(Math.sin(t*14))*.05;
+    if(nt>=1&&S.truckGoal===1&&cur===5){ S.truckSpeed=0; S.arrived=true; show(hero.userData.check,1); show(bookedLabel,1); chime(); } }
+  // report bars
+  chartBars.forEach((g,i)=>{ const u=g.userData; const goal=S.bars?1:0; u.cur+=(goal-u.cur)*(1-Math.exp(-dt*(2.2-i*.3))); const L=Math.max(.01,u.lead*u.cur), B=Math.max(.01,u.book*u.cur);
+    u.b1.scale.y=L; u.b1.position.y=L/2; u.b2.scale.y=B; u.b2.position.y=B/2; u.b2.position.y=B/2; show(u.lab,S.bars&&u.cur>.6&&cur===6); u.lab.position.y=L+1.4; });
+  show(chartLabel,S.bars&&cur===6);
+  // confetti
+  confetti.material.opacity+=((S.confetti?1:0)-confetti.material.opacity)*.05;
+  if(S.confetti){ const p=confetti.geometry.attributes.position.array, v=confetti.userData.v; for(let i=0;i<v.length;i++){ p[i*3+1]-=v[i]*dt*4; p[i*3]+=Math.sin(t*2+i)*dt*.6; if(p[i*3+1]<0){ p[i*3+1]=28+Math.random()*10; } } confetti.geometry.attributes.position.needsUpdate=true; }
+  renderer.render(scene,camera); }
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

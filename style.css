@@ -16,3 +16,4 @@ section{padding:48px 0}h2{font-size:28px;margin:0 0 20px}
 ul.check{padding-left:0;list-style:none}ul.check li{padding-left:28px;position:relative;margin:8px 0}ul.check li:before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:800}
 footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14px;margin-top:40px}
 .logo{white-space:nowrap}@media(max-width:560px){.btn.alt{margin:10px 0 0}nav a{margin-left:12px;font-size:14px}nav a[href="#how"],nav a[href="#pilot"]{display:none}}
+.band a.btn.ghost{background:transparent;color:#fff;border:2px solid #fff;margin-left:8px}@media(max-width:560px){.band a.btn.ghost{margin:10px 0 0}}
