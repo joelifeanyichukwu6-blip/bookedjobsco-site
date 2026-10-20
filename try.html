@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>See Your Business 30 Days From Now | Booked Jobs Co.</title>
+<meta name="description" content="A 3-minute 3D look at your local service business 30 days from now: the ad your neighbors see, the text in under 60 seconds, and booked jobs on your calendar.">
+<meta property="og:title" content="This is your business, 30 days from now">
+<meta property="og:description" content="Pick your trade and town, then step into a 3D preview of the 30-day pilot.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/x3d/demo.css">
+</head>
+<body data-mode="any">
+<canvas id="gl"></canvas>
+<div id="veil"></div>
+
+<!-- ================= LANDING ================= -->
+<div id="landing">
+  <header class="nav">
+    <a class="logo" href="/">Booked Jobs <b>Co.</b></a>
+    <nav><a href="#stops">What you'll see</a><a href="#how">How the pilot works</a><a href="#faq">FAQ</a></nav>
+    <a class="pill-btn book" href="#" target="_blank" rel="noopener">Book a 15-min call</a>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><i></i> A 3-minute look into your future</div>
+    <h1><span id="hCo">Your business</span>,<br><em>30 days from now.</em></h1>
+    <p class="lead">Pick your trade, type your company and town, and step into a 3D preview and watch the 30-day pilot play out for your <b id="hTrade">trade</b>: the ad your neighbors see, the text that goes out in under 60 seconds, and the jobs that land on your calendar.</p>
+    <form id="who" autocomplete="off">
+      <label>Your company<input id="iCo" maxlength="30" placeholder="e.g. Summit Roofing"></label>
+      <label>Your town<input id="iTown" maxlength="30" placeholder="e.g. Monroe, NC"></label>
+      <label class="anyonly">Your trade<select id="iNiche"></select></label>
+      <label class="anyonly">Country<select id="iCountry"></select></label>
+    </form>
+    <div class="start-wrap">
+      <button id="start" class="start" type="button"><span class="ring"></span><span class="ring r2"></span><b>Start the demo</b><small>Sound on · 3 min</small></button>
+    </div>
+    <div class="fine">Nothing you type is saved or sent. Prefer a quick read? <a href="/pilot">Open the 2D version</a>.</div>
+    <div class="scroll-cue">Scroll to see what's inside ↓</div>
+  </section>
+
+  <section class="band" id="stops">
+    <div class="wrap">
+      <div class="kicker">What you'll see</div>
+      <h2>Eight stops. One booked job. Your whole month.</h2>
+      <div class="stops">
+        <article><span>01</span><h3>The problem</h3><p>A homeowner in your town spots a problem at home at 7:38 PM. The kind you fix.</p></article>
+        <article><span>02</span><h3>Your ad</h3><p>She opens Facebook and sees your company. You tap the ad yourself.</p></article>
+        <article><span>03</span><h3>The lead</h3><p>Her request flies across town and lands on your phone.</p></article>
+        <article><span>04</span><h3>Under 60 seconds</h3><p>She gets a text in your name, then a real call. Most people book the first company that answers.</p></article>
+        <article><span>05</span><h3>Booked</h3><p>You drag her job onto your calendar. No phone tag.</p></article>
+        <article><span>06</span><h3>The job</h3><p>Sunrise. Your truck rolls out and the job gets done.</p></article>
+        <article><span>07</span><h3>Friday report</h3><p>Leads, speed, booked visits and cost per visit, in plain English.</p></article>
+        <article><span>08</span><h3>Day 30</h3><p>You look at real booked jobs and decide. No long contract.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="how">
+    <div class="wrap two">
+      <div>
+        <div class="kicker">How the pilot works</div>
+        <h2>We do the setup. You do the jobs.</h2>
+        <p class="muted">Most local service companies don't lose jobs because of bad work. They lose them because someone else answered first. The pilot fixes the first five minutes.</p>
+      </div>
+      <ol class="steps">
+        <li><b>Week 1:</b> You tell us your towns and prices. We build the ad, the form, the instant text, the call script and your booking calendar.</li>
+        <li><b>Weeks 2 to 4:</b> Ads run only in your towns. Every lead gets a text in under 60 seconds and a call within 5 minutes.</li>
+        <li><b>Every Friday:</b> A plain-English report. Leads, how fast each was reached, what got booked, what it cost.</li>
+        <li><b>Day 30:</b> You judge it on booked jobs. Keep going or walk away. You pay the ad platform directly.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap narrow">
+      <div class="kicker">Straight answers</div>
+      <h2>Questions owners ask</h2>
+      <details><summary>Are the numbers in the demo real?</summary><p>No. Names and numbers in the demo are examples to show how it works. Your real results depend on your area, your prices and how fast your team answers. That's why we start with 30 days.</p></details>
+      <details><summary>Do I need to learn any software?</summary><p>No. You get texts and calls like you do now, plus a calendar link and a weekly report by email.</p></details>
+      <details><summary>Who pays for the ads?</summary><p>You set the budget and pay Facebook directly. We never mark up your ad spend.</p></details>
+      <details><summary>What if it doesn't work?</summary><p>No long contract. After 30 days you look at the booked jobs and decide.</p></details>
+    </div>
+  </section>
+
+  <section class="band final">
+    <div class="wrap narrow center">
+      <h2>See it before you decide.</h2>
+      <p class="muted">Three minutes. No signup.</p>
+      <div class="ctas"><button class="pill-btn big" type="button" data-start>Start the demo</button><a class="pill-btn ghost big book" href="#" target="_blank" rel="noopener">Book a 15-min call</a></div>
+    </div>
+  </section>
+  <footer>© 2026 Booked Jobs Co. · <a href="/privacy">Privacy</a> · <a href="/">Home</a></footer>
+</div>
+
+<!-- ================= PORTAL + WARP HUD ================= -->
+<div id="portal"></div>
+<div id="warpHud"><div class="wl">TRAVELLING INTO YOUR FUTURE</div><div id="wDate">Today</div><div id="wDay">DAY 0</div><div class="wbar"><i id="wFill"></i></div></div>
+<div id="flash"></div>
+<div id="blackout"></div>
+<div id="dip"></div>
+
+<!-- ================= STORY UI ================= -->
+<div id="story">
+  <header class="sbar">
+    <a class="logo" href="/demo">Booked Jobs <b>Co.</b></a>
+    <div class="dots" id="dots"></div>
+    <div class="sright"><button class="icon" id="mute" aria-label="Sound">♪</button><a class="pill-btn book sm" href="#" target="_blank" rel="noopener">Book a call</a><button class="icon" id="exit" aria-label="Exit demo" title="Exit">✕</button></div>
+  </header>
+  <div class="caption" id="caption">
+    <div class="cmeta" id="cMeta"></div>
+    <div class="ctext" id="cText"></div>
+    <div class="cctl">
+      <button id="bPrev" aria-label="Previous scene">◀</button>
+      <button id="bPlay" aria-label="Pause">❚❚</button>
+      <button id="bNext" class="go">Next scene ▶</button>
+    </div>
+  </div>
+  <div id="prompt"></div>
+  <div id="timer"><small>SINCE SARAH HIT SEND</small><b id="tClock">0:00</b></div>
+  <div id="sms"></div>
+  <div id="hint">Drag to look around</div>
+</div>
+
+<!-- phone overlay (scene 2) -->
+<div id="phoneUI" aria-hidden="true">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="pScreen"></div>
+  </div>
+  <div class="ptip" id="pTip">Tap the ad, like Sarah would.</div>
+</div>
+
+<div id="panel"></div>
+<div id="endcard"></div>
+<div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
+<script type="module" src="/x3d/app.bundle.js?v=6"></script>
+</body>
+</html>

@@ -30,6 +30,8 @@
     <form id="who" autocomplete="off">
       <label>Your company<input id="iCo" maxlength="30" placeholder="e.g. Laney Septic"></label>
       <label>Your town<input id="iTown" maxlength="30" placeholder="e.g. Monroe, NC"></label>
+      <label class="anyonly">Your trade<select id="iNiche"></select></label>
+      <label class="anyonly">Country<select id="iCountry"></select></label>
     </form>
     <div class="start-wrap">
       <button id="start" class="start" type="button"><span class="ring"></span><span class="ring r2"></span><b>Start the demo</b><small>Sound on · 3 min</small></button>
@@ -97,6 +99,7 @@
 <div id="warpHud"><div class="wl">TRAVELLING INTO YOUR FUTURE</div><div id="wDate">Today</div><div id="wDay">DAY 0</div><div class="wbar"><i id="wFill"></i></div></div>
 <div id="flash"></div>
 <div id="blackout"></div>
+<div id="dip"></div>
 
 <!-- ================= STORY UI ================= -->
 <div id="story">
@@ -132,6 +135,6 @@
 <div id="panel"></div>
 <div id="endcard"></div>
 <div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
-<script type="module" src="/x3d/app.bundle.js?v=4"></script>
+<script type="module" src="/x3d/app.bundle.js?v=6"></script>
 </body>
 </html>
