@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The 30-Day Septic Pilot, Live Demo | Booked Jobs Co.</title>
+<meta name="description" content="See exactly how the 30-day pilot works: the local ad, the 60-second follow-up, the booked visit and your weekly report. Interactive demo.">
+<meta property="og:title" content="See your 30-day septic pilot before it starts">
+<meta property="og:description" content="Interactive demo: the ad your neighbors see, the 60-second follow-up, the booked job and your weekly report.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1310;--bg2:#101b17;--panel:#14221d;--panel2:#1a2c25;--line:#24382f;--ink:#eef4f0;--muted:#9db1a7;--dim:#6f857a;
+  --brand:#2f8f6a;--brand2:#45b386;--accent:#f39a3d;--accent2:#ffb867;--blue:#3b82f6;--red:#ef4444;--fb:#1877f2;
+  --r:18px;--shadow:0 20px 60px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+a{color:var(--accent2)}
+button{font:inherit;cursor:pointer}
+.serif{font-family:Fraunces,Georgia,serif;letter-spacing:-.01em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.glow{position:fixed;inset:-20% -10% auto;height:70vh;background:radial-gradient(600px 300px at 20% 10%,rgba(47,143,106,.25),transparent 70%),radial-gradient(500px 260px at 85% 0%,rgba(243,154,61,.16),transparent 70%);pointer-events:none;z-index:0}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,19,16,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font-weight:800;font-size:18px;text-decoration:none;color:var(--ink);white-space:nowrap}.logo span{color:var(--accent)}
+.prog{flex:1;height:6px;background:var(--panel2);border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand2),var(--accent));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.topbtn{background:var(--accent);color:#1b1206;border:0;border-radius:10px;padding:9px 14px;font-weight:700;white-space:nowrap;text-decoration:none;font-size:14px}
+.topbtn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+main{position:relative;z-index:1}
+
+/* HERO / PERSONALIZE */
+.hero{padding:64px 0 40px;text-align:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:99px;color:var(--muted);font-size:13px}
+.pill b{width:8px;height:8px;border-radius:50%;background:var(--brand2);box-shadow:0 0 0 0 rgba(69,179,134,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(69,179,134,0)}100%{box-shadow:0 0 0 0 rgba(69,179,134,0)}}
+.hero h1{font-size:clamp(34px,5.6vw,64px);line-height:1.05;margin:18px auto 14px;max-width:900px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:720px;margin:0 auto 28px}
+.personal{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:0 auto}
+.field{display:flex;flex-direction:column;text-align:left;gap:6px;flex:1;min-width:200px}
+.field label{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.field input,.field select{background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:13px 14px;font:inherit;outline:none}
+.field input:focus{border-color:var(--brand2)}
+.cta{background:linear-gradient(135deg,var(--accent),#e7792b);color:#1b1206;border:0;border-radius:14px;padding:15px 22px;font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(243,154,61,.3);align-self:flex-end;transition:transform .15s}
+.cta:hover{transform:translateY(-2px)}
+.sub{font-size:13px;color:var(--dim);margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:900px;margin:40px auto 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:left}
+.stat b{display:block;font-size:24px}.stat span{color:var(--muted);font-size:13px}
+
+/* CHAPTER NAV */
+.chapters{display:flex;gap:8px;overflow-x:auto;padding:18px 0 6px;scrollbar-width:none}
+.chapters::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:9px 14px;border-radius:99px;font-weight:600;font-size:14px}
+.chip .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font-size:12px}
+.chip.on{color:#fff;border-color:var(--brand2);background:linear-gradient(135deg,rgba(47,143,106,.35),rgba(47,143,106,.12))}
+.chip.on .n{background:var(--brand2);color:#062016}
+.chip.done .n{background:var(--brand);color:#fff}
+
+/* STAGE */
+.stage{display:grid;grid-template-columns:1.05fr 1fr;gap:28px;align-items:center;min-height:620px;padding:24px 0 40px}
+.copy .eyebrow{color:var(--accent2);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+.copy h2{font-size:clamp(28px,3.6vw,44px);line-height:1.1;margin:10px 0 14px}
+.copy p{color:var(--muted);font-size:17px;margin:0 0 16px}
+.copy ul{list-style:none;padding:0;margin:0 0 20px}
+.copy li{position:relative;padding-left:30px;margin:10px 0;color:#d4e2db}
+.copy li:before{content:"";position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:6px;background:rgba(69,179,134,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' stroke='%2345b386' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:12px;padding:12px 16px;font-weight:700}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.orange{background:var(--accent);border-color:var(--accent);color:#1b1206}
+.btn:disabled{opacity:.45;cursor:default}
+.note{font-size:12.5px;color:var(--dim);margin-top:14px}
+.visual{position:relative;display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.scene{display:none;animation:fadeUp .6s cubic-bezier(.2,.8,.2,1)}
+.scene.on{display:contents}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* PHONE */
+.phone{width:290px;height:590px;border-radius:44px;background:#05080a;padding:11px;box-shadow:var(--shadow),inset 0 0 0 2px #2a3a33;position:relative;flex:none}
+.phone .screen{width:100%;height:100%;border-radius:34px;overflow:hidden;background:#f0f2f5;color:#111;position:relative;font-size:13px}
+.phone .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:26px;background:#05080a;border-radius:0 0 16px 16px;z-index:5}
+.phone .label{position:absolute;bottom:-30px;left:0;right:0;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
+.statusbar{height:40px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 22px 4px;font-size:12px;font-weight:700;color:#111}
+.phone.shake{animation:shake .5s 2}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+
+/* FB feed */
+.fbbar{background:#fff;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e4e6eb}
+.fbbar b{color:var(--fb);font-size:22px;font-weight:800;letter-spacing:-.5px}
+.feed{height:calc(100% - 92px);overflow:hidden;position:relative}
+.feedinner{transition:transform 1.6s cubic-bezier(.4,0,.2,1)}
+.post{background:#fff;margin:8px 0;padding:10px 12px}
+.post .h{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:800}
+.post .h small{display:block;color:#65676b;font-size:11px}
+.post .ph{height:120px;border-radius:8px;background:linear-gradient(135deg,#cfd8dc,#eceff1)}
+.ad .creative{height:170px;border-radius:0;margin:0 -12px;position:relative;overflow:hidden;background:linear-gradient(160deg,#1e3a2f,#2f8f6a 55%,#7cc8a3)}
+.ad .creative .yard{position:absolute;bottom:0;left:0;right:0;height:62px;background:linear-gradient(#5aa33c,#3f7d29)}
+.ad .creative .house{position:absolute;bottom:52px;right:26px;width:78px;height:54px;background:#f6efe3;border-radius:4px}
+.ad .creative .house:before{content:"";position:absolute;left:-10px;right:-10px;top:-38px;border:49px solid transparent;border-bottom:32px solid #b4523a;border-top:0}
+.ad .creative .puddle{position:absolute;bottom:14px;left:40px;width:110px;height:22px;border-radius:50%;background:radial-gradient(#4a5c3a,#33402a);animation:puddle 3s ease-in-out infinite}
+@keyframes puddle{50%{transform:scaleX(1.12)}}
+.ad .creative .tag{position:absolute;top:12px;right:12px;background:#fff;color:#b4523a;font-weight:800;font-size:11px;padding:5px 8px;border-radius:6px;transform:rotate(3deg)}
+.ad .creative .headline{position:absolute;top:14px;left:14px;color:#fff;font-weight:800;font-size:17px;line-height:1.15;max-width:140px;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.adfoot{display:flex;justify-content:space-between;align-items:center;background:#f0f2f5;margin:0 -12px -10px;padding:9px 12px}
+.adfoot small{color:#65676b;font-size:10px;text-transform:uppercase}
+.adfoot b{font-size:13px}
+.fbcta{background:#e4e6eb;border:0;border-radius:6px;padding:7px 10px;font-weight:700;font-size:12px;color:#050505}
+.fbcta.hot{background:var(--fb);color:#fff;box-shadow:0 0 0 0 rgba(24,119,242,.6);animation:ring 1.4s infinite}
+@keyframes ring{70%{box-shadow:0 0 0 12px rgba(24,119,242,0)}100%{box-shadow:0 0 0 0 rgba(24,119,242,0)}}
+.tapdot{position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;pointer-events:none;opacity:0;z-index:9}
+.tapdot.go{animation:tap 1s ease}
+@keyframes tap{0%{opacity:0;transform:scale(1.6)}30%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.7)}}
+
+/* Lead form sheet */
+.sheet{position:absolute;inset:auto 0 0;height:88%;background:#fff;border-radius:18px 18px 0 0;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1);padding:16px 14px;z-index:8;box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+.sheet.up{transform:none}
+.sheet h4{margin:4px 0 2px;font-size:15px}
+.sheet .co{font-size:11px;color:#65676b;margin-bottom:10px}
+.q{font-size:12px;font-weight:700;margin:10px 0 6px}
+.opts{display:grid;gap:6px}
+.opt{border:1.5px solid #dadde1;background:#fff;border-radius:10px;padding:8px 10px;text-align:left;font-size:12.5px;color:#111;transition:all .2s}
+.opt.sel{border-color:var(--fb);background:#e7f0ff}
+.inp{border:1.5px solid #dadde1;border-radius:10px;padding:8px 10px;font-size:12.5px;margin-bottom:6px;color:#111;background:#fff;min-height:34px}
+.submit{width:100%;margin-top:10px;background:var(--fb);color:#fff;border:0;border-radius:10px;padding:11px;font-weight:800}
+.thanks{position:absolute;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:9}
+.thanks.on{display:flex;animation:fadeUp .4s}
+.check{width:64px;height:64px;border-radius:50%;background:#e9f8ef;display:grid;place-items:center;margin-bottom:12px}
+.check svg{width:34px;height:34px}
+.check path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* Messages */
+.msgs{background:#fff;height:calc(100% - 40px);display:flex;flex-direction:column}
+.msghead{text-align:center;padding:6px 0 10px;border-bottom:1px solid #eee}
+.msghead .av{margin:0 auto 4px;width:40px;height:40px}
+.msghead b{font-size:13px}.msghead small{display:block;color:#8e8e93;font-size:10px}
+.thread{flex:1;padding:12px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.bub{max-width:82%;padding:8px 11px;border-radius:17px;font-size:12.5px;line-height:1.35;animation:pop .35s cubic-bezier(.2,.9,.3,1.4)}
+.bub.in{background:#e9e9eb;color:#111;align-self:flex-start;border-bottom-left-radius:5px}
+.bub.out{background:#0a84ff;color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+.bub.typing{display:flex;gap:4px;padding:11px 13px}
+.bub.typing i{width:6px;height:6px;border-radius:50%;background:#8e8e93;animation:dots 1s infinite}
+.bub.typing i:nth-child(2){animation-delay:.15s}.bub.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dots{50%{transform:translateY(-4px);opacity:.5}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.stamp{align-self:center;font-size:10px;color:#8e8e93;margin:4px 0}
+/* Lock screen notification */
+.lock{height:100%;background:linear-gradient(160deg,#1d2b3a,#0e1620 60%,#203027);color:#fff;position:relative;text-align:center}
+.lock .time{font-size:56px;font-weight:300;margin-top:36px;letter-spacing:-1px}
+.lock .date{font-size:13px;opacity:.8}
+.notif{position:absolute;left:10px;right:10px;top:150px;background:rgba(255,255,255,.88);color:#111;border-radius:16px;padding:10px 12px;text-align:left;transform:translateY(-30px);opacity:0;transition:all .5s cubic-bezier(.2,.9,.3,1.3);backdrop-filter:blur(8px)}
+.notif.on{transform:none;opacity:1}
+.notif + .notif{top:236px}
+.notif .app{display:flex;justify-content:space-between;font-size:10.5px;color:#555;margin-bottom:3px}
+.notif b{font-size:12.5px}
+.notif p{margin:2px 0 0;font-size:12px;line-height:1.3}
+.callbar{position:absolute;bottom:26px;left:16px;right:16px;display:flex;gap:10px}
+.callbar button{flex:1;border:0;border-radius:14px;padding:12px;font-weight:800;color:#fff}
+.callbar .call{background:#34c759}
+.callbar .later{background:rgba(255,255,255,.18)}
+/* call screen */
+.callscr{position:absolute;inset:0;background:linear-gradient(#1b2a22,#0b120f);color:#fff;display:none;flex-direction:column;align-items:center;padding-top:70px;z-index:6}
+.callscr.on{display:flex;animation:fadeUp .4s}
+.callscr .big{width:90px;height:90px;border-radius:50%;background:var(--brand);display:grid;place-items:center;font-size:34px;font-weight:800;margin-bottom:14px}
+.callscr .timer{opacity:.75;margin-top:4px}
+.callscr .say{margin:28px 16px 0;background:rgba(255,255,255,.08);border-radius:14px;padding:12px;font-size:12.5px;text-align:left;line-height:1.45;min-height:110px}
+.callscr .end{margin-top:auto;margin-bottom:34px;width:64px;height:64px;border-radius:50%;background:#ff3b30;border:0}
+
+/* Stopwatch */
+.watch{width:100%;max-width:620px;display:flex;justify-content:center;gap:10px;align-items:center;margin-bottom:6px;flex-basis:100%}
+.watch .clock{font-variant-numeric:tabular-nums;font-size:34px;font-weight:800;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 16px;min-width:150px;text-align:center}
+.watch .lbl{color:var(--muted);font-size:13px;max-width:220px}
+
+/* Calendar */
+.cal{width:min(520px,100%);background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.cal h4{margin:0 0 4px}.cal .muted{color:var(--muted);font-size:13px}
+.calgrid{display:grid;grid-template-columns:52px repeat(5,1fr);gap:6px;margin-top:14px;font-size:12px}
+.calgrid .hd{color:var(--muted);text-align:center;font-weight:700}
+.calgrid .tm{color:var(--dim);text-align:right;padding-right:4px;line-height:38px}
+.slot{height:38px;border-radius:9px;background:var(--panel2);border:1px dashed transparent;position:relative}
+.slot.busy{background:repeating-linear-gradient(45deg,#1e3029,#1e3029 6px,#22362e 6px,#22362e 12px)}
+.slot.open{border-color:#2f5446;cursor:pointer}
+.slot.open:hover{background:#21382f}
+.slot.booked{background:linear-gradient(135deg,var(--accent),#e7792b);color:#1b1206;font-weight:800;font-size:10.5px;padding:3px 6px;line-height:1.2;animation:pop .4s;border:0}
+.confirm{margin-top:14px;display:none;gap:12px;align-items:center;background:rgba(69,179,134,.12);border:1px solid rgba(69,179,134,.4);border-radius:12px;padding:12px}
+.confirm.on{display:flex;animation:fadeUp .4s}
+
+/* Dashboard */
+.dash{width:min(560px,100%);background:#0f1a16;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.dash .dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.dash .dh b{font-size:15px}.dash .dh > span{font-size:12px;color:var(--muted);background:var(--panel);padding:4px 9px;border-radius:99px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+.kpi small{color:var(--muted);font-size:11px;display:block}
+.kpi b{font-size:22px;font-variant-numeric:tabular-nums}
+.kpi .up{color:var(--brand2);font-size:11px;font-weight:700}
+.chart{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.chart svg{width:100%;height:150px;display:block}
+.funnel{display:grid;gap:6px;margin-top:12px}
+.fun{display:grid;grid-template-columns:110px 1fr 40px;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.fun .bar{height:12px;border-radius:99px;background:var(--panel2);overflow:hidden}
+.fun .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--brand2),var(--accent));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.fun b{color:var(--ink);text-align:right}
+.leadrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;font-size:12px;padding:7px 0;border-top:1px solid var(--line);color:#cfe0d7}
+.badge{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:99px}
+.badge.g{background:rgba(69,179,134,.18);color:var(--brand2)}.badge.o{background:rgba(243,154,61,.18);color:var(--accent2)}.badge.b{background:rgba(59,130,246,.18);color:#8db7ff}
+
+/* Calculator */
+.calc{width:min(540px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+.rng{margin:14px 0}
+.rng .t{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted)}
+.rng .t b{color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent);margin-top:6px}
+.result{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result div{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px}
+.result small{color:var(--muted);font-size:12px}.result b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+.result .hero2{grid-column:1/-1;background:linear-gradient(135deg,rgba(47,143,106,.3),rgba(243,154,61,.18));border-color:rgba(243,154,61,.35)}
+.result .hero2 b{font-size:36px}
+
+/* Timeline */
+.tl{width:min(560px,100%);position:relative;padding-left:26px}
+.tl:before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .ev{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s}
+.tl .ev:before{content:"";position:absolute;left:-23px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--panel2);border:2px solid var(--brand2)}
+.tl .ev.on{border-color:var(--brand2)}
+.tl .ev.on:before{background:var(--brand2)}
+.tl .ev .d{font-size:11px;font-weight:800;color:var(--accent2);letter-spacing:.08em}
+.tl .ev b{display:block;margin:2px 0}
+.tl .ev p{margin:0;color:var(--muted);font-size:13.5px;display:none}
+.tl .ev.on p{display:block}
+.who{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.who.us{background:rgba(69,179,134,.18);color:var(--brand2)}.who.you{background:rgba(243,154,61,.18);color:var(--accent2)}
+
+/* Build checklist (chapter 1) */
+.build{width:min(520px,100%);display:grid;gap:10px}
+.task{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;opacity:.45;transform:translateX(10px);transition:all .5s}
+.task.on{opacity:1;transform:none;border-color:rgba(69,179,134,.45)}
+.task .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:20px;background:var(--panel2)}
+.task b{display:block}.task small{color:var(--muted)}
+.task .st{margin-left:auto;font-size:11px;font-weight:800;color:var(--dim);white-space:nowrap}
+.task.on .st{color:var(--brand2)}
+.spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:sp 0.8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* Final CTA */
+.final{margin:30px 0 70px;background:linear-gradient(135deg,#173b2d,#0f2119);border:1px solid #2a5a46;border-radius:26px;padding:40px;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center}
+.final h2{font-size:clamp(28px,3.4vw,42px);margin:0 0 10px;line-height:1.1}
+.final p{color:#c8dcd2}
+.final .box{background:rgba(0,0,0,.25);border:1px solid #2a5a46;border-radius:18px;padding:18px}
+.final .box li{margin:8px 0}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-size:13px}
+.floating{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;gap:8px}
+.floating button{border:1px solid var(--line);background:rgba(20,34,29,.92);backdrop-filter:blur(8px);color:var(--ink);border-radius:12px;padding:10px 14px;font-weight:700;box-shadow:var(--shadow)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#0b1310;padding:10px 16px;border-radius:12px;font-weight:700;z-index:80;transition:all .4s}
+.toast.on{transform:translate(-50%,0);opacity:1}
+
+.stage[data-ch="3"]{grid-template-columns:.85fr 1.15fr}
+.stage[data-ch="3"] .phone{width:258px;height:530px;border-radius:40px}
+.stage[data-ch="3"] .phone .screen{border-radius:31px}
+@media (max-width:900px){
+  .stage[data-ch="3"]{grid-template-columns:1fr}
+  .stage{grid-template-columns:1fr;min-height:0}
+  .visual{order:-1}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .final{grid-template-columns:1fr;padding:26px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .top .prog{display:none}
+}
+@media (max-width:640px){
+  .phone{width:250px;height:510px;border-radius:38px}
+  .phone .screen{border-radius:29px}
+  .visual{gap:14px}
+  .phone.second{display:none}
+  .floating{left:12px;right:12px;justify-content:center}
+  .topbtn.ghost{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/">Booked Jobs <span>Co.</span></a>
+  <div class="prog"><i id="progbar"></i></div>
+  <a class="topbtn ghost" href="/septic.html">About the pilot</a>
+  <a class="topbtn book" href="#book">Book a 15-min chat</a>
+</div></header>
+
+<main>
+<!-- HERO -->
+<section class="hero wrap" id="intro">
+  <span class="pill"><b></b> Interactive demo · takes about 3 minutes</span>
+  <h1 class="serif">See your 30-day septic pilot <em>before it even starts.</em></h1>
+  <p class="lead">Tap through the exact steps: the ad your neighbors see, the text that goes out in under 60 seconds, the job landing on your calendar, and the report you get every week.</p>
+  <div class="personal">
+    <div class="field"><label for="inCo">Your company name</label><input id="inCo" placeholder="e.g. Laney Septic" maxlength="40"></div>
+    <div class="field"><label for="inTown">Main town you serve</label><input id="inTown" placeholder="e.g. Monroe, NC" maxlength="30"></div>
+    <button class="cta" id="startBtn">Start the demo →</button>
+  </div>
+  <div class="sub">Leave it blank and we'll use an example company. Nothing you type is saved or sent anywhere.</div>
+  <div class="stats">
+    <div class="stat"><b>60 sec</b><span>from form to first text</span></div>
+    <div class="stat"><b>5 min</b><span>max until a real call</span></div>
+    <div class="stat"><b>30 days</b><span>pilot, no long contract</span></div>
+    <div class="stat"><b>Weekly</b><span>plain-English report</span></div>
+  </div>
+</section>
+
+<section class="wrap" id="tour">
+  <nav class="chapters" id="chips"></nav>
+
+  <!-- CH1 BUILD -->
+  <div class="stage" data-ch="1">
+    <div class="copy">
+      <div class="eyebrow">Step 1 · Days 1 to 5</div>
+      <h2 class="serif">We build everything. You keep running jobs.</h2>
+      <p>Before a single dollar goes into ads, we set up the whole machine for <b class="co">your company</b>. You give us about 20 minutes on a call. That's it.</p>
+      <ul>
+        <li>Ads aimed only at homeowners in <span class="town">your area</span> and the towns around it</li>
+        <li>A short form that asks the questions you'd ask on the phone</li>
+        <li>Instant text and call follow-up wired to your phone</li>
+        <li>A tracking sheet so every lead and every dollar is counted</li>
+      </ul>
+      <div class="actions"><button class="btn primary" id="buildBtn">▶ Watch the setup</button><button class="btn" data-next>Next: the ad →</button></div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="build" id="build">
+        <div class="task"><div class="ic">🎯</div><div><b>Local ad targeting</b><small>Homeowners within 25 miles of <span class="town">your area</span></small></div><span class="st">Waiting</span></div>
+        <div class="task"><div class="ic">🖼️</div><div><b>Ad pictures and words</b><small>Built around backups, smells and soggy yards</small></div><span class="st">Waiting</span></div>
+        <div class="task"><div class="ic">📝</div><div><b>Quote request form</b><small>Name, phone, town and what's going on</small></div><span class="st">Waiting</span></div>
+        <div class="task"><div class="ic">⚡</div><div><b>60-second follow-up</b><small>Text to the homeowner, alert to you</small></div><span class="st">Waiting</span></div>
+        <div class="task"><div class="ic">📊</div><div><b>Lead tracker and weekly report</b><small>Every lead, call and booked job in one place</small></div><span class="st">Waiting</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- CH2 AD -->
+  <div class="stage" data-ch="2">
+    <div class="copy">
+      <div class="eyebrow">Step 2 · The ad</div>
+      <h2 class="serif">A homeowner in <span class="town">your area</span> scrolls Facebook. Your ad shows up.</h2>
+      <p>No fancy video. Just a clear message to the people who need you right now: slow drains, a smell in the yard, a failed inspection before selling the house.</p>
+      <ul>
+        <li>Shown only in the towns you actually serve</li>
+        <li>Aimed at repair and replacement jobs, not just $350 pump-outs</li>
+        <li>One tap opens a short form, already filled with their Facebook name and number</li>
+      </ul>
+      <div class="actions"><button class="btn orange" id="adBtn">▶ Play: homeowner sees the ad</button><button class="btn" data-next>Next: the 60 seconds →</button></div>
+      <div class="note">Tip: you can tap the blue button and the form answers yourself.</div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="phone" id="fbPhone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●● 􀙇 🔋</span></div>
+        <div class="fbbar"><b>facebook</b><span>🔍 💬</span></div>
+        <div class="feed"><div class="feedinner" id="feedInner">
+          <div class="post"><div class="h"><div class="av" style="background:#8e44ad">M</div><div><b>Megan Hart</b><small>2h · 🌎</small></div></div><div>Fall soccer is DONE ⚽ so proud of these kids!</div><div class="ph" style="margin-top:8px"></div></div>
+          <div class="post"><div class="h"><div class="av" style="background:#e67e22">T</div><div><b>Town Community Group</b><small>5h · 👥</small></div></div><div>Anyone know a good septic company? Yard smells awful after the rain 😩</div></div>
+          <div class="post ad" id="theAd">
+            <div class="h"><div class="av" style="background:var(--brand)" id="adAv">L</div><div><b class="co">Your Company</b><small>Sponsored · 🌎</small></div></div>
+            <div style="margin-bottom:8px">Slow drains, gurgling pipes or a soggy yard in <span class="town">your town</span>? We fix septic problems fast. Tap for a free quote, we call you back in minutes.</div>
+            <div class="creative"><div class="headline">Septic trouble? We'll call you in 5 minutes.</div><div class="tag">LOCAL · FAST</div><div class="house"></div><div class="yard"></div><div class="puddle"></div></div>
+            <div class="adfoot"><div><small>Free quote</small><br><b>Septic help in <span class="town">your town</span></b></div><button class="fbcta" id="getQuote">Get quote</button></div>
+          </div>
+          <div class="post"><div class="h"><div class="av" style="background:#16a085">J</div><div><b>Jake Miller</b><small>8h</small></div></div><div>Deer season prep 🦌</div><div class="ph" style="margin-top:8px"></div></div>
+        </div></div>
+        <div class="tapdot" id="tap1"></div>
+        <div class="sheet" id="sheet">
+          <h4>Get a free septic quote</h4>
+          <div class="co">from <b class="co">Your Company</b> · takes 20 seconds</div>
+          <div class="q">What's going on?</div>
+          <div class="opts" id="opts">
+            <button class="opt" data-v="Slow drains or backup">🚽 Slow drains or backup</button>
+            <button class="opt" data-v="Soggy yard or smell">💧 Soggy yard or smell</button>
+            <button class="opt" data-v="Failed inspection">📋 Failed inspection (selling house)</button>
+            <button class="opt" data-v="Need a new system">🏗️ Need a new system</button>
+            <button class="opt" data-v="Just pumping">🚛 Just need pumping</button>
+          </div>
+          <div class="q">Your details</div>
+          <div class="inp" id="fName">Sarah Collins</div>
+          <div class="inp" id="fPhone">(704) 555-0142</div>
+          <button class="submit" id="submitForm">Send request</button>
+          <div class="thanks" id="thanks"><div class="check"><svg viewBox="0 0 40 40"><path d="M10 21l7 7 14-15" stroke="#16a34a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><b>Request sent!</b><p style="color:#65676b;font-size:12px;margin:6px 0 0"><span class="co">Your Company</span> will text you right now.</p></div>
+        </div>
+      </div><div class="label">Homeowner's phone</div></div>
+    </div></div>
+  </div>
+
+  <!-- CH3 60 SECONDS -->
+  <div class="stage" data-ch="3">
+    <div class="copy">
+      <div class="eyebrow">Step 3 · The first 60 seconds</div>
+      <h2 class="serif">Most companies lose the job right here. You won't.</h2>
+      <p>Homeowners with a septic problem call the first company that answers. So the moment the form comes in, two things happen at the same time. Automatically. Even if your crew is in a hole on another job.</p>
+      <ul>
+        <li><b>The homeowner</b> gets a friendly text from <span class="co">your company</span> within seconds</li>
+        <li><b>You</b> get an alert with their name, town and problem, plus a one-tap call button</li>
+        <li>If nobody calls within 5 minutes, we send a second nudge so the lead never goes cold</li>
+      </ul>
+      <div class="actions"><button class="btn orange" id="fastBtn">▶ Play the 60 seconds</button><button class="btn" data-next>Next: the booked job →</button></div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="watch"><div class="clock" id="clock">0:00</div><div class="lbl" id="clockLbl">Press play. The clock starts when Sarah taps "Send request".</div></div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:42</span><span>●●● 🔋</span></div>
+        <div class="msgs"><div class="msghead"><div class="av" style="background:var(--brand)" id="smsAv">L</div><b class="co">Your Company</b><small>Text message</small></div>
+          <div class="thread" id="hoThread"></div></div>
+      </div><div class="label">Sarah (homeowner)</div></div>
+      <div class="phone second" id="ownerPhone"><div class="notch"></div><div class="screen">
+        <div class="lock"><div class="time" id="ownTime">9:42</div><div class="date">Tuesday · on a job site</div>
+          <div class="notif" id="n1"><div class="app"><span>💬 BOOKED JOBS ALERT</span><span>now</span></div><b>🔥 New septic lead</b><p id="n1t">Sarah Collins · your town · Slow drains or backup</p></div>
+          <div class="notif" id="n2"><div class="app"><span>📧 EMAIL</span><span>now</span></div><b>Lead details + call script</b><p>Tap to see what she said and what to say back.</p></div>
+          <div class="callbar"><button class="later">Later</button><button class="call" id="callBtn">📞 Call Sarah</button></div>
+          <div class="callscr" id="callScr"><div class="big">S</div><b>Sarah Collins</b><div class="timer" id="callTimer">calling…</div><div class="say" id="callSay"></div><button class="end" id="endCall">✕</button></div>
+        </div>
+      </div><div class="label">You (the owner)</div></div>
+    </div></div>
+  </div>
+
+  <!-- CH4 BOOKED -->
+  <div class="stage" data-ch="4">
+    <div class="copy">
+      <div class="eyebrow">Step 4 · Booked</div>
+      <h2 class="serif">The visit lands on your calendar. Not on your competitor's.</h2>
+      <p>You call, quote a time, done. If you'd rather not call, the homeowner can pick a slot from your open times instead. Either way, they get a confirmation text and a reminder the day before, so fewer no-shows.</p>
+      <ul>
+        <li>Works with the calendar you already use</li>
+        <li>Reminder text the day before and 1 hour before</li>
+        <li>You see which ad and which town every job came from</li>
+      </ul>
+      <div class="actions"><button class="btn orange" id="bookBtn">▶ Book Sarah's visit</button><button class="btn" data-next>Next: your weekly report →</button></div>
+      <div class="note">Or tap any open slot on the calendar yourself.</div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="cal">
+        <h4><span class="co">Your Company</span> · this week</h4>
+        <div class="muted">Grey = already booked · outlined = open</div>
+        <div class="calgrid" id="calgrid"></div>
+        <div class="confirm" id="confirm"><div style="font-size:26px">✅</div><div><b>Sarah Collins · Wed 10:00 AM</b><div class="muted" id="confTxt">Slow drains or backup · confirmation text sent · reminder set</div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- CH5 REPORT -->
+  <div class="stage" data-ch="5">
+    <div class="copy">
+      <div class="eyebrow">Step 5 · Every Monday</div>
+      <h2 class="serif">One simple report. Real numbers, no fluff.</h2>
+      <p>Every week you see exactly what came in, how fast it was followed up, what got booked and what it cost you. If something isn't working, you'll see it as fast as we do.</p>
+      <ul>
+        <li>Leads, booked visits and cost per booked visit</li>
+        <li>Which towns and which problems bring the best jobs</li>
+        <li>Every lead listed by name, so nothing slips through</li>
+      </ul>
+      <div class="actions"><button class="btn orange" id="dashBtn">▶ Show an example week</button><button class="btn" data-next>Next: what it's worth →</button></div>
+      <div class="note">These are example numbers to show what the report looks like. Your real numbers depend on your area, budget and how fast leads get called.</div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="dash">
+        <div class="dh"><b>📊 <span class="co">Your Company</span> · Week 2</b><span>example data</span></div>
+        <div class="kpis">
+          <div class="kpi"><small>Leads</small><b data-k="leads">0</b><div class="up">quote requests</div></div>
+          <div class="kpi"><small>Called in 5 min</small><b data-k="fast">0</b><div class="up">% of leads</div></div>
+          <div class="kpi"><small>Booked visits</small><b data-k="booked">0</b><div class="up">on your calendar</div></div>
+          <div class="kpi"><small>Cost / booked</small><b data-k="cpb">$0</b><div class="up">ad spend ÷ visits</div></div>
+        </div>
+        <div class="chart"><svg viewBox="0 0 500 150" id="chart" preserveAspectRatio="none"></svg></div>
+        <div class="funnel">
+          <div class="fun"><span>Saw the ad</span><div class="bar"><i data-w="100"></i></div><b>4,860</b></div>
+          <div class="fun"><span>Asked for a quote</span><div class="bar"><i data-w="62"></i></div><b>21</b></div>
+          <div class="fun"><span>Reached by phone</span><div class="bar"><i data-w="48"></i></div><b>16</b></div>
+          <div class="fun"><span>Booked a visit</span><div class="bar"><i data-w="30"></i></div><b>9</b></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="leadrow"><span>Sarah C. · <span class="town">your town</span></span><span class="badge o">Backup</span><span class="badge g">Booked</span></div>
+          <div class="leadrow"><span>Mike R. · 8 mi away</span><span class="badge b">Inspection</span><span class="badge g">Booked</span></div>
+          <div class="leadrow"><span>Dana P. · 12 mi away</span><span class="badge o">Soggy yard</span><span class="badge b">Called, quoting</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- CH6 CALCULATOR -->
+  <div class="stage" data-ch="6">
+    <div class="copy">
+      <div class="eyebrow">Step 6 · Your numbers</div>
+      <h2 class="serif">What could one month be worth to you?</h2>
+      <p>Move the sliders to match your business. The math is simple: ad budget brings leads, fast follow-up turns leads into visits, and you close the visits like you always do.</p>
+      <ul>
+        <li>Septic repairs and drain field work often run in the thousands. A new system can run much higher. Use your own average.</li>
+        <li>You set the ad budget and pay Facebook directly. We never touch that money.</li>
+      </ul>
+      <div class="actions"><button class="btn" data-next>Next: the 30-day plan →</button></div>
+      <div class="note">This is a calculator, not a promise. It shows what's possible at the numbers you choose.</div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="calc">
+        <div class="rng"><div class="t"><span>Monthly ad budget</span><b id="vBud">$1,000</b></div><input type="range" id="rBud" min="300" max="5000" step="100" value="1000"></div>
+        <div class="rng"><div class="t"><span>Cost per quote request</span><b id="vCpl">$40</b></div><input type="range" id="rCpl" min="15" max="120" step="5" value="40"></div>
+        <div class="rng"><div class="t"><span>Requests that book a visit</span><b id="vBook">40%</b></div><input type="range" id="rBook" min="10" max="80" step="5" value="40"></div>
+        <div class="rng"><div class="t"><span>Visits you win</span><b id="vClose">50%</b></div><input type="range" id="rClose" min="10" max="90" step="5" value="50"></div>
+        <div class="rng"><div class="t"><span>Your average repair or replacement job</span><b id="vJob">$2,500</b></div><input type="range" id="rJob" min="500" max="15000" step="250" value="2500"></div>
+        <div class="result">
+          <div><small>Quote requests</small><b id="oLeads">25</b></div>
+          <div><small>Booked visits</small><b id="oVisits">10</b></div>
+          <div><small>Jobs won</small><b id="oJobs">5</b></div>
+          <div><small>Return on ad spend</small><b id="oRoas">12.5x</b></div>
+          <div class="hero2"><small>Possible new revenue in a month</small><b id="oRev">$12,500</b></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- CH7 30 DAYS -->
+  <div class="stage" data-ch="7">
+    <div class="copy">
+      <div class="eyebrow">Step 7 · The 30-day pilot</div>
+      <h2 class="serif">Here's the whole month, day by day.</h2>
+      <p>Tap each step. Green is what we do. Orange is the little bit we need from you.</p>
+      <ul>
+        <li>No long contract. After 30 days you look at the booked jobs and decide.</li>
+        <li>You own the ad account, the form and the leads. Always.</li>
+        <li>One person to talk to: Joel, on text or email.</li>
+      </ul>
+      <div class="actions"><a class="btn orange book" href="#book">Book a 15-min chat</a><button class="btn" id="replayBtn">↺ Replay the demo</button></div>
+    </div>
+    <div class="visual"><div class="scene on">
+      <div class="tl" id="tl">
+        <div class="ev on"><div class="d">DAY 1</div><b>20-minute kickoff call <span class="who you">YOU</span></b><p>Your towns, the jobs you want more of, your best phone number and the hours you take calls.</p></div>
+        <div class="ev"><div class="d">DAYS 2 TO 5</div><b>We build everything <span class="who us">US</span></b><p>Ads, form, instant texts, alerts to your phone and the lead tracker. You approve the ad before it goes live.</p></div>
+        <div class="ev"><div class="d">DAY 6</div><b>Ads go live <span class="who us">US</span></b><p>We start small, watch every lead come in, and test that the 60-second follow-up works on your phone.</p></div>
+        <div class="ev"><div class="d">DAYS 6 TO 30</div><b>Call leads fast, book jobs <span class="who you">YOU</span></b><p>When the alert buzzes, you call. That's the one habit that makes this work. We handle the rest.</p></div>
+        <div class="ev"><div class="d">EVERY MONDAY</div><b>Weekly report and tune-up <span class="who us">US</span></b><p>We cut what isn't working, push what is, and send you the numbers in plain English.</p></div>
+        <div class="ev"><div class="d">DAY 30</div><b>Look at the jobs. Decide. <span class="who you">YOU</span></b><p>Keep going month to month, change things up, or stop. Your call, no hard feelings.</p></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="wrap" id="book">
+  <div class="final">
+    <div>
+      <div class="eyebrow" style="color:var(--accent2);font-weight:800;letter-spacing:.12em;font-size:12px">READY WHEN YOU ARE</div>
+      <h2 class="serif">Want this running for <span class="co">your company</span> next week?</h2>
+      <p>Book a quick 15-minute chat. We'll look at <span class="town">your area</span>, the jobs you want more of, and whether the pilot makes sense for you. No pressure and no pitch deck.</p>
+      <div class="actions" style="margin-top:18px"><a class="btn orange" id="calLink" href="mailto:joel.nnamani@bookedjobshq.com?subject=Septic%20pilot%20chat">📅 Book a 15-min chat</a><a class="btn" href="mailto:joel.nnamani@bookedjobshq.com?subject=Septic%20pilot%20question">✉️ Email Joel</a></div>
+    </div>
+    <div class="box">
+      <b>What you get in the pilot</b>
+      <ul style="padding-left:18px;color:#c8dcd2;margin:10px 0 0">
+        <li>Local Facebook and Instagram ads for <span class="town">your area</span></li>
+        <li>Quote form built for septic problems</li>
+        <li>Text to every lead in under 60 seconds</li>
+        <li>Instant lead alerts to your phone</li>
+        <li>Booking with reminders</li>
+        <li>Weekly report every Monday</li>
+        <li>30 days, then you decide</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">© 2026 Booked Jobs Co. · This page is a demo. Names, phone numbers and figures shown are examples, not real customers or promised results. · <a href="/privacy.html">Privacy</a></div></footer>
+
+<div class="floating"><button id="prevBtn">← Back</button><button id="autoBtn">▶ Auto-play tour</button><button id="nextBtn">Next →</button></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== CONFIG: paste your Calendly link here ===== */
+const CAL_URL = '';
+/* ================================================ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let runId=0; // cancels running animations when chapter changes
+const alive=id=>id===runId;
+const state={co:'Laney Septic',town:'Monroe, NC',problem:'Slow drains or backup',cur:0,auto:false};
+
+/* ---------- personalization ---------- */
+function owner(){return state.co.split(/\s+/)[0]}
+function applyNames(){
+  $$('.co').forEach(e=>e.textContent=state.co);
+  const t=state.town.split(',')[0];
+  $$('.town').forEach(e=>e.textContent=t);
+  ['adAv','smsAv'].forEach(id=>{const el=document.getElementById(id); if(el) el.textContent=state.co.trim()[0].toUpperCase()});
+  $('#n1t').textContent=`Sarah Collins · ${t} · ${state.problem}`;
+  if(CAL_URL) $$('#calLink, a.book').forEach(a=>{a.href=CAL_URL;a.target='_blank'});
+}
+(function init(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('co')){state.co=p.get('co');$('#inCo').value=state.co}
+  if(p.get('town')){state.town=p.get('town');$('#inTown').value=state.town}
+  applyNames();
+})();
+$('#startBtn').onclick=()=>{
+  const c=$('#inCo').value.trim(), t=$('#inTown').value.trim();
+  if(c) state.co=c; if(t) state.town=t;
+  applyNames(); go(1,true);
+  $('#tour').scrollIntoView({behavior:'smooth'});
+};
+
+/* ---------- chapter engine ---------- */
+const stages=$$('.stage'); const N=stages.length;
+const names=['We build it','The ad','The 60 seconds','Booked','Weekly report','Your numbers','The 30 days'];
+$('#chips').innerHTML=names.map((n,i)=>`<button class="chip" data-i="${i+1}"><span class="n">${i+1}</span>${n}</button>`).join('');
+$$('.chip').forEach(c=>c.onclick=()=>go(+c.dataset.i,true));
+function go(i,play){
+  i=Math.max(1,Math.min(N,i)); state.cur=i; runId++;
+  stages.forEach(s=>s.style.display=(+s.dataset.ch===i)?'grid':'none');
+  $$('.chip').forEach(c=>{const k=+c.dataset.i;c.classList.toggle('on',k===i);c.classList.toggle('done',k<i)});
+  $('#progbar').style.width=(i/N*100)+'%';
+  $('#prevBtn').disabled=i===1; $('#nextBtn').textContent=i===N?'Book a chat →':'Next →';
+  resetCh(i);
+  if(play) setTimeout(()=>playCh(i),350);
+  const chip=$(`.chip[data-i="${i}"]`); chip&&chip.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+}
+$$('[data-next]').forEach(b=>b.onclick=()=>{go(state.cur+1,true);$('#tour').scrollIntoView({behavior:'smooth'})});
+$('#prevBtn').onclick=()=>{state.auto=false;go(state.cur-1,true)};
+$('#nextBtn').onclick=()=>{state.auto=false; if(state.cur===N){location.hash='book';$('#book').scrollIntoView({behavior:'smooth'})} else go(state.cur+1,true)};
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return; if(e.key==='ArrowRight')go(state.cur+1,true); if(e.key==='ArrowLeft')go(state.cur-1,true)});
+$('#replayBtn').onclick=()=>{go(1,true);$('#tour').scrollIntoView({behavior:'smooth'})};
+$('#autoBtn').onclick=async()=>{
+  state.auto=!state.auto; $('#autoBtn').textContent=state.auto?'⏸ Pause tour':'▶ Auto-play tour';
+  if(!state.auto) return;
+  $('#tour').scrollIntoView({behavior:'smooth'});
+  for(let i=state.cur||1;i<=N&&state.auto;i++){
+    go(i,false); const id=runId; await sleep(400); await playCh(i); if(!state.auto||!alive(id))return; await sleep(2600);
+  }
+  state.auto=false; $('#autoBtn').textContent='▶ Auto-play tour';
+};
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2600)}
+
+function resetCh(i){
+  if(i===1) $$('#build .task').forEach(t=>{t.classList.remove('on');t.querySelector('.st').textContent='Waiting'});
+  if(i===2){ $('#feedInner').style.transform='translateY(0)'; $('#sheet').classList.remove('up'); $('#thanks').classList.remove('on'); $$('.opt').forEach(o=>o.classList.remove('sel')); $('#getQuote').classList.remove('hot'); }
+  if(i===3){ $('#hoThread').innerHTML=''; $('#clock').textContent='0:00'; $('#clockLbl').textContent='Press play. The clock starts when Sarah taps "Send request".'; $$('.notif').forEach(n=>n.classList.remove('on')); $('#callScr').classList.remove('on'); $('#callSay').textContent=''; }
+  if(i===4){ buildCal(); $('#confirm').classList.remove('on'); }
+  if(i===5){ $$('.kpi b').forEach(b=>b.textContent=b.dataset.k==='cpb'?'$0':'0'); $$('.fun .bar i').forEach(x=>x.style.width='0'); $('#chart').innerHTML=''; }
+  if(i===6) calc();
+}
+async function playCh(i){
+  const id=runId;
+  if(i===1) return playBuild(id);
+  if(i===2) return playAd(id);
+  if(i===3) return playFast(id);
+  if(i===4) return playBook(id);
+  if(i===5) return playDash(id);
+  if(i===7) return playTl(id);
+}
+
+/* ---------- CH1 build ---------- */
+async function playBuild(id){
+  for(const t of $$('#build .task')){
+    if(!alive(id))return; const st=t.querySelector('.st');
+    t.classList.add('on'); st.innerHTML='<span class="spin"></span> Building'; await sleep(700); if(!alive(id))return;
+    st.textContent='✓ Ready';
+  }
+  toast('Setup done. Ads are ready to go live.');
+}
+$('#buildBtn').onclick=()=>{resetCh(1);runId++;playBuild(runId)};
+
+/* ---------- CH2 ad ---------- */
+function tapAt(el,phone){const r=el.getBoundingClientRect(),p=phone.getBoundingClientRect(),d=$('#tap1');d.style.left=(r.left-p.left+r.width/2-19)+'px';d.style.top=(r.top-p.top+r.height/2-19)+'px';d.classList.remove('go');void d.offsetWidth;d.classList.add('go')}
+async function playAd(id){
+  const ph=$('#fbPhone'); await sleep(500); if(!alive(id))return;
+  const ad=$('#theAd'); $('#feedInner').style.transform=`translateY(-${Math.max(0,ad.offsetTop-10)}px)`;
+  await sleep(1900); if(!alive(id))return;
+  $('#getQuote').classList.add('hot'); await sleep(900); if(!alive(id))return;
+  tapAt($('#getQuote'),ph); await sleep(450); openSheet(); await sleep(1100); if(!alive(id))return;
+  const want=$$('.opt').find(o=>o.dataset.v===state.problem)||$$('.opt')[0];
+  tapAt(want,ph); await sleep(250); selOpt(want); await sleep(1100); if(!alive(id))return;
+  tapAt($('#submitForm'),ph); await sleep(300); submitForm();
+}
+function openSheet(){$('#sheet').classList.add('up')}
+function selOpt(o){$$('.opt').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');state.problem=o.dataset.v;applyNames()}
+function submitForm(){ if(!$('.opt.sel')) selOpt($$('.opt')[0]); $('#thanks').classList.add('on'); toast('Lead captured. Watch what happens in the next 60 seconds →'); }
+$('#getQuote').onclick=()=>{runId++;openSheet()};
+$$('.opt').forEach(o=>o.onclick=()=>selOpt(o));
+$('#submitForm').onclick=()=>submitForm();
+$('#adBtn').onclick=()=>{resetCh(2);runId++;playAd(runId)};
+
+/* ---------- CH3 the 60 seconds ---------- */
+function bubble(txt,cls){const th=$('#hoThread');const b=document.createElement('div');b.className='bub '+cls;b.innerHTML=txt;th.appendChild(b);while(th.scrollHeight>th.clientHeight&&th.children.length>1)th.removeChild(th.firstChild);return b}
+async function typeThen(txt,id){const t=bubble('<i></i><i></i><i></i>','in typing');await sleep(1200);if(!alive(id))return;t.remove();bubble(txt,'in')}
+let clockT; function startClock(id,speed){let s=0;clearInterval(clockT);clockT=setInterval(()=>{if(!alive(id)){clearInterval(clockT);return}s++;$('#clock').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')},1000/speed);return()=>{clearInterval(clockT);return s}}
+async function playFast(id){
+  const T=state.town.split(',')[0], O=owner();
+  $('#clockLbl').textContent='Sarah just tapped "Send request"…';
+  const stop=startClock(id,4); bubble('Request sent from Facebook form','in'); $('#hoThread').firstChild.className='stamp';
+  await sleep(900); if(!alive(id))return;
+  $('#n1').classList.add('on'); $('#ownerPhone').classList.add('shake'); setTimeout(()=>$('#ownerPhone').classList.remove('shake'),1100);
+  $('#clockLbl').textContent='You get the alert on your phone.';
+  await sleep(500); if(!alive(id))return;
+  await typeThen(`Hi Sarah, this is ${state.co}. Got your request about your septic in ${T}. ${O} will call you in the next few minutes. If now's a bad time, just reply with a better time 👍`,id); if(!alive(id))return;
+  $('#clockLbl').textContent='Sarah has a text from you before she even puts her phone down.';
+  await sleep(900); $('#n2').classList.add('on');
+  await sleep(1500); if(!alive(id))return;
+  bubble("Now is good! It's backing up into the downstairs tub 😩",'out');
+  await sleep(1400); if(!alive(id))return;
+  await typeThen(`So sorry, that's no fun. ${O} is calling you right now.`,id); if(!alive(id))return;
+  await sleep(700); if(!alive(id))return;
+  $('#clockLbl').textContent='You tap "Call Sarah" right from the alert.';
+  await sleep(800); if(!alive(id))return;
+  await startCall(id);
+  const secs=stop(); $('#clockLbl').innerHTML=`<b style="color:var(--brand2)">Called in ${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}.</b> Most companies take hours, or never call back.`;
+}
+async function startCall(id){
+  const scr=$('#callScr'); scr.classList.add('on'); $('#callTimer').textContent='calling…';
+  await sleep(1000); if(!alive(id))return; $('#callTimer').textContent='0:04';
+  const say=`💡 Call script on your screen:\n\n"Hi Sarah, it's ${owner()} from ${state.co}. Sorry about the tub. When did it start backing up? ... Got it. I can have someone out tomorrow morning at 10. Does that work?"`;
+  const box=$('#callSay'); box.textContent='';
+  for(const ch of say){ if(!alive(id))return; box.textContent+=ch; await sleep(14) }
+}
+$('#callBtn').onclick=()=>{runId++;startCall(runId)};
+$('#endCall').onclick=()=>$('#callScr').classList.remove('on');
+$('#fastBtn').onclick=()=>{resetCh(3);runId++;playFast(runId)};
+
+/* ---------- CH4 calendar ---------- */
+const days=['Mon','Tue','Wed','Thu','Fri'], times=['8 AM','10 AM','12 PM','2 PM','4 PM'];
+const busy=new Set(['0-0','0-1','1-0','1-2','1-3','2-0','2-3','3-1','3-2','4-0','4-4','0-3','3-4']);
+function buildCal(){
+  let h='<div></div>'+days.map(d=>`<div class="hd">${d}</div>`).join('');
+  times.forEach((t,ti)=>{h+=`<div class="tm">${t}</div>`;days.forEach((d,di)=>{const k=di+'-'+ti;h+=`<div class="slot ${busy.has(k)?'busy':'open'}" data-k="${k}"></div>`})});
+  $('#calgrid').innerHTML=h;
+  $$('.slot.open').forEach(s=>s.onclick=()=>bookSlot(s));
+}
+function bookSlot(s){
+  $$('.slot.booked').forEach(b=>{b.className='slot open';b.textContent='';b.onclick=()=>bookSlot(b)});
+  const [di,ti]=s.dataset.k.split('-').map(Number);
+  s.className='slot booked'; s.textContent='Sarah C. · septic';
+  $('#confirm b').textContent=`Sarah Collins · ${days[di]} ${times[ti]}`;
+  $('#confTxt').textContent=`${state.problem} · confirmation text sent · reminder set for the day before`;
+  $('#confirm').classList.add('on'); toast('Booked. Sarah gets a confirmation text automatically.');
+}
+async function playBook(id){ await sleep(900); if(!alive(id))return; bookSlot($('.slot[data-k="2-1"]')) }
+$('#bookBtn').onclick=()=>{resetCh(4);runId++;playBook(runId)};
+
+/* ---------- CH5 dashboard ---------- */
+function countUp(el,to,pre='',suf='',ms=1300){const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/ms);el.textContent=pre+Math.round(to*(1-Math.pow(1-p,3))).toLocaleString()+suf;if(p<1)requestAnimationFrame(f)})(t0)}
+async function playDash(id){
+  const k=k=>$(`[data-k="${k}"]`);
+  countUp(k('leads'),21); countUp(k('fast'),94,'','%'); countUp(k('booked'),9); countUp(k('cpb'),58,'$');
+  const data=[2,3,1,4,5,3,3], max=6, W=500,H=150, bw=46, gap=(W-bw*7)/8;
+  const lbl=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let svg=`<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f39a3d"/><stop offset="1" stop-color="#2f8f6a"/></linearGradient></defs>`;
+  data.forEach((v,i)=>{const x=gap+i*(bw+gap),h=v/max*(H-34);svg+=`<rect x="${x}" y="${H-20}" width="${bw}" height="0" rx="7" fill="url(#g)"><animate attributeName="height" from="0" to="${h}" dur=".9s" begin="${i*0.08}s" fill="freeze"/><animate attributeName="y" from="${H-20}" to="${H-20-h}" dur=".9s" begin="${i*0.08}s" fill="freeze"/></rect><text x="${x+bw/2}" y="${H-5}" fill="#9db1a7" font-size="11" text-anchor="middle">${lbl[i]}</text><text x="${x+bw/2}" y="${H-26-h}" fill="#eef4f0" font-size="11" font-weight="700" text-anchor="middle" opacity="0">${v}<animate attributeName="opacity" from="0" to="1" dur=".3s" begin="${0.9+i*0.08}s" fill="freeze"/></text>`});
+  $('#chart').innerHTML=svg;
+  await sleep(200); $$('.fun .bar i').forEach(b=>b.style.width=b.dataset.w+'%');
+}
+$('#dashBtn').onclick=()=>{resetCh(5);runId++;playDash(runId)};
+
+/* ---------- CH6 calculator ---------- */
+const money=n=>'$'+Math.round(n).toLocaleString();
+function calc(){
+  const bud=+$('#rBud').value,cpl=+$('#rCpl').value,bk=+$('#rBook').value/100,cl=+$('#rClose').value/100,job=+$('#rJob').value;
+  $('#vBud').textContent=money(bud);$('#vCpl').textContent=money(cpl);$('#vBook').textContent=Math.round(bk*100)+'%';$('#vClose').textContent=Math.round(cl*100)+'%';$('#vJob').textContent=money(job);
+  const leads=bud/cpl,visits=leads*bk,jobs=visits*cl,rev=jobs*job;
+  $('#oLeads').textContent=Math.round(leads);$('#oVisits').textContent=Math.round(visits);$('#oJobs').textContent=(Math.round(jobs*10)/10).toString();
+  $('#oRoas').textContent=(rev/bud).toFixed(1)+'x';$('#oRev').textContent=money(rev);
+}
+$$('.calc input').forEach(i=>i.oninput=calc);
+
+/* ---------- CH7 timeline ---------- */
+$$('#tl .ev').forEach(e=>e.onclick=()=>{$$('#tl .ev').forEach(x=>x.classList.remove('on'));e.classList.add('on')});
+async function playTl(id){for(const e of $$('#tl .ev')){if(!alive(id))return;$$('#tl .ev').forEach(x=>x.classList.remove('on'));e.classList.add('on');await sleep(1400)}}
+
+go(1,false);
+</script>
+</body>
+</html>
