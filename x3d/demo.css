@@ -83,6 +83,7 @@ footer{background:var(--deep);text-align:center;color:#7d948a;font-size:13px;pad
 #story{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 1s}
 body.in-story #story{opacity:1}
 #story>*{pointer-events:auto}
+body:not(.in-story) #story,body:not(.in-story) #story *{pointer-events:none!important}
 .sbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:14px;padding:14px 20px;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent)}
 .dots{display:flex;gap:6px;margin:0 auto}
 .dots button{width:30px;height:6px;border-radius:6px;border:0;background:rgba(255,255,255,.28);transition:all .3s;padding:0}
@@ -234,3 +235,5 @@ body[data-mode="any"] #who{max-width:980px}
 /* hook video on landing */
 .hookvid{width:min(720px,100%);margin:6px auto 22px;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);background:#000;aspect-ratio:16/9}
 .hookvid video{display:block;width:100%;height:100%;object-fit:cover}
+#landing [id]{scroll-margin-top:84px}
+@media(max-width:560px){.sbar .logo{font-size:15px;white-space:nowrap;flex:none}.dots{flex:1 1 auto;min-width:0;justify-content:center;gap:4px}.dots button{flex:1 1 0;min-width:5px;max-width:16px}.dots button.on{max-width:26px;flex-grow:1.6}.sright{flex:none}.sbar .icon{width:34px;height:34px}}
