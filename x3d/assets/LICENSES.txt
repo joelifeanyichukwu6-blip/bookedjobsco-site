@@ -1,0 +1,14 @@
+Third-party 3D assets used by the demo and hook videos
+
+Characters and animations (x3d/assets/people/*.glb)
+  KayKit Adventurers character pack + KayKit Character Animations, by Kay Lousberg (kaylousberg.com)
+  License: CC0 1.0 Universal (public domain). Obtained via the "hearthling" npm package (MIT) and the KayKit GitHub releases.
+  Trimmed and recombined (unused clips, props and accessories removed) with gltf-transform.
+
+Trees and rocks (x3d/assets/nature/*)
+  KayKit Forest Nature pack, by Kay Lousberg. License: CC0 1.0 Universal.
+
+Streetlights, cars, fire hydrant, bush (x3d/assets/*.gltf)
+  KayKit City Builder Bits, by Kay Lousberg. License: CC0 1.0 Universal.
+
+Three.js r160 (x3d/vendor) is MIT licensed.
