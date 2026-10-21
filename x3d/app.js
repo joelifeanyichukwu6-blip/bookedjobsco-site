@@ -405,9 +405,17 @@ async function scene6(id) {
   const route = prop.front ? [wk] : [...SIDE_PATH, wk];
   if (work === 'hose') makeHose([truckRear(), ...(prop.front ? [] : SIDE_PATH.map(p => p.clone().setY(.1))), wk.clone().setY(.15), lk.clone().setY(Math.min(lk.y, .4))]);
   const tgt = prop.ladder ? V(prop.ladder.x, 0, prop.ladder.z + 1.25) : wk;
-  const walk = O.walkTo(prop.front ? [tgt] : [...SIDE_PATH, tgt], 1.6);
-  setShot(() => { const p = O.root.position; return [p.clone().add(V(7, 6, 6)), p.clone().add(V(0, 1, 0))]; }, 1);
-  await walk; if (!alive(id)) return;
+  // quick version: ~1s step away from the truck, then cut straight to him approaching Sarah
+  const firstLeg = prop.front ? tgt : SIDE_PATH[0];
+  const d1 = firstLeg.clone().sub(O.root.position).setY(0); const step1 = O.root.position.clone().addScaledVector(d1.normalize(), Math.min(1.6, d1.length() || 1.6));
+  setShot(() => { const p = O.root.position; return [p.clone().add(V(6, 4.5, 6)), p.clone().add(V(0, 1, 0))]; }, .6);
+  await Promise.race([O.walkTo([step1], 1.6), wait(1000, id)]); if (!alive(id)) return;
+  const from = prop.front ? O.root.position.clone() : SIDE_PATH[SIDE_PATH.length - 1].clone();
+  const ap = tgt.clone().sub(from).setY(0); const apLen = ap.length(); ap.normalize();
+  O.root.position.copy(tgt.clone().addScaledVector(ap, -Math.min(3, Math.max(1.2, apLen)))); O.face(tgt.x, tgt.z);
+  setShot(() => { const p = O.root.position; return [p.clone().addScaledVector(ap, -4.2).add(V(1.6, 2.4, 0)), tgt.clone().add(V(0, 1, 0))]; }, .3, { cut: true });
+  await Promise.race([O.walkTo([tgt], 1.6), wait(2200, id)]); if (!alive(id)) return;
+  O.root.position.copy(tgt);
   // the work itself
   if (prop.ladder) { E.ladder.visible = true; O.face(prop.ladder.x, prop.ladder.z - 3); O.set('climb'); const y0 = performance.now();
     setShot(fly([prop.ladder.x + 4.5, 3.2, prop.ladder.z + 7], [prop.ladder.x - .8, 3, prop.ladder.z], [prop.ladder.x + 3.6, 4, prop.ladder.z + 6.2], [prop.ladder.x - 1, 3.6, prop.ladder.z]), 6, { shake: 1 });
