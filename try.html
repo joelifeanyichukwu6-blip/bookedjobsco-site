@@ -27,6 +27,8 @@
     <div class="eyebrow"><i></i> A 3-minute look into your future</div>
     <h1><span id="hCo">Your business</span>,<br><em>30 days from now.</em></h1>
     <p class="lead">Pick your trade, type your company and town, and step into a 3D preview and watch the 30-day pilot play out for your <b id="hTrade">trade</b>: the ad your neighbors see, the text that goes out in under 60 seconds, and the jobs that land on your calendar.</p>
+    <!-- HOOK VIDEO: change hook-fuse to hook-phone to swap videos -->
+    <div class="hookvid"><video src="/media/hook-fuse.mp4" poster="/media/hook-fuse.jpg" controls playsinline preload="none"></video></div>
     <form id="who" autocomplete="off">
       <label>Your company<input id="iCo" maxlength="30" placeholder="e.g. Summit Roofing"></label>
       <label>Your town<input id="iTown" maxlength="30" placeholder="e.g. Monroe, NC"></label>
@@ -135,6 +137,7 @@
 <div id="panel"></div>
 <div id="endcard"></div>
 <div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
+<script>document.addEventListener("click",function(e){if(e.target.closest("#start,[data-start]"))document.querySelectorAll(".hookvid video").forEach(function(v){v.pause()})},true)</script>
 <script type="module" src="/x3d/app.bundle.js?v=6"></script>
 </body>
 </html>
