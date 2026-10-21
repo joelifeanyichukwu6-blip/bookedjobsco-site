@@ -9,7 +9,7 @@
 <meta property="og:description" content="Most local service work comes from word of mouth and referrals. We put your business in front of people who have never heard of you, so they find you and book you. Starts with a free test.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/meet.css?v=2">
+<link rel="stylesheet" href="/meet.css?v=3">
 <script src="/rep.js"></script>
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
 </head>
@@ -24,6 +24,7 @@
   <div class="pills"><span class="pill"><i></i>For local service businesses</span><span class="pill hi" id="hiChip" hidden></span></div>
   <h1>Reach more customers. <em>Book more jobs.</em></h1>
   <p class="sub">Word of mouth and referrals only reach people who already know you. I put your business in front of people in your towns who need your help and have never heard of you, so they can find you and reach out. Extra jobs on top of what you already get. We start with a free 1 to 2 week test. No setup fee, and you don't pay me anything for the test.</p>
+  <p class="area-lock"><b>One company per trade per area.</b> Once a company in your trade in <span data-town="your area">your area</span> says yes, that area is taken and I move on to the next town.</p>
 
   <!-- ============================================================
        VIDEO: paste your video link inside data-src="" below.
@@ -40,7 +41,7 @@
 <section class="apply" id="apply"><div class="wrap">
   <div class="formcard">
     <h2>Apply for your free test</h2>
-    <p class="lead">A few quick questions first. I only take a few companies per area right now, so I read every application myself.</p>
+    <p class="lead">A few quick questions first. I only work with one company in your trade per area, so I read every application myself.</p>
 
     <form id="applyForm" novalidate>
       <div class="stepn" id="stepN">STEP 1 OF 3</div>
@@ -107,7 +108,7 @@
           <label class="fld"><span>Website or Google page</span><input type="text" id="fSite" maxlength="120" placeholder="Optional"></label>
           <label class="fld"><span>Service area</span><input type="text" id="fArea" maxlength="60" placeholder="e.g. Monroe, NC" required></label>
         </div>
-        <div class="navrow"><button type="button" class="back" data-back>&larr; Back</button><button type="submit" class="btn orange">Apply for the free test &rarr;</button></div>
+        <div class="navrow"><button type="button" class="back" data-back>&larr; Back</button><button type="submit" class="btn orange">Claim my area and apply &rarr;</button></div>
         <p class="fine">Next you pick a time for a quick 15-minute call. No spam, no sales script.</p>
       </div>
       <p class="err" id="formErr" role="alert"></p>
@@ -196,6 +197,7 @@
 <section class="b"><div class="wrap narrow">
   <div class="kicker">Straight answers</div>
   <h2 class="big">Common questions.</h2>
+  <details><summary>Do you work with my competitors?</summary><p>No. I only work with one company per trade per area. Once a company in your trade says yes in a town, that area is taken and I move on to the next one. So if you want it, claim your area first.</p></details>
   <details><summary>What do I actually get?</summary><p>Local Facebook ads that only show in your towns, so homeowners who've never heard of you can find you and reach out. Their requests come straight to you, the jobs go on your calendar, and you get a Friday report in plain English.</p></details>
   <details><summary>Does this work for my trade?</summary><p>It works best for local service businesses where people search for help when something breaks, like septic, plumbing, HVAC, roofing, garage doors, tree work and water damage. We talk it through on the call and I'll be honest if your trade isn't a good fit.</p></details>
   <details><summary>What does the free test cost me?</summary><p>No setup fee, and you don't pay me anything for the test. We run it for 1 to 2 weeks and try to get you 2 or 3 extra jobs from new customers. We go over the details on the call.</p></details>
@@ -209,9 +211,9 @@
 </div></section>
 
 <section class="final"><div class="wrap">
-  <h2 class="big">Is your area still open?</h2>
-  <p>I only take a few companies per area right now. Apply, and if it's a fit we set up your free test this week.</p>
-  <div class="ctas"><a class="btn orange" href="#apply">Apply for the free test &rarr;</a><a class="btn ghost" data-demo="/try" href="/try">Or see the 3-minute demo first</a></div>
+  <h2 class="big">Is <span data-town="your area">your area</span> still open?</h2>
+  <p>One company per trade per area. Once someone in your towns says yes, that area is taken and I move on. Apply now to claim it before another company does.</p>
+  <div class="ctas"><a class="btn orange" href="#apply">Claim my area &rarr;</a><a class="btn ghost" data-demo="/try" href="/try">Or see the 3-minute demo first</a></div>
 </div></section>
 
 <footer>&copy; 2026 Booked Jobs Co. &middot; <a href="/privacy">Privacy</a> &middot; <a href="/">Home</a></footer>

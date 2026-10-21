@@ -9,7 +9,7 @@
 <meta property="og:description" content="Step into a 3D preview of the 30-day septic pilot.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/x3d/demo.css?v=4">
+<link rel="stylesheet" href="/x3d/demo.css?v=6">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
 <script src="/rep.js"></script></head>
 <body>
@@ -33,7 +33,7 @@
     <script>/* HOOK VIDEO A/B: fuse vs missed, 50/50, sticky per visitor, override with ?hv=fuse or ?hv=missed */
     (function(){var V=["fuse","missed"],hv=null;try{var q=new URLSearchParams(location.search).get("hv");if(V.indexOf(q)>-1)hv=q;}catch(e){}
     if(!hv){try{hv=localStorage.getItem("bj_hv");}catch(e){}if(V.indexOf(hv)<0){hv=Math.random()<.5?"fuse":"missed";try{localStorage.setItem("bj_hv",hv);}catch(e){}}}
-    document.documentElement.dataset.hv=hv;var v=document.getElementById("hookVid");v.poster="/media/hook-"+hv+".jpg";v.src="/media/hook-"+hv+".mp4";
+    document.documentElement.dataset.hv=hv;var v=document.getElementById("hookVid");v.poster="/media/hook-"+hv+".jpg?v=4";v.src="/media/hook-"+hv+".mp4?v=4";
     var P="utm_source=demo&utm_medium=demo&utm_content=hv-"+hv;
     function tag(a){if(!a||!a.href||a.href.indexOf("calendly.com")<0||a.href.indexOf("utm_content=")>-1)return;a.href+=(a.href.indexOf("?")<0?"?":"&")+P;}
     document.addEventListener("click",function(e){tag(e.target.closest&&e.target.closest("a"));},true);
@@ -47,6 +47,7 @@
     <div class="start-wrap">
       <button id="start" class="start" type="button"><span class="ring"></span><span class="ring r2"></span><b>Start the demo</b><small>Sound on · 3 min</small></button>
     </div>
+    <div class="area-lock"><b>One septic company per area.</b> Once a septic company in <span data-town="your area" data-live-town>your area</span> says yes, that area is taken and I move on to the next town.</div>
     <div class="fine">Nothing you type is saved or sent. Prefer a quick read? <a href="/pilot">Open the 2D version</a>.</div>
     <div class="scroll-cue">Scroll to see what's inside ↓</div>
   </section>
@@ -80,6 +81,7 @@
         <li><b>Week 1:</b> You tell us your towns and prices. We build the ads, the form and your booking calendar.</li>
         <li><b>Weeks 2 to 4:</b> Ads run only in your towns, so homeowners who never heard of you can find you. Their requests come straight to you and go on your calendar.</li>
         <li><b>Every Friday:</b> A plain-English report. New people who reached out, booked jobs and revenue.</li>
+        <li><b>Your area stays yours:</b> One septic company per area. I never run ads for two competitors in the same towns.</li>
         <li><b>Day 30:</b> You judge it on booked jobs. Keep going or walk away. No long contract.</li>
       </ol>
     </div>
@@ -93,6 +95,7 @@
       <details><summary>Do I need to learn any software?</summary><p>No. You get texts and calls like you do now, plus a calendar link and a weekly report by email.</p></details>
       <details><summary>I already get work from word of mouth. Why would I need this?</summary><p>You don't replace it. Referrals only reach people who already know you. This adds new customers on top, people who would never have heard your name otherwise.</p></details>
       <details><summary>What does the free test cost?</summary><p>No setup fee, and you don't pay us anything for the test. We go over the details on a quick call.</p></details>
+      <details><summary>Do you work with my competitors?</summary><p>No. I only work with one septic company per area. Once a company in a town says yes, that area is taken and I move on to the next one. So if you want it, claim your area first.</p></details>
       <details><summary>What if it doesn't work?</summary><p>No long contract. After the test, and again after 30 days, you look at the booked jobs and decide.</p></details>
     </div>
   </section>
@@ -101,6 +104,7 @@
     <div class="wrap narrow center">
       <h2>See it before you decide.</h2>
       <p class="muted">Three minutes. No signup.</p>
+      <p class="area-final">One septic company per area. Claim <span data-town="your area" data-live-town>your area</span> before someone else does.</p>
       <div class="ctas"><button class="pill-btn big" type="button" data-start>Start the demo</button><a class="pill-btn ghost big book" href="#" target="_blank" rel="noopener">Book a 15-min call</a></div>
     </div>
   </section>
@@ -149,6 +153,7 @@
 <div id="endcard"></div>
 <div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
 <script>document.addEventListener("click",function(e){if(e.target.closest("#start,[data-start]"))document.querySelectorAll(".hookvid video").forEach(function(v){v.pause()})},true)</script>
-<script type="module" src="/x3d/app.bundle.js?v=12"></script>
+<script>(function(){function up(){var i=document.getElementById('iTown');var v=(i&&i.value||'').split(',')[0].trim().slice(0,30)||(window.REP&&REP.town)||'your area';document.querySelectorAll('[data-live-town]').forEach(function(e){e.textContent=v});}document.addEventListener('input',function(e){if(e.target&&e.target.id==='iTown')up()});window.addEventListener('load',function(){setTimeout(up,50)});})();</script>
+<script type="module" src="/x3d/app.bundle.js?v=15"></script>
 </body>
 </html>

@@ -155,3 +155,5 @@ footer a{color:var(--muted)}
 .demo-link{display:inline-block;margin-top:12px;font-weight:700}
 
 @media(max-width:480px){.pill{font-size:13px;padding:6px 12px}.vph .play{width:58px;height:58px}.vph .play:after{border-left-width:18px;border-top-width:11px;border-bottom-width:11px}.vph b{font-size:16px}.vph small{font-size:12px}}
+.area-lock{max-width:640px;margin:-10px auto 26px;padding:11px 16px;border-radius:12px;background:#fff1dc;border:1px solid #f0c48a;color:#5a3b0c;font-size:15px;line-height:1.45}
+.area-lock b{color:#b4601a}

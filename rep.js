@@ -51,12 +51,32 @@
     var els = (root || document).querySelectorAll('[data-rep-name]');
     for (var i = 0; i < els.length; i++) els[i].textContent = R.name;
   }
+
+  // Area lock: fill [data-town] with the visitor's town from ?town= (short form, e.g. "Charlotte"), else a fallback.
+  function townName() {
+    try {
+      var t = (new URLSearchParams(location.search).get('town') || '').trim().slice(0, 30);
+      t = t.split(',')[0].replace(/[<>"]/g, '').trim();
+      return t;
+    } catch (e) { return ''; }
+  }
+  R.town = townName();
+  function fixTowns(root) {
+    var els = (root || document).querySelectorAll('[data-town]');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i]; if (el.getAttribute('data-town-done')) continue;
+      el.textContent = R.town || el.getAttribute('data-town') || 'your area';
+      el.setAttribute('data-town-done', '1');
+    }
+  }
+  R.fixTowns = fixTowns;
   function fixAll(root) {
     root = root || document;
     var as = root.querySelectorAll ? root.querySelectorAll('a[href]') : [];
     for (var i = 0; i < as.length; i++) fixA(as[i]);
     if (root.tagName === 'A') fixA(root);
     fixNames(root);
+    if (root.querySelectorAll) fixTowns(root);
   }
   R.fix = fixAll;
   R.link = function (p) { // build a same-site link for this rep, e.g. REP.link('/demo?co=x')
