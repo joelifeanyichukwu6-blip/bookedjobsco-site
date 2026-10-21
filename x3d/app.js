@@ -55,8 +55,8 @@ const sfx = {
   tick() { tone(1900, .03, 'square', .02); },
 };
 let voiceMap = null, voiceBuf = null, voiceRaw = null, voiceSrc = null, voiceGain = null;
-fetch('/x3d/assets/voice.json?v=2').then(r => r.json()).then(j => voiceMap = j).catch(() => { });
-fetch('/x3d/assets/voice.mp3?v=2').then(r => r.arrayBuffer()).then(b => { voiceRaw = b; decodeVoice(); }).catch(() => { });
+fetch('/x3d/assets/voice.json?v=3').then(r => r.json()).then(j => voiceMap = j).catch(() => { });
+fetch('/x3d/assets/voice.mp3?v=3').then(r => r.arrayBuffer()).then(b => { voiceRaw = b; decodeVoice(); }).catch(() => { });
 function decodeVoice() { const a = AC; if (!a || !voiceRaw || voiceBuf) return; a.decodeAudioData(voiceRaw.slice(0)).then(b => voiceBuf = b).catch(() => { }); }
 function stopVoice() { try { voiceSrc && voiceSrc.stop(); } catch (e) { } voiceSrc = null; try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) { } }
 // plays a narration line; returns its length in ms (0 when silent)
@@ -107,7 +107,7 @@ function labelSprite(lines, o = {}) {
 }
 const poppers = [];
 function show(s, on) { s.userData.on = on ? 1 : 0; }
-function updatePoppers(dt) { poppers.forEach(s => { const u = s.userData; u.cur += (u.on - u.cur) * (1 - Math.exp(-dt * 10)); const k = Math.max(.0001, u.cur * (1 + Math.sin(Math.min(1, u.cur) * Math.PI) * .12 * u.on)); s.scale.set(u.base.x * k, u.base.y * k, 1); s.visible = u.cur > .01; }); }
+function updatePoppers(dt) { poppers.forEach(s => { const u = s.userData; u.cur += (u.on - u.cur) * (1 - Math.exp(-dt * 10)); const k = Math.max(.0001, u.cur * (1 + Math.sin(Math.min(1, u.cur) * Math.PI) * .12 * u.on)) * (camera.aspect < .8 && s.userData.base.x < 6 ? .62 : 1); s.scale.set(u.base.x * k, u.base.y * k, 1); s.visible = u.cur > .01; }); }
 function buildExtras() {
   poppers.length = 0; const g = new THREE.Group(); W.root.add(g); const E = { g };
   prop = PROPS[N().prop]; const pg = new THREE.Group(); g.add(pg); propState = prop.build(pg, W); propState.fix(0); fixU = 0; fixGoal = 0;
@@ -146,7 +146,7 @@ function updateCamera(dt) {
   if (!drag) { rig.yawT *= Math.exp(-dt * .9); rig.pitchT *= Math.exp(-dt * .9); }
   const off = P.clone().sub(T); const portrait = camera.aspect < .8;
   off.applyAxisAngle(V(0, 1, 0), rig.yaw); off.y *= 1 + rig.pitch;
-  const desired = T.clone().add(off);
+  const desired = unblock(T, T.clone().add(off));
   if (rig.shake) desired.add(V(Math.sin(rig.T * 1.7) * .03, Math.sin(rig.T * 2.3) * .025, Math.cos(rig.T * 1.3) * .03).multiplyScalar(rig.shake));
   const k = rig.cut ? 1 : 1 - Math.exp(-dt * 7); rig.cut = false;
   camera.position.lerp(desired, k); lookAt.lerp(T, k); camera.lookAt(lookAt);
@@ -154,13 +154,27 @@ function updateCamera(dt) {
   if (Math.abs(camera.fov - fov) > .01) { camera.fov += (fov - camera.fov) * Math.max(k, .1); camera.updateProjectionMatrix(); }
   eng.setFocus(T);
 }
+// keep the camera's view of its target clear: swing around people standing in the way, pull in front of walls
+const _ray = new THREE.Ray(), _hit = V(0, 0, 0);
+function unblock(T, P) {
+  if (!W) return P; const people = Object.values(W.people).filter(p => p.root.visible && p.root.position.distanceTo(T) < 20);
+  const near = people.reduce((a, p) => { const d = p.root.position.distanceTo(V(T.x, 0, T.z)); return d < a.d ? { p, d } : a; }, { p: null, d: 1.2 }).p;
+  const blocked = (C) => { const dir = C.clone().sub(T), L = dir.length(); dir.normalize();
+    return people.some(p => { if (p === near) return false; const c = p.root.position.clone().add(V(0, p.o.height * .55, 0)); const k = clamp(c.clone().sub(T).dot(dir), 0, L); if (k < .4) return false; return T.clone().addScaledVector(dir, k).distanceTo(c) < p.o.height * .42; }); };
+  let C = P;
+  if (blocked(C)) { for (const a of [.45, -.45, .9, -.9, 1.35, -1.35]) { const c2 = T.clone().add(P.clone().sub(T).applyAxisAngle(V(0, 1, 0), a)); if (!blocked(c2)) { C = c2; break; } } }
+  if (W.boxes && C.y < 14 && C.distanceTo(T) < 40) { const dir = C.clone().sub(T), L = dir.length(); dir.normalize(); _ray.set(T, dir); let best = L;
+    W.boxes.forEach(b => { if (b.containsPoint(T)) return; if (_ray.intersectBox(b, _hit)) { const d = _hit.distanceTo(T); if (d < best) best = d; } });
+    if (best < L) C = T.clone().addScaledVector(dir, Math.max(.8, best - .35)); }
+  return C;
+}
 let drag = null;
 canvas.addEventListener('pointerdown', e => { if (mode !== 'story') return; drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); $('#hint').style.opacity = 0; });
 canvas.addEventListener('pointermove', e => { if (!drag) return; rig.yawT = clamp(rig.yawT - (e.clientX - drag.x) * .004, -.9, .9); rig.pitchT = clamp(rig.pitchT + (e.clientY - drag.y) * .003, -.4, .6); drag = { x: e.clientX, y: e.clientY }; });
 ['pointerup', 'pointercancel'].forEach(ev => canvas.addEventListener(ev, () => drag = null));
-const headOf = (p, dy = 1.5) => p.root.position.clone().add(V(0, dy * (p.o.height / 1.75), 0));
+const headOf = (p, dy = 1.5) => p.root.position.clone().add(V(0, dy * (p.o.height / 1.875), 0));
 const fwd = p => V(Math.sin(p.yaw), 0, Math.cos(p.yaw));
-function closeUp(p, dist = 2.6, side = .6, h = 1.55, dy = 1.5) { return () => { const f = fwd(p), s = V(f.z, 0, -f.x); const hd = headOf(p, dy); return [hd.clone().addScaledVector(f, dist).addScaledVector(s, side).add(V(0, h - dy, 0)), hd]; }; }
+function closeUp(p, dist = 2.6, side = .6, h = 1.55, dy = 1.5) { return () => { const f = fwd(p), s = V(f.z, 0, -f.x); const hd = headOf(p, dy).add(V(0, -.12, 0)); return [hd.clone().addScaledVector(f, dist * 1.3).addScaledVector(s, side * 1.3).add(V(0, (h - dy) * .5, 0)), hd]; }; }
 
 /* ---------- flow: slideshow-style start ---------- */
 let mode = 'landing';
@@ -191,7 +205,7 @@ const alive = id => id === runId;
 const wait = (ms, id) => new Promise(r => setTimeout(() => r(alive(id)), ms));
 const waitV = (ms, id) => wait(Math.max(ms, voiceEnd - performance.now() + 350), id);   // waits for the narrator to finish too
 function say(meta, text, key) {
-  const d = key ? speak(key, text) : 0; voiceEnd = performance.now() + d;
+  $('#caption').classList.remove('quiet'); const d = key ? speak(key, text) : 0; voiceEnd = performance.now() + d;
   $('#cMeta').textContent = meta; const el = $('#cText'); el.innerHTML = text.split(' ').map(w => `<span>${esc(w)}</span>`).join(' ');
   const per = d ? Math.min(90, d / Math.max(1, el.children.length) * .85) : 55;
   [...el.children].forEach((s, i) => setTimeout(() => s.classList.add('on'), 60 + i * per));
@@ -215,7 +229,7 @@ function goScene(i, fromWarp) {
     $('#bNext').classList.remove('pulse'); $('#bNext').textContent = i === SCENES.length - 1 ? 'Replay ↺' : 'Next scene ▶';
     prompt(''); closePhone(true); panel(''); $('#endcard').classList.remove('on'); $('#sms').innerHTML = ''; timer(false);
     stage(i);
-    SCENES[i].run(id, fromWarp).then(done => { if (!alive(id) || !done) return; if (auto && sceneI < SCENES.length - 1) setTimeout(() => alive(id) && goScene(sceneI + 1), 700); else $('#bNext').classList.add('pulse'); });
+    SCENES[i].run(id, fromWarp).then(done => { if (!alive(id) || !done) return; if (auto && sceneI < SCENES.length - 1) setTimeout(() => alive(id) && goScene(sceneI + 1), 250); else $('#bNext').classList.add('pulse'); });
   };
   if (fromWarp) return begin();
   const D = $('#dip'); D.classList.add('on'); setTimeout(() => { begin(); setTimeout(() => D.classList.remove('on'), 120); }, 320);   // quick dip to black between scenes
@@ -258,9 +272,9 @@ async function scene1(id, fromWarp) {
   say(meta1(), `Meet Sarah. She lives a few streets from ${co()}. She's never heard of you.`, 'g_meet');
   if (!await waitV(fromWarp ? 3800 : 2600, id)) return;
   say(meta1(), 'It\'s a normal Tuesday evening. Dinner is done.', 'g_evening');
-  const st = sarahStart(); await S.walkTo([st.p.clone().addScaledVector(V(Math.sin(st.yaw), 0, Math.cos(st.yaw)), 1.6), sp], 1.05); if (!alive(id)) return;
+  const st = sarahStart(); const w0 = sp.clone().lerp(st.p, Math.min(1, 3.2 / Math.max(.1, sp.distanceTo(st.p)))); S.root.position.copy(w0); await S.walkTo([sp], 1.15); if (!alive(id)) return;
   S.face(lk.x, lk.z); S.set(prop.look === undefined || N().look === 'down' ? 'lookDown' : 'lookUp'); S.setMood('worried');
-  await waitV(600, id); if (!alive(id)) return;
+  await waitV(150, id); if (!alive(id)) return;
   // insert shot: the problem itself
   let ins = V(...prop.ins);
   if (N().look === 'down') { const d = sp.clone().sub(V(lk.x, 0, lk.z)).normalize(), pp = V(d.z, 0, -d.x); ins = V(lk.x, 0, lk.z).addScaledVector(pp, 3.4).addScaledVector(d, 1.6).add(V(0, 1.7 + lk.y * .4, 0)); }
@@ -269,10 +283,10 @@ async function scene1(id, fromWarp) {
   if (!await waitV(3800, id)) return;
   // reaction
   setShot(closeUp(S, 2.5, .7, 1.55, 1.45), 3, { cut: true, shake: 1, fov: 36 });
-  if (!await wait(1600, id)) return;
+  if (!await wait(800, id)) return;
   S.set('phone');
   setShot((u) => { const r = S.root, f = fwd(S), side = V(f.z, 0, -f.x); const ph = new THREE.Vector3(); S.phone.getWorldPosition(ph);
-    const p = r.position.clone().addScaledVector(f, -2.3 + u * .4).addScaledVector(side, -1).add(V(0, 2.15, 0)); return [p, ph]; }, 4, { cut: true, shake: 1 });
+    const p = r.position.clone().addScaledVector(f, 3.1 - u * .4).addScaledVector(side, -1.9).add(V(0, 1.75, 0)); return [p, ph.clone().lerp(headOf(S), .5)]; }, 4, { cut: true, shake: 1, fov: 36 });
   say(meta1(), 'So she does what everyone does now. She grabs her phone.', 'g_phone');
   return await waitV(3600, id);
 }
@@ -284,25 +298,25 @@ async function scene2(id) {
     const far = S.root.position.clone().addScaledVector(f, -2).addScaledVector(side, -.9).add(V(0, 2.1, 0)); const near = ph.clone().addScaledVector(f, -.22).addScaledVector(side, -.05).add(V(0, .16, 0));
     return [far.lerp(near, u), ph]; }, 2.2);
   say('7:39 PM · Sarah\'s phone', 'She opens Facebook. She\'s never heard of you. But there you are.', 'g_fb'); sfx.whoosh();
-  if (!await wait(2000, id)) return;
+  if (!await wait(1500, id)) return;
   openPhone();
-  if (!await wait(1300, id)) return;
+  if (!await wait(900, id)) return;
   $('#feedIn').style.transform = `translateY(-${$('#adPost').offsetTop - 8}px)`;
-  if (!await waitV(2300, id)) return;
+  if (!await waitV(900, id)) return;
   say('Your move', 'This is your ad. Tap it, like Sarah would.', 'g_tap');
   $('#adBtn').classList.add('hl'); $('#pTip').style.visibility = 'visible';
-  await waitTap('#adBtn', id, 8000); if (!alive(id)) return;
+  await waitTap('#adBtn', id, 3400); if (!alive(id)) return;
   sfx.tap(); $('#adBtn').classList.remove('hl'); $('#pTip').textContent = 'Pick what\'s going on.'; $('#sheet').classList.add('on');
   say('The form', 'Three taps. About 20 seconds. That\'s all it takes.', 'g_form');
-  const pick = await waitTap('.opt', id, 4800, true); if (!alive(id)) return;
+  const pick = await waitTap('.opt', id, 2600, true); if (!alive(id)) return;
   sfx.tap(); (pick || $$('.opt')[N().pick]).classList.add('sel'); $('#send').classList.add('ok'); $('#pTip').textContent = 'Now send it.';
-  await waitTap('#send', id, 3000); if (!alive(id)) return;
+  await waitTap('#send', id, 1500); if (!alive(id)) return;
   sfx.tap(); $('#done').classList.add('on'); $('#pTip').style.visibility = 'hidden'; sfx.chime();
   say('7:41 PM', 'Request sent. Now watch where it goes.', 'g_sent');
   if (!await waitV(2000, id)) return;
   closePhone(); S.set('phoneHappy'); S.setMood('smile');
   setShot(closeUp(S, 3, -.8, 1.7, 1.45), 2.5, { cut: true });
-  return await wait(2200, id);
+  return await wait(1400, id);
 }
 
 async function scene3(id) {
@@ -316,7 +330,7 @@ async function scene3(id) {
   sfx.ping(); E.notif.position.set(73, 3.3, -9.4); show(E.notif, 1);
   say('7:41 PM · Your phone', 'Name, address, the problem. Right on your phone. A brand-new customer.', 'g_phone2');
   if (!await wait(1200, id)) return; O.setMood('smile');
-  return await waitV(4000, id);
+  return await waitV(2400, id);
 }
 
 async function scene4(id) {
@@ -329,11 +343,11 @@ async function scene4(id) {
   S.setMood('smile');
   if (!await waitV(2600, id)) return;
   sms('', 'Sarah', 'Thank you! So glad I found you 🙏', '7:41 PM'); S.set('phoneHappy'); S.setMood('happy'); sfx.tick();
-  if (!await wait(1800, id)) return;
+  if (!await wait(1200, id)) return;
   O.set('call'); O.setMood('smile'); show(E.notif, 0); E.call.position.set(73, 3.2, -9.4); show(E.call, 1); sfx.ring();
   setShot(closeUp(O, 2.6, -.8, 1.7, 1.55), 4, { cut: true, shake: 1 });
   say('Then a real call', 'Then you call her back, and talk about the job.', 'g_call');
-  if (!await waitV(4200, id)) return;
+  if (!await waitV(3000, id)) return;
   S.set('call'); S.setMood('happy'); show(E.call, 0); timer(false); sfx.chime();
   sms('sys', 'Your phone', '✓ New customer: Sarah M. · found you on Facebook', '7:42 PM');
   setShot(closeUp(S, 2.5, -.6, 1.6, 1.45), 4, { cut: true, shake: 1 });
@@ -355,14 +369,14 @@ async function scene5(id) {
    <div class="cal"><div></div>${days.map(d => `<div class="hd">${d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()} ${d.getDate()}</div>`).join('')}`;
   times.forEach((t, r) => { html += `<div class="tm">${t}</div>`; for (let c = 0; c < 5; c++) { const k = c + ',' + r; html += busy[k] ? `<div class="slot busy">${esc(busy[k])}</div>` : `<div class="slot open" data-k="${k}">open</div>`; } });
   html += '</div>'; panel(html);
-  const picked = await dragJob(id, auto ? Math.max(6000, voiceEnd - performance.now() + 1200) : 0); if (!alive(id) || !picked) return;
+  const picked = await dragJob(id, auto ? Math.max(3600, voiceEnd - performance.now() + 500) : 0); if (!alive(id) || !picked) return;
   const [c, r] = picked.dataset.k.split(',').map(Number); const when = `${days[c].toLocaleDateString('en-US', { weekday: 'long' })} ${times[r].replace(' ', ':00 ')}`;
   picked.classList.add('booked'); picked.textContent = 'Sarah M. ✓'; sfx.chime();
   say('Booked', `Booked for ${when}. She gets a confirmation text right away.`, 'g_booked');
-  if (!await wait(1800, id)) return; panel('');
+  if (!await wait(1300, id)) return; panel('');
   sms('me', co(), `You're booked for ${esc(when)}. We'll text you when we're on the way.`, '7:45 PM'); sfx.ping();
   S.set('phoneHappy');
-  return await waitV(3600, id);
+  return await waitV(2400, id);
 }
 function dragJob(id, autoMs) {
   return new Promise(res => {
@@ -385,14 +399,16 @@ async function scene6(id) {
   eng.setTOD('dawn'); eng.setTOD('day', 9); const S = W.people.sarah, O = W.people.owner, E = extras; W.noTraffic = true;
   const when = dayDate(5); const work = N().work, sp = V(prop.spot[0], 0, prop.spot[1]), wk = V(prop.work[0], 0, prop.work[1]), lk = V(...prop.look);
   say(`${fmt(when)} · 9:48 AM`, 'Thursday morning. You head out.', 'g_morning');
-  setShot(fly([66, 3, -1], [74, 1.4, -10], [64, 4, 1], [74, 1.6, -11]), 3);
-  await O.walkTo([V(73.5, 0, -10.6)], 1.4); if (!alive(id)) return;
-  O.root.visible = false; sfx.engine(9); truckDrive = 1; W.truck.setLights(true);
+  O.root.visible = false; sfx.engine(6.5); truckDrive = 1; W.truck.setLights(true);
   setShot(() => { const t = W.truck, f = V(Math.cos(t.rotation.y), 0, -Math.sin(t.rotation.y)); const side = V(-f.z, 0, f.x);
     return [t.position.clone().addScaledVector(f, -13).addScaledVector(side, C().leftDrive ? 6 : -6).add(V(0, 7.5, 0)), t.position.clone().addScaledVector(f, 6).add(V(0, 1.5, 0))]; }, 1);
   await waitV(1200, id); if (!alive(id)) return;
   say(`${fmt(when)} · 9:52 AM`, `Your name on the side, rolling through ${townShort()}.`, 'g_truck');
-  while (alive(id) && truckU < TRUCK_END_U) await wait(200, id); if (!alive(id)) return;
+  if (!await waitV(1800, id)) return;
+  // jump ahead: low roadside shot as the truck rolls into Sarah's street
+  if (truckU < .7) { placeTruck(.7); const lz = C().leftDrive ? 1 : -1;
+    setShot(() => [V(-4, 1.3, lz > 0 ? -7.2 : 7.2), W.truck.position.clone().add(V(0, 1.6, 0))], 1, { cut: true, fov: 34 }); }
+  while (alive(id) && truckU < TRUCK_END_U) await wait(150, id); if (!alive(id)) return;
   truckDrive = 0; W.truck.setLights(false);
   setShot(fly([-6, 6, 14], [-18, 1.5, 4], [-4, 8, 18], [-14, 1, 14]), 3);
   await waitV(200, id); if (!alive(id)) return;
@@ -401,7 +417,7 @@ async function scene6(id) {
   const st = sarahStart(); S.root.visible = true; S.root.position.copy(st.p); S.yaw = S.yawTarget = st.yaw;
   const sw = prop.front ? V(-21.5, 0, 12.8) : sp.clone().add(V(1.6, 0, 1.2));
   S.walkTo([st.p.clone().addScaledVector(V(Math.sin(st.yaw), 0, Math.cos(st.yaw)), 1.4), sw], 1.1).then(() => { if (!alive(id)) return; S.face(wk.x, wk.z); S.set('wave'); S.setMood('happy'); });
-  if (!await wait(1400, id)) return;
+  if (!await wait(1000, id)) return;
   const route = prop.front ? [wk] : [...SIDE_PATH, wk];
   if (work === 'hose') makeHose([truckRear(), ...(prop.front ? [] : SIDE_PATH.map(p => p.clone().setY(.1))), wk.clone().setY(.15), lk.clone().setY(Math.min(lk.y, .4))]);
   const tgt = prop.ladder ? V(prop.ladder.x, 0, prop.ladder.z + 1.25) : wk;
@@ -414,7 +430,7 @@ async function scene6(id) {
   const ap = tgt.clone().sub(from).setY(0); const apLen = ap.length(); ap.normalize();
   O.root.position.copy(tgt.clone().addScaledVector(ap, -Math.min(3, Math.max(1.2, apLen)))); O.face(tgt.x, tgt.z);
   setShot(() => { const p = O.root.position; return [p.clone().addScaledVector(ap, -4.2).add(V(1.6, 2.4, 0)), tgt.clone().add(V(0, 1, 0))]; }, .3, { cut: true });
-  await Promise.race([O.walkTo([tgt], 1.6), wait(2200, id)]); if (!alive(id)) return;
+  await Promise.race([O.walkTo([tgt], 1.6), wait(1600, id)]); if (!alive(id)) return;
   O.root.position.copy(tgt);
   // the work itself
   if (prop.ladder) { E.ladder.visible = true; O.face(prop.ladder.x, prop.ladder.z - 3); O.set('climb'); const y0 = performance.now();
@@ -426,7 +442,7 @@ async function scene6(id) {
   if (!alive(id)) return;
   fixGoal = 1;
   say('10:06 AM', N().work_line, 'w_' + NK);
-  if (!await waitV(5200, id)) return;
+  if (!await waitV(4300, id)) return;
   if (prop.ladder) { O.set('climb'); const y0 = performance.now(); while (alive(id) && performance.now() - y0 < 1600) { O.root.position.y = Math.max(0, prop.ladder.top * (1 - (performance.now() - y0) / 1600)); await wait(40, id); } O.root.position.y = 0; }
   O.set('idle'); O.face(sw.x, sw.z); O.setMood('happy'); show(E.booked, 1); sfx.chime();
   setShot(closeUp(S, 3.2, .9, 1.7, 1.45), 4, { cut: true, shake: 1 });
@@ -438,7 +454,7 @@ async function scene7(id) {
   eng.setTOD('day', 1.2);
   setShot(fly([58, 3, 0], [66, 1.6, -12], [61, 2.4, -4.5], [66, 1.7, -12]), 6, { shake: 1 });
   say('Friday · 4:00 PM', 'Every Friday, a plain-English report lands in your inbox. New customers, booked jobs, and what they\'re worth. These are example numbers.', 'g_report');
-  if (!await wait(1500, id)) return;
+  if (!await wait(700, id)) return;
   const wk = [[3, 1], [5, 2], [6, 3], [7, 3]];
   panel(`<h3>${esc(co())} · Pilot report</h3><div class="sub">Weeks 1 to 4 · <b style="color:#ffd29a">Example numbers</b> to show the format</div>
    <div class="kp"><div><b data-n="21">0</b><span>new people reached out</span></div><div><b data-n="9">0</b><span>jobs booked</span></div><div><b data-n="${nice(N().avg * C().mult * 9 * .6)}" data-m="1">0</b><span>revenue booked</span></div><div><b data-n="9">0</b><span>new customers, not referrals</span></div></div>
@@ -446,7 +462,7 @@ async function scene7(id) {
    <div class="bars">${wk.map((w, i) => `<div class="col"><div class="stack" data-h="${w[0] / 7 * 100}"><div class="bk" style="flex:${w[1]}"></div><div class="l" style="flex:${w[0] - w[1]}"></div></div><small>Wk ${i + 1} · ${w[0]} / ${w[1]}</small></div>`).join('')}</div>
    <div class="ex">Your real numbers depend on your area and your prices. You'll see them every Friday, good or bad.</div>`);
   setTimeout(() => { $$('.stack').forEach(s => s.style.height = s.dataset.h + '%'); countUp(); sfx.chime(); }, 300);
-  return await waitV(9000, id);
+  return await waitV(7500, id);
 }
 function countUp() { $$('[data-n]').forEach(el => { const n = +el.dataset.n, isM = el.dataset.m, s = el.dataset.s || '', t0 = performance.now(); const f = () => { const k = Math.min(1, (performance.now() - t0) / 1400); const v = Math.round(n * ease(k)); el.textContent = isM ? money(v) : v + s; if (k < 1) requestAnimationFrame(f); }; f(); }); }
 
@@ -456,16 +472,18 @@ async function scene8(id) {
   say(`Day 30 · ${fmt(dayDate(30))}`, 'Thirty days later. Every light is a booked job from someone who found you on Facebook. People who had never heard your name.', 'g_day30');
   for (let i = 0; i < E.pins.length; i++) { if (!await wait(i ? 650 : 1500, id)) return; E.pins[i].userData.on = 1; show(E.pins[i].userData.lab, 1); tone(660 + i * 60, .3, 'sine', .06); }
   if (!await waitV(1800, id)) return;
-  say('Your call', `${co()}, this could be your next 30 days. Extra jobs on top of your referrals, and more money coming in. Keep going, or walk away.`, 'g_final');
+  say('Your call', `${co()}, this could be your next 30 days. Extra jobs on top of your referrals, and more money coming in. And I only work with one company per area, so the first to say yes gets it.`, 'g_final');
   if (!await wait(1800, id)) return;
   const m = C().mult, j0 = nice(N().avg * m);
   panel(`<div class="fin"><div class="kicker">Day 30 · you decide</div><h2>Keep going, or walk away.</h2><div class="sub">No setup fee. No long contract. Play with the numbers:</div></div>
    <div class="roi"><div><label>Extra jobs a month <b id="rb"></b></label><input type="range" id="rB" min="1" max="15" step="1" value="4"><label>Average job value <b id="rj"></b></label><input type="range" id="rJ" min="${nice(j0 * .3)}" max="${nice(j0 * 3)}" step="${nice(j0 * .05)}" value="${j0}"></div>
    <div class="out"><div><b id="oV">0</b><span>extra jobs a year</span></div><div><b id="oJ">0</b><span>extra a month</span></div><div><b id="oR">0</b><span>extra a year</span></div></div></div>
    <div class="ex">Example math only, on top of your referrals. Not a promise. Real results depend on your area and your prices.</div>
-   <div class="ctas"><a class="pill-btn big" href="${CAL}" target="_blank" rel="noopener">Book a 15-min call</a><button class="pill-btn ghost big" id="replay">↺ Watch again</button><button class="pill-btn ghost big" id="copy">Copy this demo link</button></div>`);
+   <div class="arealock"><b>One ${esc(N().trade)} company per area.</b> Once a ${esc(N().trade)} company in ${esc(TOWN ? townShort() : 'your area')} says yes, that area is taken. Claim ${esc(TOWN ? townShort() : 'your area')} before someone else does.</div>
+   <div class="ctas"><a class="pill-btn big" href="${CAL}" target="_blank" rel="noopener">${TOWN ? 'Claim ' + esc(townShort()) + ': book' : 'Book'} a 15-min call</a><button class="pill-btn ghost big" id="replay">↺ Watch again</button><button class="pill-btn ghost big" id="copy">Copy this demo link</button></div>`);
   const roi = () => { const x = +$('#rB').value, j = +$('#rJ').value; $('#rb').textContent = x; $('#rj').textContent = money(j); $('#oV').textContent = x * 12; $('#oJ').textContent = money(nice(x * j)); $('#oR').textContent = money(nice(x * j * 12)); };
   $('#rB').oninput = roi; $('#rJ').oninput = roi; roi();
+  waitV(300, id).then(ok => { if (ok) $('#caption').classList.add('quiet'); });
   $('#replay').onclick = () => goScene(0); $('#copy').onclick = async () => { try { await navigator.clipboard.writeText(shareUrl()); $('#copy').textContent = 'Link copied ✓'; } catch (e) { prompt(shareUrl()); } };
   return false;
 }
@@ -474,7 +492,7 @@ function waitTap(sel, id, autoMs, multi) {
   return new Promise(res => { let done = false; const els = multi ? $$(sel) : [$(sel)];
     const fin = (el) => { if (done) return; done = true; els.forEach(e => e.removeEventListener('click', h)); res(el); };
     const h = e => fin(e.currentTarget); els.forEach(e => e.addEventListener('click', h));
-    if (auto) setTimeout(() => fin(null), Math.max(autoMs, voiceEnd - performance.now() + 600));
+    if (auto) setTimeout(() => fin(null), Math.max(autoMs, voiceEnd - performance.now() + 250));
     const chk = setInterval(() => { if (!alive(id)) { clearInterval(chk); fin(null); } else if (done) clearInterval(chk); }, 300); });
 }
 function openPhone() {
@@ -529,5 +547,5 @@ function loop() {
     E.pins.forEach((p, i) => { const u = p.userData; u.cur += (u.on - u.cur) * (1 - Math.exp(-dt * 3)); u.beam.material.opacity = u.cur * (.22 + Math.sin(rig.T * 3 + i) * .05); u.orb.material.opacity = u.cur * .9; u.beam.scale.y = Math.max(.01, u.cur); u.beam.position.y = 20 * u.cur; }); }
   eng.render();
 }
-window.__demo = { goScene: i => goScene(i), get W() { return W; }, setAuto: v => { auto = v; } };
+window.__demo = { Raycaster: THREE.Raycaster, goScene: i => goScene(i), get W() { return W; }, setAuto: v => { auto = v; }, get T() { return rig.T; }, shot: (p, t, fov) => { runId++; setShot(() => [V(...p), V(...t)], .1, { cut: true, fov }); }, tod: n => eng.setTOD(n) };
 loop();

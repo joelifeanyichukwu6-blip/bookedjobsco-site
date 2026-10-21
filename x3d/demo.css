@@ -237,3 +237,10 @@ body[data-mode="any"] #who{max-width:980px}
 .hookvid video{display:block;width:100%;height:100%;object-fit:cover}
 #landing [id]{scroll-margin-top:84px}
 @media(max-width:560px){.sbar .logo{font-size:15px;white-space:nowrap;flex:none}.dots{flex:1 1 auto;min-width:0;justify-content:center;gap:4px}.dots button{flex:1 1 0;min-width:5px;max-width:16px}.dots button.on{max-width:26px;flex-grow:1.6}.sright{flex:none}.sbar .icon{width:34px;height:34px}}
+
+.area-lock{max-width:560px;margin:18px auto 0;padding:11px 16px;border-radius:12px;background:rgba(255,170,80,.10);border:1px solid rgba(255,170,80,.35);color:#ffe1bd;font-size:14px;line-height:1.45;text-align:center}
+.area-lock b{color:#ffb766}
+.area-final{color:#ffb766;font-weight:600;margin:4px 0 18px}
+#panel .arealock{margin:12px 0 4px;padding:10px 14px;border-radius:10px;background:rgba(255,170,80,.12);border:1px solid rgba(255,170,80,.35);color:#ffe1bd;font-size:13.5px;line-height:1.4}
+#panel .arealock b{color:#ffb766}
+#caption.quiet .ctext,#caption.quiet .cmeta{display:none}
