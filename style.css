@@ -17,3 +17,5 @@ ul.check{padding-left:0;list-style:none}ul.check li{padding-left:28px;position:r
 footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14px;margin-top:40px}
 .logo{white-space:nowrap}@media(max-width:560px){.btn.alt{margin:10px 0 0}nav a{margin-left:12px;font-size:14px}nav a[href="#how"],nav a[href="#pilot"]{display:none}}
 .band a.btn.ghost{background:transparent;color:#fff;border:2px solid #fff;margin-left:8px}@media(max-width:560px){.band a.btn.ghost{margin:10px 0 0}}
+nav a{white-space:nowrap}section[id]{scroll-margin-top:16px}
+@media(max-width:560px){header .wrap{height:auto;flex-wrap:wrap;row-gap:6px;padding-top:12px;padding-bottom:10px}header nav{width:100%;display:flex;gap:16px}header nav a{margin-left:0}}

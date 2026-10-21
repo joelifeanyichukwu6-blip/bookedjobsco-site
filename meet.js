@@ -2,8 +2,11 @@
   'use strict';
   var body = document.body;
   var MODE = body.getAttribute('data-mode') || 'septic';
-  var CAL = 'https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat';
-  var EMAIL = 'joel.nnamani@bookedjobshq.com';
+  var REP = window.REP || { key: 'joel', name: 'Joel', cal: 'https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat', email: 'joel.nnamani@bookedjobshq.com', base: '' };
+  var CAL = REP.cal;
+  var EMAIL = REP.email;
+  function siteLink(p) { return REP.link ? REP.link(p) : p; }
+  (function () { var nt = document.getElementById('calNewTab'); if (nt) nt.href = CAL; })();
 
   // average job values per trade (from the demo's niche data)
   var TRADES = {
@@ -38,7 +41,8 @@
   (function () {
     var box = $('#trustVideo');
     if (!box) return;
-    var src = (box.getAttribute('data-src') || '').trim();
+    var own = box.getAttribute('data-src-' + REP.key);
+    var src = (own !== null ? own : (REP.key === 'joel' ? box.getAttribute('data-src') : '') || '').trim();
     if (!src) return;
     var el, m;
     if (/\.(mp4|webm|mov|m4v)(\?|$)/i.test(src)) {
@@ -51,7 +55,7 @@
       else if ((m = src.match(/loom\.com\/share\/([\w]+)/))) url = 'https://www.loom.com/embed/' + m[1];
       else if ((m = src.match(/vimeo\.com\/(\d+)/))) url = 'https://player.vimeo.com/video/' + m[1];
       el = document.createElement('iframe');
-      el.src = url; el.allow = 'autoplay; fullscreen; picture-in-picture'; el.allowFullscreen = true; el.title = "Joel's video";
+      el.src = url; el.allow = 'autoplay; fullscreen; picture-in-picture'; el.allowFullscreen = true; el.title = REP.name + "'s video";
     }
     box.textContent = '';
     box.appendChild(el);
@@ -60,6 +64,7 @@
   /* ---------- trade select (any trade page) ---------- */
   var tradeSel = $('#fTrade');
   if (tradeSel) {
+    var o0 = document.createElement('option'); o0.value = ''; o0.textContent = 'Pick your trade'; tradeSel.appendChild(o0);
     Object.keys(TRADES).forEach(function (k) {
       var o = document.createElement('option'); o.value = k; o.textContent = TRADES[k][0]; tradeSel.appendChild(o);
     });
@@ -81,7 +86,7 @@
       var n = (tradeSel && tradeSel.value) || NICHE;
       if (MODE === 'any' && n) p.set('niche', n);
       var s = p.toString();
-      a.href = base + (s ? '?' + s : '');
+      a.href = siteLink(base + (s ? '?' + s : ''));
     });
   }
   setDemoLinks();
@@ -156,7 +161,7 @@
     var done = $('#booked');
     done.classList.add('on');
     var mail = $('#mailFallback');
-    mail.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Free test application: ' + $('#fBiz').value.trim()) +
+    if (mail && EMAIL) mail.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Free test application: ' + $('#fBiz').value.trim()) +
       '&body=' + encodeURIComponent(parts.join('\n'));
     var nt = $('#calNewTab'); if (nt) nt.href = calUrl;
     var holder = $('#calHolder');
@@ -181,31 +186,26 @@
     });
   });
 
-  /* ---------- calculator ---------- */
-  var budIn = $('#cBudget'), jobIn = $('#cJob'), rateIn = $('#cRate');
-  var CPL = Number(body.getAttribute('data-cpl')) || 45;
+  /* ---------- calculator (example: extra jobs x job value) ---------- */
+  var jobsIn = $('#cJobs'), jobIn = $('#cJob');
   if (tradeSel && tradeSel.value && TRADES[tradeSel.value] && jobIn) jobIn.value = TRADES[tradeSel.value][1];
   function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
   function calc() {
-    if (!budIn) return;
-    var bud = Number(budIn.value) || 0;
+    if (!jobsIn || !jobIn) return;
+    var jobs = Math.max(0, Number(jobsIn.value) || 0);
     var job = Math.max(0, Number(jobIn.value) || 0);
-    var rate = Math.min(100, Math.max(0, Number(rateIn.value) || 0)) / 100;
-    var leads = bud / CPL;
-    var booked = leads * rate;
-    var rev = booked * job;
-    $('#oBudget').textContent = money(bud);
-    $('#oCpl').textContent = money(CPL);
-    $('#oLeads').textContent = Math.round(leads);
-    $('#oBooked').textContent = (Math.round(booked * 10) / 10).toString();
+    var rev = jobs * job;
+    $('#oJobsIn').textContent = jobs;
+    $('#oJobs').textContent = jobs;
+    $('#oJobVal').textContent = money(job);
     $('#oRev').textContent = money(rev);
-    $('#oRoi').textContent = bud ? (Math.round(rev / bud * 10) / 10) + 'x' : '0x';
-    $('#oBig').textContent = Math.round(booked);
+    $('#oYear').textContent = money(rev * 12);
+    $('#oBig').textContent = money(rev * 12);
   }
-  [budIn, jobIn, rateIn].forEach(function (el) { if (el) el.addEventListener('input', calc); });
+  [jobsIn, jobIn].forEach(function (el) { if (el) el.addEventListener('input', calc); });
   var reset = $('#cReset');
   if (reset) reset.addEventListener('click', function () {
-    budIn.value = 1000; rateIn.value = 40;
+    jobsIn.value = 4;
     jobIn.value = (tradeSel && TRADES[tradeSel.value]) ? TRADES[tradeSel.value][1] : body.getAttribute('data-job');
     calc();
   });

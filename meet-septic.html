@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Get More Booked Septic Jobs | Booked Jobs Co.</title>
-<meta name="description" content="A free 1 to 2 week test for septic companies: local ads, a text in under 60 seconds and 2 or 3 extra booked jobs before you pay anything.">
-<meta property="og:title" content="More booked septic jobs, starting with a free test">
-<meta property="og:description" content="A free 1 to 2 week test for septic companies: local ads, a text in under 60 seconds and 2 or 3 extra booked jobs before you pay anything.">
+<meta name="description" content="Most septic work comes from word of mouth and referrals. We put your company in front of homeowners who have never heard of you, so they find you and book you. Starts with a free test.">
+<meta property="og:title" content="Reach homeowners who don't know you yet. Starts with a free test">
+<meta property="og:description" content="Most septic work comes from word of mouth and referrals. We put your company in front of homeowners who have never heard of you, so they find you and book you. Starts with a free test.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/meet.css?v=1">
+<link rel="stylesheet" href="/meet.css?v=2">
+<script src="/rep.js"></script>
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
 </head>
 <body data-mode="septic" data-cpl="45" data-job="650">
@@ -21,8 +22,8 @@
 
 <section class="hero"><div class="wrap center">
   <div class="pills"><span class="pill"><i></i>For septic service companies</span><span class="pill hi" id="hiChip" hidden></span></div>
-  <h1>Get more booked septic jobs, <em>every month.</em></h1>
-  <p class="sub">I help septic companies book more pumping, repair and replacement jobs from homeowners in their own towns. Ads only where you work, a text in under 60 seconds and the job on your calendar. We start with a free 1 to 2 week test where I try to get you 2 or 3 extra booked jobs before you pay me anything.</p>
+  <h1>Reach more homeowners. <em>Book more septic jobs.</em></h1>
+  <p class="sub">Word of mouth and referrals only reach people who already know you. I put your company in front of homeowners in your towns who need septic help and have never heard of you, so they can find you and reach out. Extra jobs on top of what you already get. We start with a free 1 to 2 week test. No setup fee, and you don't pay me anything for the test.</p>
 
   <!-- ============================================================
        VIDEO: paste your video link inside data-src="" below.
@@ -30,8 +31,8 @@
        a YouTube link, a Loom share link or a Vimeo link.
        Leave it empty to show the placeholder.
        ============================================================ -->
-  <div class="video" id="trustVideo" data-src="" data-poster="">
-    <div class="vph"><div class="play"></div><b>Joel's video goes here</b><small>A short hello from Joel about the free test</small></div>
+  <div class="video" id="trustVideo" data-src="" data-src-vera="" data-poster="">
+    <div class="vph"><div class="play"></div><b><span data-rep-name>Joel</span>'s video goes here</b><small>A short hello from <span data-rep-name>Joel</span> about the free test</small></div>
   </div>
   <p class="under">Two minutes. Then decide if a free test makes sense for you.</p>
 </div></section>
@@ -56,9 +57,9 @@
           </div></div>
         <div class="q"><div class="ql">Where do most of your jobs come from now?</div>
           <div class="opts four">
-            <label class="opt"><input type="radio" name="source" value="Google"><span>Google</span></label>
             <label class="opt"><input type="radio" name="source" value="Word of mouth"><span>Word of mouth</span></label>
-            <label class="opt"><input type="radio" name="source" value="Repeat customers"><span>Repeat customers</span></label>
+            <label class="opt"><input type="radio" name="source" value="Referrals"><span>Referrals</span></label>
+            <label class="opt"><input type="radio" name="source" value="Google"><span>Google</span></label>
             <label class="opt"><input type="radio" name="source" value="Ads"><span>Ads</span></label>
           </div></div>
         <div class="q"><div class="ql">Are you running paid ads right now?</div>
@@ -87,7 +88,7 @@
             <label class="opt"><input type="radio" name="capacity" value="Not sure"><span>Not sure</span></label>
           </div></div>
         <label class="fld q"><span>What's the biggest headache in your business right now?</span>
-          <textarea id="fChallenge" maxlength="400" placeholder="e.g. slow months, missed calls, too many tire kickers, hiring..."></textarea></label>
+          <textarea id="fChallenge" maxlength="400" placeholder="e.g. slow months, relying on referrals, hiring..."></textarea></label>
         <div class="q"><div class="ql">If it makes sense, are you up for a free test?</div>
           <div class="opts">
             <label class="opt"><input type="radio" name="ready" value="Yes"><span>Yes</span></label>
@@ -114,20 +115,20 @@
 
     <div class="booked" id="booked">
       <h3>Got it. Now pick a time.</h3>
-      <p>15 minutes on Zoom or phone. Your answers are already filled in, so we skip the small talk.</p>
+      <p>A quick 15-minute call. Your answers are already filled in, so we skip the small talk.</p>
       <div id="calHolder"></div>
-      <p class="fine"><a id="calNewTab" href="#" target="_blank" rel="noopener">Open the calendar in a new tab</a> &middot; Calendar not loading? <a id="mailFallback" href="mailto:joel.nnamani@bookedjobshq.com">Email me instead</a> at joel.nnamani@bookedjobshq.com</p>
+      <p class="fine"><a id="calNewTab" href="#" target="_blank" rel="noopener">Open the calendar in a new tab</a> <span class="rep-email"> &middot; Calendar not loading? <a id="mailFallback" href="mailto:joel.nnamani@bookedjobshq.com">Email me instead</a> at joel.nnamani@bookedjobshq.com</span></p>
     </div>
   </div>
-  <p class="fine">Prefer email? <a href="mailto:joel.nnamani@bookedjobshq.com">joel.nnamani@bookedjobshq.com</a></p>
+  <p class="fine rep-email">Prefer email? <a href="mailto:joel.nnamani@bookedjobshq.com">joel.nnamani@bookedjobshq.com</a></p>
 </div></section>
 
 <section class="b alt"><div class="wrap narrow prose">
   <div class="kicker">The real problem</div>
-  <h2 class="big">Right now, your next job isn't in your hands.</h2>
-  <p>Your jobs come from Google, word of mouth and the same few repeat customers. Some months the truck never stops. Other months the phone goes quiet and you're wondering where everybody went.</p>
-  <p>And when a homeowner finds a soggy spot in the yard or a drain backing up, they don't shop around for long. They call two or three companies and book the first one that picks up or texts back. If you're on a job, in the truck or it's after 6 PM, that call goes to someone else. You never even know you lost it.</p>
-  <p>The fix isn't a fancier website or another directory listing. It's a simple system that brings homeowners in your towns to you, reaches them in under a minute, and puts the job on your calendar before anyone else calls back. That's what I set up, and then run for you.</p>
+  <h2 class="big">Right now, your work depends on who already knows you.</h2>
+  <p>Most of your jobs come from word of mouth, referrals and a few repeat customers. That's a great sign you do good work. But it means your next job depends on someone mentioning your name.</p>
+  <p>Meanwhile, there are homeowners in your towns who need septic help right now and have never heard of you. They search, see a couple of names and reach out to one of them. If yours isn't one of them, that job goes somewhere else and you never even know it was out there.</p>
+  <p>The fix isn't a fancier website. It's putting your name in front of those new homeowners, so they can find you and contact you. Extra jobs on top of the ones you already get. That's what I set up, and then run for you.</p>
 </div></section>
 
 <section class="b"><div class="wrap">
@@ -135,36 +136,34 @@
   <h2 class="big">Here's how this works, step by step.</h2>
   <div class="steps">
     <div class="st"><span class="num">1</span><span class="tag">15 minutes</span><h3>Quick call</h3><p>You tell me your towns, your prices and how busy you are. If it's not a fit, I'll say so and you've lost 15 minutes, not a month.</p></div>
-    <div class="st"><span class="num">2</span><span class="tag">1 to 2 weeks</span><h3>Free test</h3><p>I set up a small local test and try to send you 2 or 3 extra booked jobs. You don't pay me anything for the test.</p></div>
-    <div class="st"><span class="num">3</span><span class="tag">30 days</span><h3>The pilot</h3><p>If the test works, we run 30 days. Ads only in your towns, a text in under 60 seconds, a call within 5 minutes, jobs on your calendar.</p></div>
+    <div class="st"><span class="num">2</span><span class="tag">1 to 2 weeks</span><h3>Free test</h3><p>I set up local ads in your towns and try to bring you 2 or 3 extra jobs from people who don't know you yet. No setup fee, and you don't pay me anything for the test.</p></div>
+    <div class="st"><span class="num">3</span><span class="tag">30 days</span><h3>The pilot</h3><p>If the test works, we run 30 days. More homeowners in your towns finding you, more jobs on your calendar every week, on top of your usual work.</p></div>
   </div>
-  <div class="promise"><b>The deal:</b> you judge me on booked jobs, nothing else. No long contract. You pay Facebook directly for the ads and I never mark up your ad spend. Every Friday you get a plain-English report: leads, how fast each one was reached, what got booked and what it cost.</div>
+  <div class="promise"><b>The deal:</b> you judge me on booked jobs, nothing else. No setup fee and no long contract. Every Friday you get a plain-English report: the new people who reached out and what got booked.</div>
 </div></section>
 
 <section class="b alt"><div class="wrap">
   <div class="kicker">Run the numbers</div>
-  <h2 class="big">What could a month look like for you?</h2>
+  <h2 class="big">What could a few extra jobs a month mean?</h2>
   <div class="calc">
     <div class="panel">
-      <div class="ptitle"><span>Septic job calculator</span><span class="badge">ESTIMATE</span></div>
-      <div class="range"><div class="rl"><span>Monthly ad budget</span><output id="oBudget">$1,000</output></div>
-        <input type="range" id="cBudget" min="500" max="3000" step="50" value="1000" aria-label="Monthly ad budget">
-        <div class="minmax"><span>$500</span><span>$3,000</span></div></div>
+      <div class="ptitle"><span>Septic job calculator</span><span class="badge">EXAMPLE</span></div>
+      <div class="range"><div class="rl"><span>Extra jobs a month</span><output id="oJobsIn">4</output></div>
+        <input type="range" id="cJobs" min="1" max="15" step="1" value="4" aria-label="Extra jobs a month">
+        <div class="minmax"><span>1</span><span>15</span></div></div>
       <div class="grid2">
         <label class="fld"><span>Average job value</span><div class="pre"><b>$</b><input type="number" id="cJob" min="0" step="10" value="650" inputmode="numeric"></div></label>
-        <label class="fld"><span>Close rate</span><div class="post"><input type="number" id="cRate" min="0" max="100" step="1" value="40" inputmode="numeric"><b>%</b></div></label>
       </div>
       <button type="button" class="back" id="cReset">Reset to my estimate</button>
-      <p class="disc">Move the slider and put in your own job value and close rate. The cost per lead is a typical number for local service ads. Yours could be higher or lower.</p>
+      <p class="disc">Pick how many extra jobs from new customers you'd like each month and put in your own average job value.</p>
     </div>
     <div class="panel">
-      <div class="row"><span>Cost per lead (typical, varies by area)</span><b id="oCpl">$45</b></div>
-      <div class="row"><span>Leads in 30 days</span><b id="oLeads">0</b></div>
-      <div class="row"><span>Booked jobs in 30 days</span><b id="oBooked">0</b></div>
-      <div class="row hl"><span>Revenue from those jobs</span><b id="oRev">$0</b></div>
-      <div class="row"><span>Return on ad spend (before job costs)</span><b id="oRoi">0x</b></div>
-      <div class="bigout"><b id="oBig">0</b><span>extra booked jobs a month (estimate)</span></div>
-      <p class="disc">Rough estimate to show the math. Real numbers depend on your area, prices and how fast you answer.</p>
+      <div class="row"><span>Extra jobs a month</span><b id="oJobs">0</b></div>
+      <div class="row"><span>Average job value</span><b id="oJobVal">$0</b></div>
+      <div class="row hl"><span>Extra revenue a month</span><b id="oRev">$0</b></div>
+      <div class="row"><span>Extra revenue a year</span><b id="oYear">$0</b></div>
+      <div class="bigout"><b id="oBig">$0</b><span>extra a year, on top of your referrals (example)</span></div>
+      <p class="disc">Example math only, not a promise. Real results depend on your area, your prices and how much work your crew can take.</p>
     </div>
   </div>
   <p class="center" style="margin-top:22px"><a class="btn" href="#apply">Apply for the free test &rarr;</a></p>
@@ -173,39 +172,39 @@
 <section class="b"><div class="wrap">
   <div class="kicker">The system</div>
   <h2 class="big">The system I set up for you.</h2>
-  <p class="prose" style="max-width:760px;color:#2f3b35;font-size:17px;margin:0">Four simple parts working together, so new jobs come in every month, not just when the phone happens to ring.</p>
+  <p class="prose" style="max-width:760px;color:#2f3b35;font-size:17px;margin:0">Four simple parts working together, so new customers find you every month, not just when someone happens to mention your name.</p>
   <div class="sys">
     <div class="box"><b>1</b><strong>Ads in your towns</strong><small>Facebook ads that only show to homeowners in the towns you serve, for the problems you fix.</small></div><div class="arr">&rarr;</div>
-    <div class="box"><b>2</b><strong>Text in 60 seconds</strong><small>Every lead gets a text in your company's name right away, then a call within 5 minutes.</small></div><div class="arr">&rarr;</div>
-    <div class="box"><b>3</b><strong>Booked on your calendar</strong><small>The job lands on your calendar. No phone tag, no lost sticky notes.</small></div><div class="arr">&rarr;</div>
-    <div class="box"><b>4</b><strong>Reviews and repeat</strong><small>Happy customers leave reviews and call you again, so it keeps getting easier.</small></div>
+    <div class="box"><b>2</b><strong>New homeowners find you</strong><small>People who've never heard of you see your name when they need help.</small></div><div class="arr">&rarr;</div>
+    <div class="box"><b>3</b><strong>They contact you</strong><small>Their request comes straight to you, in your company's name.</small></div><div class="arr">&rarr;</div>
+    <div class="box"><b>4</b><strong>Booked on your calendar</strong><small>The job lands on your calendar, on top of the work you already get.</small></div>
   </div>
-  <p class="loop">&#8635; The faster you answer, the more you win. That's the whole game.</p>
+  <p class="loop">&#8635; Happy new customers leave reviews and refer you too, so your reach keeps growing.</p>
 </div></section>
 
 <section class="b alt"><div class="wrap">
   <div class="kicker">Why you can trust me with this</div>
   <h2 class="big">No big promises. Just a test you can see.</h2>
   <div class="trust">
-    <div class="tc"><h3>I run it myself</h3><p>You talk to me, Joel. I build the ads, the text and the follow-up and I watch them every day. You're not handed off to a junior.</p></div>
+    <div class="tc"><h3>I run it myself</h3><p>You talk to me, <span data-rep-name>Joel</span>. I build the ads and watch them every day. You're not handed off to a junior.</p></div>
     <div class="tc"><h3>The free test comes first</h3><p>Before you pay me anything, I try to get you 2 or 3 extra booked jobs. If it doesn't work, we shake hands and part ways.</p></div>
-    <div class="tc"><h3>Your ad money stays yours</h3><p>You pay Facebook directly from your own account. I never touch or mark up your ad spend.</p></div>
-    <div class="tc"><h3>Judged on booked jobs</h3><p>Not clicks, not likes. Every Friday you see exactly what came in, what got booked and what it cost.</p></div>
+    <div class="tc"><h3>No setup fee</h3><p>You don't pay me anything to set this up or for the test. We only talk price if you want to keep going.</p></div>
+    <div class="tc"><h3>Judged on booked jobs</h3><p>Not clicks, not likes. Every Friday you see who reached out and what got booked.</p></div>
   </div>
 </div></section>
 
 <section class="b"><div class="wrap narrow">
   <div class="kicker">Straight answers</div>
   <h2 class="big">Common questions.</h2>
-  <details><summary>What do I actually get?</summary><p>A local Facebook ad that only shows in your towns, a text that goes out in your company's name within 60 seconds of every lead, a call within 5 minutes, booking on your calendar and a Friday report in plain English.</p></details>
-  <details><summary>What does the free test cost me?</summary><p>Nothing from me. We run a small test for 1 to 2 weeks and try to get you 2 or 3 extra booked jobs. If we use ads in the test, that small ad budget is paid from your own account so you can see every dollar.</p></details>
+  <details><summary>What do I actually get?</summary><p>Local Facebook ads that only show in your towns, so homeowners who've never heard of you can find you and reach out. Their requests come straight to you, the jobs go on your calendar, and you get a Friday report in plain English.</p></details>
+  <details><summary>What does the free test cost me?</summary><p>No setup fee, and you don't pay me anything for the test. We run it for 1 to 2 weeks and try to get you 2 or 3 extra jobs from new customers. We go over the details on the call.</p></details>
   <details><summary>What happens after the test?</summary><p>If you like what you see, we do a 30-day pilot. We agree the price on the call before anything starts, so there are no surprises. If you don't like it, we stop. No long contract.</p></details>
-  <details><summary>Do I pay for the ads too?</summary><p>Yes, you pay Facebook directly from your own account. I never mark up your ad spend and you can see every number.</p></details>
-  <details><summary>I've tried Facebook ads before and they didn't work.</summary><p>Most ads fail in the first five minutes after the lead comes in, not in the ad itself. Nobody calls back fast enough and the homeowner books someone else. That's the part I fix.</p></details>
+  <details><summary>I already get my work from word of mouth and referrals.</summary><p>That's great, it means you do good work. This doesn't replace it. It adds new customers on top, people who would never have heard your name otherwise.</p></details>
+  <details><summary>I've tried Facebook ads before and they didn't work.</summary><p>Most ads fail because they show to the wrong people or the wrong area. I keep the ads only in your towns and only for the jobs you want, so the people who see them can actually hire you.</p></details>
   <details><summary>Will the leads be shared with other companies?</summary><p>No. The ads run in your company's name and the leads come straight to you. They're yours.</p></details>
   <details><summary>How fast will I see jobs?</summary><p>The free test usually takes 1 to 2 weeks. Ads can start bringing leads in the first few days once they're approved.</p></details>
-  <details><summary>How much of my time does this take?</summary><p>A 15-minute call to start, then you answer the booked jobs. I handle the ads, the texts and the follow-up.</p></details>
-  <details><summary>I already get enough work from word of mouth.</summary><p>Great. Then this is for the slow months, or for the bigger jobs you want more of, like repairs and replacements. If you're truly full, I'll tell you to wait.</p></details>
+  <details><summary>How much of my time does this take?</summary><p>A 15-minute call to start, then you do the jobs. I handle the ads and getting the requests to you.</p></details>
+  <details><summary>Is this only for slow months?</summary><p>No. It's for any month you want more work, especially the bigger jobs like repairs and replacements. If your crew is truly full, I'll tell you to wait.</p></details>
   <details><summary>If we stop working together, who keeps everything?</summary><p>You do. The ad account is yours, the leads are yours and the customers are yours.</p></details>
 </div></section>
 
@@ -216,6 +215,6 @@
 </div></section>
 
 <footer>&copy; 2026 Booked Jobs Co. &middot; <a href="/privacy">Privacy</a> &middot; <a href="/">Home</a></footer>
-<script src="/meet.js?v=1"></script>
+<script src="/meet.js?v=3"></script>
 </body>
 </html>

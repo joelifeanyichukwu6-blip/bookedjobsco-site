@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The 30-Day Septic Pilot, Live Demo | Booked Jobs Co.</title>
-<meta name="description" content="See exactly how the 30-day pilot works: the local ad, the 60-second follow-up, the booked visit and your weekly report. Interactive demo.">
+<meta name="description" content="See exactly how the 30-day pilot works: the local ad, a new homeowner who never heard of you finding you, the booked visit and your weekly report. Interactive demo.">
 <meta property="og:title" content="See your 30-day septic pilot before it starts">
-<meta property="og:description" content="Interactive demo: the ad your neighbors see, the 60-second follow-up, the booked job and your weekly report.">
+<meta property="og:description" content="Interactive demo: the ad your neighbors see, new homeowners finding you, the booked job and your weekly report.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
@@ -33,7 +33,7 @@ button{font:inherit;cursor:pointer}
 main{position:relative;z-index:1}
 
 /* HERO / PERSONALIZE */
-.hero{padding:64px 0 40px;text-align:center}
+.hero{padding:64px 20px 40px;text-align:center}
 .pill{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:99px;color:var(--muted);font-size:13px}
 .pill b{width:8px;height:8px;border-radius:50%;background:var(--brand2);box-shadow:0 0 0 0 rgba(69,179,134,.7);animation:pulse 1.8s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(69,179,134,0)}100%{box-shadow:0 0 0 0 rgba(69,179,134,0)}}
@@ -283,13 +283,13 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
-</head>
+<script src="/rep.js"></script></head>
 <body>
 <div class="glow"></div>
 <header class="top"><div class="wrap">
   <a class="logo" href="/">Booked Jobs <span>Co.</span></a>
   <div class="prog"><i id="progbar"></i></div>
-  <a class="topbtn ghost" href="/septic.html">About the pilot</a>
+  <a class="topbtn ghost" href="/septic">About the pilot</a>
   <a class="topbtn book" href="#book">Book a 15-min chat</a>
 </div></header>
 
@@ -298,7 +298,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
 <section class="hero wrap" id="intro">
   <span class="pill"><b></b> Interactive demo · takes about 3 minutes</span>
   <h1 class="serif">See your 30-day septic pilot <em>before it even starts.</em></h1>
-  <p class="lead">Tap through the exact steps: the ad your neighbors see, the text that goes out in under 60 seconds, the job landing on your calendar, and the report you get every week.</p>
+  <p class="lead">Tap through the exact steps: the ad your neighbors see, a homeowner who never heard of you finding you, the job landing on your calendar, and the report you get every week.</p>
   <div class="personal">
     <div class="field"><label for="inCo">Your company name</label><input id="inCo" placeholder="e.g. Laney Septic" maxlength="40"></div>
     <div class="field"><label for="inTown">Main town you serve</label><input id="inTown" placeholder="e.g. Monroe, NC" maxlength="30"></div>
@@ -306,8 +306,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
   </div>
   <div class="sub">Leave it blank and we'll use an example company. Nothing you type is saved or sent anywhere.</div>
   <div class="stats">
-    <div class="stat"><b>60 sec</b><span>from form to first text</span></div>
-    <div class="stat"><b>5 min</b><span>max until a real call</span></div>
+    <div class="stat"><b>Your towns</b><span>ads only where you work</span></div>
+    <div class="stat"><b>More jobs</b><span>on your calendar each month</span></div>
     <div class="stat"><b>30 days</b><span>pilot, no long contract</span></div>
     <div class="stat"><b>Weekly</b><span>plain-English report</span></div>
   </div>
@@ -321,12 +321,12 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
     <div class="copy">
       <div class="eyebrow">Step 1 · Days 1 to 5</div>
       <h2 class="serif">We build everything. You keep running jobs.</h2>
-      <p>Before a single dollar goes into ads, we set up the whole machine for <b class="co">your company</b>. You give us about 20 minutes on a call. That's it.</p>
+      <p>Before anything goes live, we set up the whole thing for <b class="co">your company</b>. You give us about 20 minutes on a call. That's it.</p>
       <ul>
         <li>Ads aimed only at homeowners in <span class="town">your area</span> and the towns around it</li>
         <li>A short form that asks the questions you'd ask on the phone</li>
-        <li>Instant text and call follow-up wired to your phone</li>
-        <li>A tracking sheet so every lead and every dollar is counted</li>
+        <li>Every request sent straight to your phone</li>
+        <li>A simple tracker so every new customer is counted</li>
       </ul>
       <div class="actions"><button class="btn primary" id="buildBtn">▶ Watch the setup</button><button class="btn" data-next>Next: the ad →</button></div>
     </div>
@@ -335,7 +335,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
         <div class="task"><div class="ic">🎯</div><div><b>Local ad targeting</b><small>Homeowners within 25 miles of <span class="town">your area</span></small></div><span class="st">Waiting</span></div>
         <div class="task"><div class="ic">🖼️</div><div><b>Ad pictures and words</b><small>Built around backups, smells and soggy yards</small></div><span class="st">Waiting</span></div>
         <div class="task"><div class="ic">📝</div><div><b>Quote request form</b><small>Name, phone, town and what's going on</small></div><span class="st">Waiting</span></div>
-        <div class="task"><div class="ic">⚡</div><div><b>60-second follow-up</b><small>Text to the homeowner, alert to you</small></div><span class="st">Waiting</span></div>
+        <div class="task"><div class="ic">📲</div><div><b>Requests straight to you</b><small>Alert to your phone with their details</small></div><span class="st">Waiting</span></div>
         <div class="task"><div class="ic">📊</div><div><b>Lead tracker and weekly report</b><small>Every lead, call and booked job in one place</small></div><span class="st">Waiting</span></div>
       </div>
     </div></div>
@@ -346,13 +346,13 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
     <div class="copy">
       <div class="eyebrow">Step 2 · The ad</div>
       <h2 class="serif">A homeowner in <span class="town">your area</span> scrolls Facebook. Your ad shows up.</h2>
-      <p>No fancy video. Just a clear message to the people who need you right now: slow drains, a smell in the yard, a failed inspection before selling the house.</p>
+      <p>No fancy video. Just a clear message to homeowners who need help and have never heard of you: slow drains, a smell in the yard, a failed inspection before selling the house.</p>
       <ul>
         <li>Shown only in the towns you actually serve</li>
         <li>Aimed at repair and replacement jobs, not just $350 pump-outs</li>
         <li>One tap opens a short form, already filled with their Facebook name and number</li>
       </ul>
-      <div class="actions"><button class="btn orange" id="adBtn">▶ Play: homeowner sees the ad</button><button class="btn" data-next>Next: the 60 seconds →</button></div>
+      <div class="actions"><button class="btn orange" id="adBtn">▶ Play: homeowner sees the ad</button><button class="btn" data-next>Next: she finds you →</button></div>
       <div class="note">Tip: you can tap the blue button and the form answers yourself.</div>
     </div>
     <div class="visual"><div class="scene on">
@@ -364,8 +364,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
           <div class="post"><div class="h"><div class="av" style="background:#e67e22">T</div><div><b>Town Community Group</b><small>5h · 👥</small></div></div><div>Anyone know a good septic company? Yard smells awful after the rain 😩</div></div>
           <div class="post ad" id="theAd">
             <div class="h"><div class="av" style="background:var(--brand)" id="adAv">L</div><div><b class="co">Your Company</b><small>Sponsored · 🌎</small></div></div>
-            <div style="margin-bottom:8px">Slow drains, gurgling pipes or a soggy yard in <span class="town">your town</span>? We fix septic problems fast. Tap for a free quote, we call you back in minutes.</div>
-            <div class="creative"><div class="headline">Septic trouble? We'll call you in 5 minutes.</div><div class="tag">LOCAL · FAST</div><div class="house"></div><div class="yard"></div><div class="puddle"></div></div>
+            <div style="margin-bottom:8px">Slow drains, gurgling pipes or a soggy yard in <span class="town">your town</span>? Local septic help from a company your neighbors trust. Tap for a free quote.</div>
+            <div class="creative"><div class="headline">Septic trouble? Local help near you.</div><div class="tag">LOCAL · TRUSTED</div><div class="house"></div><div class="yard"></div><div class="puddle"></div></div>
             <div class="adfoot"><div><small>Free quote</small><br><b>Septic help in <span class="town">your town</span></b></div><button class="fbcta" id="getQuote">Get quote</button></div>
           </div>
           <div class="post"><div class="h"><div class="av" style="background:#16a085">J</div><div><b>Jake Miller</b><small>8h</small></div></div><div>Deer season prep 🦌</div><div class="ph" style="margin-top:8px"></div></div>
@@ -392,21 +392,21 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
     </div></div>
   </div>
 
-  <!-- CH3 60 SECONDS -->
+  <!-- CH3 SHE FINDS YOU -->
   <div class="stage" data-ch="3">
     <div class="copy">
-      <div class="eyebrow">Step 3 · The first 60 seconds</div>
-      <h2 class="serif">Most companies lose the job right here. You won't.</h2>
-      <p>Homeowners with a septic problem call the first company that answers. So the moment the form comes in, two things happen at the same time. Automatically. Even if your crew is in a hole on another job.</p>
+      <div class="eyebrow">Step 3 · She finds you</div>
+      <h2 class="serif">She'd never heard of you. Now she's your customer.</h2>
+      <p>She's not a referral and she's not a repeat customer. She saw your ad, liked what she saw and sent her request to you. It comes straight to you, even if your crew is in a hole on another job.</p>
       <ul>
-        <li><b>The homeowner</b> gets a friendly text from <span class="co">your company</span> within seconds</li>
+        <li><b>The homeowner</b> gets a friendly text from <span class="co">your company</span> confirming her request</li>
         <li><b>You</b> get an alert with their name, town and problem, plus a one-tap call button</li>
-        <li>If nobody calls within 5 minutes, we send a second nudge so the lead never goes cold</li>
+        <li>Every request is tracked by name, so no job slips through the cracks</li>
       </ul>
-      <div class="actions"><button class="btn orange" id="fastBtn">▶ Play the 60 seconds</button><button class="btn" data-next>Next: the booked job →</button></div>
+      <div class="actions"><button class="btn orange" id="fastBtn">▶ Play it</button><button class="btn" data-next>Next: the booked job →</button></div>
     </div>
     <div class="visual"><div class="scene on">
-      <div class="watch"><div class="clock" id="clock">0:00</div><div class="lbl" id="clockLbl">Press play. The clock starts when Sarah taps "Send request".</div></div>
+      <div class="watch"><div class="clock" id="clock">NEW</div><div class="lbl" id="clockLbl">Press play to see a brand-new customer reach you.</div></div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="statusbar"><span>9:42</span><span>●●● 🔋</span></div>
         <div class="msgs"><div class="msghead"><div class="av" style="background:var(--brand)" id="smsAv">L</div><b class="co">Your Company</b><small>Text message</small></div>
@@ -452,23 +452,23 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
     <div class="copy">
       <div class="eyebrow">Step 5 · Every Monday</div>
       <h2 class="serif">One simple report. Real numbers, no fluff.</h2>
-      <p>Every week you see exactly what came in, how fast it was followed up, what got booked and what it cost you. If something isn't working, you'll see it as fast as we do.</p>
+      <p>Every week you see exactly who reached out, what got booked and what it's worth. If something isn't working, you'll see it as fast as we do.</p>
       <ul>
-        <li>Leads, booked visits and cost per booked visit</li>
+        <li>New customers, booked jobs and revenue</li>
         <li>Which towns and which problems bring the best jobs</li>
         <li>Every lead listed by name, so nothing slips through</li>
       </ul>
       <div class="actions"><button class="btn orange" id="dashBtn">▶ Show an example week</button><button class="btn" data-next>Next: what it's worth →</button></div>
-      <div class="note">These are example numbers to show what the report looks like. Your real numbers depend on your area, budget and how fast leads get called.</div>
+      <div class="note">These are example numbers to show what the report looks like. Your real numbers depend on your area and your prices.</div>
     </div>
     <div class="visual"><div class="scene on">
       <div class="dash">
         <div class="dh"><b>📊 <span class="co">Your Company</span> · Week 2</b><span>example data</span></div>
         <div class="kpis">
           <div class="kpi"><small>Leads</small><b data-k="leads">0</b><div class="up">quote requests</div></div>
-          <div class="kpi"><small>Called in 5 min</small><b data-k="fast">0</b><div class="up">% of leads</div></div>
+          <div class="kpi"><small>Booked rate</small><b data-k="fast">0</b><div class="up">% of leads</div></div>
           <div class="kpi"><small>Booked visits</small><b data-k="booked">0</b><div class="up">on your calendar</div></div>
-          <div class="kpi"><small>Cost / booked</small><b data-k="cpb">$0</b><div class="up">ad spend ÷ visits</div></div>
+          <div class="kpi"><small>Revenue</small><b data-k="cpb">$0</b><div class="up">from booked jobs</div></div>
         </div>
         <div class="chart"><svg viewBox="0 0 500 150" id="chart" preserveAspectRatio="none"></svg></div>
         <div class="funnel">
@@ -491,27 +491,24 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
     <div class="copy">
       <div class="eyebrow">Step 6 · Your numbers</div>
       <h2 class="serif">What could one month be worth to you?</h2>
-      <p>Move the sliders to match your business. The math is simple: ad budget brings leads, fast follow-up turns leads into visits, and you close the visits like you always do.</p>
+      <p>Move the sliders to match your business. The math is simple: a few extra jobs a month from homeowners who never heard of you, on top of the work you already get.</p>
       <ul>
         <li>Septic repairs and drain field work often run in the thousands. A new system can run much higher. Use your own average.</li>
-        <li>You set the ad budget and pay Facebook directly. We never touch that money.</li>
+        <li>These are extra jobs on top of your referrals, not instead of them.</li>
       </ul>
       <div class="actions"><button class="btn" data-next>Next: the 30-day plan →</button></div>
       <div class="note">This is a calculator, not a promise. It shows what's possible at the numbers you choose.</div>
     </div>
     <div class="visual"><div class="scene on">
       <div class="calc">
-        <div class="rng"><div class="t"><span>Monthly ad budget</span><b id="vBud">$1,000</b></div><input type="range" id="rBud" min="300" max="5000" step="100" value="1000"></div>
-        <div class="rng"><div class="t"><span>Cost per quote request</span><b id="vCpl">$40</b></div><input type="range" id="rCpl" min="15" max="120" step="5" value="40"></div>
-        <div class="rng"><div class="t"><span>Requests that book a visit</span><b id="vBook">40%</b></div><input type="range" id="rBook" min="10" max="80" step="5" value="40"></div>
-        <div class="rng"><div class="t"><span>Visits you win</span><b id="vClose">50%</b></div><input type="range" id="rClose" min="10" max="90" step="5" value="50"></div>
+        <div class="rng"><div class="t"><span>Extra jobs a month</span><b id="vX">4</b></div><input type="range" id="rX" min="1" max="15" step="1" value="4"></div>
         <div class="rng"><div class="t"><span>Your average repair or replacement job</span><b id="vJob">$2,500</b></div><input type="range" id="rJob" min="500" max="15000" step="250" value="2500"></div>
         <div class="result">
-          <div><small>Quote requests</small><b id="oLeads">25</b></div>
-          <div><small>Booked visits</small><b id="oVisits">10</b></div>
-          <div><small>Jobs won</small><b id="oJobs">5</b></div>
-          <div><small>Return on ad spend</small><b id="oRoas">12.5x</b></div>
-          <div class="hero2"><small>Possible new revenue in a month</small><b id="oRev">$12,500</b></div>
+          <div><small>Extra jobs a month</small><b id="oJobs">4</b></div>
+          <div><small>Extra jobs a year</small><b id="oYearJobs">48</b></div>
+          <div><small>Extra revenue a year</small><b id="oYear">$120,000</b></div>
+          <div><small>On top of</small><b>Referrals</b></div>
+          <div class="hero2"><small>Possible extra revenue in a month</small><b id="oRev">$10,000</b></div>
         </div>
       </div>
     </div></div>
@@ -526,16 +523,16 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
       <ul>
         <li>No long contract. After 30 days you look at the booked jobs and decide.</li>
         <li>You own the ad account, the form and the leads. Always.</li>
-        <li>One person to talk to: Joel, on text or email.</li>
+        <li>One person to talk to: <span data-rep-name>Joel</span>, on text or call.</li>
       </ul>
       <div class="actions"><a class="btn orange book" href="#book">Book a 15-min chat</a><button class="btn" id="replayBtn">↺ Replay the demo</button></div>
     </div>
     <div class="visual"><div class="scene on">
       <div class="tl" id="tl">
         <div class="ev on"><div class="d">DAY 1</div><b>20-minute kickoff call <span class="who you">YOU</span></b><p>Your towns, the jobs you want more of, your best phone number and the hours you take calls.</p></div>
-        <div class="ev"><div class="d">DAYS 2 TO 5</div><b>We build everything <span class="who us">US</span></b><p>Ads, form, instant texts, alerts to your phone and the lead tracker. You approve the ad before it goes live.</p></div>
-        <div class="ev"><div class="d">DAY 6</div><b>Ads go live <span class="who us">US</span></b><p>We start small, watch every lead come in, and test that the 60-second follow-up works on your phone.</p></div>
-        <div class="ev"><div class="d">DAYS 6 TO 30</div><b>Call leads fast, book jobs <span class="who you">YOU</span></b><p>When the alert buzzes, you call. That's the one habit that makes this work. We handle the rest.</p></div>
+        <div class="ev"><div class="d">DAYS 2 TO 5</div><b>We build everything <span class="who us">US</span></b><p>Ads, form, texts, alerts to your phone and the lead tracker. You approve the ad before it goes live.</p></div>
+        <div class="ev"><div class="d">DAY 6</div><b>Ads go live <span class="who us">US</span></b><p>We start small, watch every lead come in, and make sure every request reaches your phone.</p></div>
+        <div class="ev"><div class="d">DAYS 6 TO 30</div><b>Homeowners find you, you book jobs <span class="who you">YOU</span></b><p>When a request comes in, you call and book it. We keep more homeowners finding you all month.</p></div>
         <div class="ev"><div class="d">EVERY MONDAY</div><b>Weekly report and tune-up <span class="who us">US</span></b><p>We cut what isn't working, push what is, and send you the numbers in plain English.</p></div>
         <div class="ev"><div class="d">DAY 30</div><b>Look at the jobs. Decide. <span class="who you">YOU</span></b><p>Keep going month to month, change things up, or stop. Your call, no hard feelings.</p></div>
       </div>
@@ -550,15 +547,15 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
       <div class="eyebrow" style="color:var(--accent2);font-weight:800;letter-spacing:.12em;font-size:12px">READY WHEN YOU ARE</div>
       <h2 class="serif">Want this running for <span class="co">your company</span> next week?</h2>
       <p>Book a quick 15-minute chat. We'll look at <span class="town">your area</span>, the jobs you want more of, and whether the pilot makes sense for you. No pressure and no pitch deck.</p>
-      <div class="actions" style="margin-top:18px"><a class="btn orange" id="calLink" href="mailto:joel.nnamani@bookedjobshq.com?subject=Septic%20pilot%20chat">📅 Book a 15-min chat</a><a class="btn" href="mailto:joel.nnamani@bookedjobshq.com?subject=Septic%20pilot%20question">✉️ Email Joel</a></div>
+      <div class="actions" style="margin-top:18px"><a class="btn orange" id="calLink" href="https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat" target="_blank" rel="noopener">📅 Book a 15-min chat</a><a class="btn" href="mailto:joel.nnamani@bookedjobshq.com?subject=Septic%20pilot%20question">✉️ Email Joel</a></div>
     </div>
     <div class="box">
       <b>What you get in the pilot</b>
       <ul style="padding-left:18px;color:#c8dcd2;margin:10px 0 0">
         <li>Local Facebook and Instagram ads for <span class="town">your area</span></li>
         <li>Quote form built for septic problems</li>
-        <li>Text to every lead in under 60 seconds</li>
-        <li>Instant lead alerts to your phone</li>
+        <li>More homeowners in your towns finding you</li>
+        <li>New customer requests sent to your phone</li>
         <li>Booking with reminders</li>
         <li>Weekly report every Monday</li>
         <li>30 days, then you decide</li>
@@ -568,13 +565,13 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--dim);font-siz
 </section>
 </main>
 
-<footer><div class="wrap">© 2026 Booked Jobs Co. · This page is a demo. Names, phone numbers and figures shown are examples, not real customers or promised results. · <a href="/privacy.html">Privacy</a></div></footer>
+<footer><div class="wrap">© 2026 Booked Jobs Co. · This page is a demo. Names, phone numbers and figures shown are examples, not real customers or promised results. · <a href="/privacy">Privacy</a></div></footer>
 
 <div class="floating"><button id="prevBtn">← Back</button><button id="autoBtn">▶ Auto-play tour</button><button id="nextBtn">Next →</button></div>
 <div class="toast" id="toast"></div>
 <script>
 /* ===== CONFIG: paste your Calendly link here ===== */
-const CAL_URL = 'https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat';
+const CAL_URL = (window.REP && REP.cal) || 'https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat';
 /* ================================================ */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -607,7 +604,7 @@ $('#startBtn').onclick=()=>{
 
 /* ---------- chapter engine ---------- */
 const stages=$$('.stage'); const N=stages.length;
-const names=['We build it','The ad','The 60 seconds','Booked','Weekly report','Your numbers','The 30 days'];
+const names=['We build it','The ad','A new customer','Booked','Weekly report','Your numbers','The 30 days'];
 $('#chips').innerHTML=names.map((n,i)=>`<button class="chip" data-i="${i+1}"><span class="n">${i+1}</span>${n}</button>`).join('');
 $$('.chip').forEach(c=>c.onclick=()=>go(+c.dataset.i,true));
 function go(i,play){
@@ -639,7 +636,7 @@ function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');c
 function resetCh(i){
   if(i===1) $$('#build .task').forEach(t=>{t.classList.remove('on');t.querySelector('.st').textContent='Waiting'});
   if(i===2){ $('#feedInner').style.transform='translateY(0)'; $('#sheet').classList.remove('up'); $('#thanks').classList.remove('on'); $$('.opt').forEach(o=>o.classList.remove('sel')); $('#getQuote').classList.remove('hot'); }
-  if(i===3){ $('#hoThread').innerHTML=''; $('#clock').textContent='0:00'; $('#clockLbl').textContent='Press play. The clock starts when Sarah taps "Send request".'; $$('.notif').forEach(n=>n.classList.remove('on')); $('#callScr').classList.remove('on'); $('#callSay').textContent=''; }
+  if(i===3){ $('#hoThread').innerHTML=''; $('#clock').textContent='NEW'; $('#clockLbl').textContent='Press play to see a brand-new customer reach you.'; $$('.notif').forEach(n=>n.classList.remove('on')); $('#callScr').classList.remove('on'); $('#callSay').textContent=''; }
   if(i===4){ buildCal(); $('#confirm').classList.remove('on'); }
   if(i===5){ $$('.kpi b').forEach(b=>b.textContent=b.dataset.k==='cpb'?'$0':'0'); $$('.fun .bar i').forEach(x=>x.style.width='0'); $('#chart').innerHTML=''; }
   if(i===6) calc();
@@ -679,26 +676,26 @@ async function playAd(id){
 }
 function openSheet(){$('#sheet').classList.add('up')}
 function selOpt(o){$$('.opt').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');state.problem=o.dataset.v;applyNames()}
-function submitForm(){ if(!$('.opt.sel')) selOpt($$('.opt')[0]); $('#thanks').classList.add('on'); toast('Lead captured. Watch what happens in the next 60 seconds →'); }
+function submitForm(){ if(!$('.opt.sel')) selOpt($$('.opt')[0]); $('#thanks').classList.add('on'); toast('She chose you. Watch what happens next →'); }
 $('#getQuote').onclick=()=>{runId++;openSheet()};
 $$('.opt').forEach(o=>o.onclick=()=>selOpt(o));
 $('#submitForm').onclick=()=>submitForm();
 $('#adBtn').onclick=()=>{resetCh(2);runId++;playAd(runId)};
 
-/* ---------- CH3 the 60 seconds ---------- */
+/* ---------- CH3 a new customer finds you ---------- */
 function bubble(txt,cls){const th=$('#hoThread');const b=document.createElement('div');b.className='bub '+cls;b.innerHTML=txt;th.appendChild(b);while(th.scrollHeight>th.clientHeight&&th.children.length>1)th.removeChild(th.firstChild);return b}
 async function typeThen(txt,id){const t=bubble('<i></i><i></i><i></i>','in typing');await sleep(1200);if(!alive(id))return;t.remove();bubble(txt,'in')}
-let clockT; function startClock(id,speed){let s=0;clearInterval(clockT);clockT=setInterval(()=>{if(!alive(id)){clearInterval(clockT);return}s++;$('#clock').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')},1000/speed);return()=>{clearInterval(clockT);return s}}
+let clockT; function startClock(id,speed){let s=0;clearInterval(clockT);clockT=setInterval(()=>{if(!alive(id)){clearInterval(clockT);return}s++},1000/speed);return()=>{clearInterval(clockT);return s}}
 async function playFast(id){
   const T=state.town.split(',')[0], O=owner();
-  $('#clockLbl').textContent='Sarah just tapped "Send request"…';
+  $('#clockLbl').textContent='Sarah, who never heard of you before today, just tapped "Send request"…';
   const stop=startClock(id,4); bubble('Request sent from Facebook form','in'); $('#hoThread').firstChild.className='stamp';
   await sleep(900); if(!alive(id))return;
   $('#n1').classList.add('on'); $('#ownerPhone').classList.add('shake'); setTimeout(()=>$('#ownerPhone').classList.remove('shake'),1100);
   $('#clockLbl').textContent='You get the alert on your phone.';
   await sleep(500); if(!alive(id))return;
-  await typeThen(`Hi Sarah, this is ${state.co}. Got your request about your septic in ${T}. ${O} will call you in the next few minutes. If now's a bad time, just reply with a better time 👍`,id); if(!alive(id))return;
-  $('#clockLbl').textContent='Sarah has a text from you before she even puts her phone down.';
+  await typeThen(`Hi Sarah, this is ${state.co}. Got your request about your septic in ${T}. ${O} will give you a call shortly. If now's a bad time, just reply with a better time 👍`,id); if(!alive(id))return;
+  $('#clockLbl').textContent='Sarah gets a friendly text from your company.';
   await sleep(900); $('#n2').classList.add('on');
   await sleep(1500); if(!alive(id))return;
   bubble("Now is good! It's backing up into the downstairs tub 😩",'out');
@@ -708,7 +705,7 @@ async function playFast(id){
   $('#clockLbl').textContent='You tap "Call Sarah" right from the alert.';
   await sleep(800); if(!alive(id))return;
   await startCall(id);
-  const secs=stop(); $('#clockLbl').innerHTML=`<b style="color:var(--brand2)">Called in ${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}.</b> Most companies take hours, or never call back.`;
+  stop(); $('#clockLbl').innerHTML=`<b style="color:var(--brand2)">A brand-new customer.</b> Not a referral. She found you on her own.`;
 }
 async function startCall(id){
   const scr=$('#callScr'); scr.classList.add('on'); $('#callTimer').textContent='calling…';
@@ -745,7 +742,7 @@ $('#bookBtn').onclick=()=>{resetCh(4);runId++;playBook(runId)};
 function countUp(el,to,pre='',suf='',ms=1300){const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/ms);el.textContent=pre+Math.round(to*(1-Math.pow(1-p,3))).toLocaleString()+suf;if(p<1)requestAnimationFrame(f)})(t0)}
 async function playDash(id){
   const k=k=>$(`[data-k="${k}"]`);
-  countUp(k('leads'),21); countUp(k('fast'),94,'','%'); countUp(k('booked'),9); countUp(k('cpb'),58,'$');
+  countUp(k('leads'),21); countUp(k('fast'),43,'','%'); countUp(k('booked'),9); countUp(k('cpb'),11800,'$');
   const data=[2,3,1,4,5,3,3], max=6, W=500,H=150, bw=46, gap=(W-bw*7)/8;
   const lbl=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   let svg=`<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f39a3d"/><stop offset="1" stop-color="#2f8f6a"/></linearGradient></defs>`;
@@ -758,11 +755,9 @@ $('#dashBtn').onclick=()=>{resetCh(5);runId++;playDash(runId)};
 /* ---------- CH6 calculator ---------- */
 const money=n=>'$'+Math.round(n).toLocaleString();
 function calc(){
-  const bud=+$('#rBud').value,cpl=+$('#rCpl').value,bk=+$('#rBook').value/100,cl=+$('#rClose').value/100,job=+$('#rJob').value;
-  $('#vBud').textContent=money(bud);$('#vCpl').textContent=money(cpl);$('#vBook').textContent=Math.round(bk*100)+'%';$('#vClose').textContent=Math.round(cl*100)+'%';$('#vJob').textContent=money(job);
-  const leads=bud/cpl,visits=leads*bk,jobs=visits*cl,rev=jobs*job;
-  $('#oLeads').textContent=Math.round(leads);$('#oVisits').textContent=Math.round(visits);$('#oJobs').textContent=(Math.round(jobs*10)/10).toString();
-  $('#oRoas').textContent=(rev/bud).toFixed(1)+'x';$('#oRev').textContent=money(rev);
+  const x=+$('#rX').value,job=+$('#rJob').value,rev=x*job;
+  $('#vX').textContent=x;$('#vJob').textContent=money(job);
+  $('#oJobs').textContent=x;$('#oYearJobs').textContent=x*12;$('#oYear').textContent=money(rev*12);$('#oRev').textContent=money(rev);
 }
 $$('.calc input').forEach(i=>i.oninput=calc);
 
