@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/x3d/demo.css">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
 </head>
 <body data-mode="any">
 <canvas id="gl"></canvas>
@@ -27,8 +28,16 @@
     <div class="eyebrow"><i></i> A 3-minute look into your future</div>
     <h1><span id="hCo">Your business</span>,<br><em>30 days from now.</em></h1>
     <p class="lead">Pick your trade, type your company and town, and step into a 3D preview and watch the 30-day pilot play out for your <b id="hTrade">trade</b>: the ad your neighbors see, the text that goes out in under 60 seconds, and the jobs that land on your calendar.</p>
-    <!-- HOOK VIDEO: change hook-fuse to hook-phone to swap videos -->
-    <div class="hookvid"><video src="/media/hook-fuse.mp4" poster="/media/hook-fuse.jpg" controls playsinline preload="none"></video></div>
+    <!-- HOOK VIDEO A/B: files are /media/hook-fuse.* and /media/hook-missed.*; see script below -->
+    <div class="hookvid"><video id="hookVid" controls playsinline preload="none"></video></div>
+    <script>/* HOOK VIDEO A/B: fuse vs missed, 50/50, sticky per visitor, override with ?hv=fuse or ?hv=missed */
+    (function(){var V=["fuse","missed"],hv=null;try{var q=new URLSearchParams(location.search).get("hv");if(V.indexOf(q)>-1)hv=q;}catch(e){}
+    if(!hv){try{hv=localStorage.getItem("bj_hv");}catch(e){}if(V.indexOf(hv)<0){hv=Math.random()<.5?"fuse":"missed";try{localStorage.setItem("bj_hv",hv);}catch(e){}}}
+    document.documentElement.dataset.hv=hv;var v=document.getElementById("hookVid");v.poster="/media/hook-"+hv+".jpg";v.src="/media/hook-"+hv+".mp4";
+    var P="utm_source=demo&utm_medium=try&utm_content=hv-"+hv;
+    function tag(a){if(!a||!a.href||a.href.indexOf("calendly.com")<0||a.href.indexOf("utm_content=")>-1)return;a.href+=(a.href.indexOf("?")<0?"?":"&")+P;}
+    document.addEventListener("click",function(e){tag(e.target.closest&&e.target.closest("a"));},true);
+    function all(){document.querySelectorAll("a[href*=\"calendly.com\"]").forEach(tag);}window.addEventListener("load",all);document.addEventListener("DOMContentLoaded",function(){setTimeout(all,0);});})();</script>
     <form id="who" autocomplete="off">
       <label>Your company<input id="iCo" maxlength="30" placeholder="e.g. Summit Roofing"></label>
       <label>Your town<input id="iTown" maxlength="30" placeholder="e.g. Monroe, NC"></label>
