@@ -176,13 +176,18 @@ function unblock(T, P) {
     if (best < L) C = T.clone().addScaledVector(dir, Math.max(.8, best - .35)); }
   return C;
 }
-// side-on shot of two people facing each other, from whichever side has a clear view (no house in the way)
+// shot of two people facing each other: tries several angles and keeps the one with a clear view (no house or truck in the way)
 function twoShot(A, B) {
   const a = A.root.position.clone().setY(0), b = B.root.position.clone().setY(0); const mid = a.clone().lerp(b, .5); const d = b.clone().sub(a); const len = Math.max(1.5, d.length()); d.normalize();
-  const perp = V(d.z, 0, -d.x), T = mid.clone().add(V(0, 1.15, 0)), dist = 3.2 + len * .9;
-  const clear = sgn => { const C = T.clone().addScaledVector(perp, sgn * dist).add(V(0, .9, 0)); const dir = C.clone().sub(T); const L = dir.length(); dir.normalize(); _ray.set(T, dir); let best = L; (W.boxes || []).forEach(bx => { if (bx.containsPoint(T)) return; if (_ray.intersectBox(bx, _hit)) best = Math.min(best, _hit.distanceTo(T)); }); return best; };
-  const sgn = clear(1) >= clear(-1) ? 1 : -1;
-  return () => [T.clone().addScaledVector(perp, sgn * dist).add(V(0, .9, 0)).addScaledVector(d, .4), T];
+  const T = mid.clone().add(V(0, 1.15, 0)), dist = 3.4 + len * .9, tr = W.truck ? W.truck.position.clone().setY(1.2) : null;
+  const score = C => { const dir = C.clone().sub(T); const L = dir.length(); dir.normalize(); _ray.set(T, dir); let best = L;
+    (W.boxes || []).forEach(bx => { if (bx.containsPoint(T)) return; if (_ray.intersectBox(bx, _hit)) best = Math.min(best, _hit.distanceTo(T)); });
+    let sc = best / L; if (tr) { const k = clamp(tr.clone().sub(T).dot(dir), 0, L); if (T.clone().addScaledVector(dir, k).distanceTo(tr) < 3.2) sc -= 1; } return sc; };
+  let bestC = null, bestS = -9;
+  for (const sgn of [1, -1]) for (const ang of [0, .5, -.5, .9, -.9]) { const perp = V(d.z, 0, -d.x).multiplyScalar(sgn).applyAxisAngle(V(0, 1, 0), ang);
+    const C = T.clone().addScaledVector(perp, dist).add(V(0, .9, 0)); const sc = score(C) - Math.abs(ang) * .08; if (sc > bestS) { bestS = sc; bestC = C; } }
+  if (bestS < .9) bestC.add(V(0, 2.2, 0));
+  return () => [bestC.clone(), T];
 }
 let drag = null;
 canvas.addEventListener('pointerdown', e => { if (mode !== 'story') return; drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); $('#hint').style.opacity = 0; });
