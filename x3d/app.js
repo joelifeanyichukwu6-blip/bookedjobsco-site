@@ -179,7 +179,7 @@ function unblock(T, P) {
 // shot of two people facing each other: tries several angles and keeps the one with a clear view (no house or truck in the way)
 function twoShot(A, B) {
   const a = A.root.position.clone().setY(0), b = B.root.position.clone().setY(0); const mid = a.clone().lerp(b, .5); const d = b.clone().sub(a); const len = Math.max(1.5, d.length()); d.normalize();
-  const T = mid.clone().add(V(0, 1.15, 0)), dist = 3.4 + len * .9, tr = W.truck ? W.truck.position.clone().setY(1.2) : null;
+  const T = mid.clone().add(V(0, 1.15, 0)), dist = (3.4 + len * .9) * (camera.aspect < .8 ? 1.9 : 1), tr = W.truck ? W.truck.position.clone().setY(1.2) : null;
   const score = C => { const dir = C.clone().sub(T); const L = dir.length(); dir.normalize(); _ray.set(T, dir); let best = L;
     (W.boxes || []).forEach(bx => { if (bx.containsPoint(T)) return; if (_ray.intersectBox(bx, _hit)) best = Math.min(best, _hit.distanceTo(T)); });
     let sc = best / L; if (tr) { const k = clamp(tr.clone().sub(T).dot(dir), 0, L); if (T.clone().addScaledVector(dir, k).distanceTo(tr) < 3.2) sc -= 1; } return sc; };
