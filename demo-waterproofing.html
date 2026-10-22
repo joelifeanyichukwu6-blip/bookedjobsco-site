@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" data-rep-default="wisdom">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Your Waterproofing Business, 30 Days From Now | Booked Jobs Co.</title>
+<meta name="description" content="A 3-minute 3D look at your basement waterproofing business 30 days from now: the ad homeowners see, new customers who find you, and extra jobs on top of your referrals.">
+<meta property="og:title" content="This is your waterproofing business, 30 days from now">
+<meta property="og:description" content="Step into a 3D preview of the 30-day waterproofing pilot.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/x3d/demo.css?v=6">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#1f4e3d">
+<script src="/rep.js"></script></head>
+<body data-niche="waterproofing">
+<canvas id="gl"></canvas>
+<div id="veil"></div>
+
+<!-- ================= LANDING ================= -->
+<div id="landing">
+  <header class="nav">
+    <a class="logo" href="/">Booked Jobs <b>Co.</b></a>
+    <nav><a href="#stops">What you'll see</a><a href="#how">How the pilot works</a><a href="#faq">FAQ</a></nav>
+    <a class="pill-btn book" href="#" target="_blank" rel="noopener">Book a call</a>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><i></i> A 3-minute look into your future</div>
+    <h1><span id="hCo">Your company</span>,<br><em>30 days from now.</em></h1>
+    <p class="lead">Step into a 3D preview of your town and watch the 30-day basement waterproofing pilot play out: the ad your neighbors see, homeowners who never heard of you finding you, and extra jobs on top of your referrals filling your calendar.</p>
+    <!-- HOOK VIDEO A/B: files are /media/hook-fuse.* and /media/hook-missed.*; see script below -->
+    <div class="hookvid"><video id="hookVid" controls playsinline preload="none"></video></div>
+    <script>/* HOOK VIDEO A/B: fuse vs missed, 50/50, sticky per visitor, override with ?hv=fuse or ?hv=missed */
+    (function(){var V=["fuse","missed"],hv=null;try{var q=new URLSearchParams(location.search).get("hv");if(V.indexOf(q)>-1)hv=q;}catch(e){}
+    if(!hv){try{hv=localStorage.getItem("bj_hv");}catch(e){}if(V.indexOf(hv)<0){hv=Math.random()<.5?"fuse":"missed";try{localStorage.setItem("bj_hv",hv);}catch(e){}}}
+    document.documentElement.dataset.hv=hv;var v=document.getElementById("hookVid");v.poster="/media/hook-"+hv+".jpg?v=4";v.src="/media/hook-"+hv+".mp4?v=4";
+    var P="utm_source=demo&utm_medium=demo&utm_content=hv-"+hv;
+    function tag(a){if(!a||!a.href||a.href.indexOf("calendly.com")<0||a.href.indexOf("utm_content=")>-1)return;a.href+=(a.href.indexOf("?")<0?"?":"&")+P;}
+    document.addEventListener("click",function(e){tag(e.target.closest&&e.target.closest("a"));},true);
+    function all(){document.querySelectorAll("a[href*=\"calendly.com\"]").forEach(tag);}window.addEventListener("load",all);document.addEventListener("DOMContentLoaded",function(){setTimeout(all,0);});})();</script>
+    <form id="who" autocomplete="off">
+      <label>Your company<input id="iCo" maxlength="30" placeholder="e.g. DryPro Basements"></label>
+      <label>Your town<input id="iTown" maxlength="30" placeholder="e.g. Monroe, NC"></label>
+      <label class="anyonly">Your trade<select id="iNiche"></select></label>
+      <label class="anyonly">Country<select id="iCountry"></select></label>
+    </form>
+    <div class="start-wrap">
+      <button id="start" class="start" type="button"><span class="ring"></span><span class="ring r2"></span><b>Start the demo</b><small>Sound on · 3 min</small></button>
+    </div>
+    <div class="area-lock"><b>One waterproofing company per area.</b> Once a waterproofing company in <span data-town="your area" data-live-town>your area</span> says yes, that area is taken and I move on to the next town.</div>
+    <div class="fine">Nothing you type is saved or sent. Works on your phone too.</div>
+    <div class="scroll-cue">Scroll to see what's inside ↓</div>
+  </section>
+
+  <section class="band" id="stops">
+    <div class="wrap">
+      <div class="kicker">What you'll see</div>
+      <h2>Eight stops. One booked job. Your whole month.</h2>
+      <div class="stops">
+        <article><span>01</span><h3>The problem</h3><p>A homeowner in your town smells damp in the basement again, and sees water pooling by the house at 7:38 PM.</p></article>
+        <article><span>02</span><h3>Your ad</h3><p>She's never heard of you. She opens Facebook and sees your company. You tap the ad yourself.</p></article>
+        <article><span>03</span><h3>The lead</h3><p>Her request flies across town and lands on your phone.</p></article>
+        <article><span>04</span><h3>A brand-new customer</h3><p>Not a referral, not a repeat. Someone who never knew your name just reached out to you.</p></article>
+        <article><span>05</span><h3>Booked</h3><p>You drag her job onto your calendar. No phone tag.</p></article>
+        <article><span>06</span><h3>The job</h3><p>Sunrise. Your truck rolls out and the job gets done.</p></article>
+        <article><span>07</span><h3>Friday report</h3><p>New people who reached out, booked jobs and revenue, in plain English.</p></article>
+        <article><span>08</span><h3>Day 30</h3><p>Extra jobs and extra revenue on top of your referrals. You decide. No long contract.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="how">
+    <div class="wrap two">
+      <div>
+        <div class="kicker">How the pilot works</div>
+        <h2>We do the setup. You do the jobs.</h2>
+        <p class="muted">Most waterproofing companies get their work from word of mouth and referrals. That's great, but it only reaches people who already know you. The pilot puts your name in front of homeowners in your towns who have never heard of you.</p>
+      </div>
+      <ol class="steps">
+        <li><b>Free test first:</b> 1 to 2 weeks where we try to get you 2 or 3 extra jobs. No setup fee, and you don't pay us anything for the test.</li>
+        <li><b>Week 1:</b> You tell us your towns and prices. We build the ads, the form and your booking calendar.</li>
+        <li><b>Weeks 2 to 4:</b> Ads run only in your towns, so homeowners who never heard of you can find you. Their requests come straight to you and go on your calendar.</li>
+        <li><b>Every Friday:</b> A plain-English report. New people who reached out, booked jobs and revenue.</li>
+        <li><b>Your area stays yours:</b> One waterproofing company per area. I never run ads for two competitors in the same towns.</li>
+        <li><b>Day 30:</b> You judge it on booked jobs. Keep going or walk away. No long contract.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap narrow">
+      <div class="kicker">Straight answers</div>
+      <h2>Questions owners ask</h2>
+      <details><summary>Are the numbers in the demo real?</summary><p>No. Names and numbers in the demo are examples to show how it works. Your real results depend on your area and your prices. That's why we start with a free test.</p></details>
+      <details><summary>Do I need to learn any software?</summary><p>No. You get texts and calls like you do now, plus a calendar link and a weekly report by email.</p></details>
+      <details><summary>I already get work from word of mouth. Why would I need this?</summary><p>You don't replace it. Referrals only reach people who already know you. This adds new customers on top, people who would never have heard your name otherwise.</p></details>
+      <details><summary>What does the free test cost?</summary><p>No setup fee, and you don't pay us anything for the test. We go over the details on a quick call.</p></details>
+      <details><summary>Do you work with my competitors?</summary><p>No. I only work with one waterproofing company per area. Once a company in a town says yes, that area is taken and I move on to the next one. So if you want it, claim your area first.</p></details>
+      <details><summary>What if it doesn't work?</summary><p>No long contract. After the test, and again after 30 days, you look at the booked jobs and decide.</p></details>
+    </div>
+  </section>
+
+  <section class="band final">
+    <div class="wrap narrow center">
+      <h2>See it before you decide.</h2>
+      <p class="muted">Three minutes. No signup.</p>
+      <p class="area-final">One waterproofing company per area. Claim <span data-town="your area" data-live-town>your area</span> before someone else does.</p>
+      <div class="ctas"><button class="pill-btn big" type="button" data-start>Start the demo</button><a class="pill-btn ghost big book" href="#" target="_blank" rel="noopener">Book a call</a></div>
+    </div>
+  </section>
+  <footer>© 2026 Booked Jobs Co. · <a href="/privacy">Privacy</a> · <a href="/">Home</a></footer>
+</div>
+
+<!-- ================= PORTAL + WARP HUD ================= -->
+<div id="portal"></div>
+<div id="warpHud"><div class="wl">TRAVELLING INTO YOUR FUTURE</div><div id="wDate">Today</div><div id="wDay">DAY 0</div><div class="wbar"><i id="wFill"></i></div></div>
+<div id="flash"></div>
+<div id="blackout"></div>
+<div id="dip"></div>
+
+<!-- ================= STORY UI ================= -->
+<div id="story">
+  <header class="sbar">
+    <a class="logo" href="/demo">Booked Jobs <b>Co.</b></a>
+    <div class="dots" id="dots"></div>
+    <div class="sright"><button class="icon" id="mute" aria-label="Sound">♪</button><a class="pill-btn book sm" href="#" target="_blank" rel="noopener">Book a call</a><button class="icon" id="exit" aria-label="Exit demo" title="Exit">✕</button></div>
+  </header>
+  <div class="caption" id="caption">
+    <div class="cmeta" id="cMeta"></div>
+    <div class="ctext" id="cText"></div>
+    <div class="cctl">
+      <button id="bPrev" aria-label="Previous scene">◀</button>
+      <button id="bPlay" aria-label="Pause">❚❚</button>
+      <button id="bNext" class="go">Next scene ▶</button>
+    </div>
+  </div>
+  <div id="prompt"></div>
+  <div id="timer"><small>SINCE SARAH HIT SEND</small><b id="tClock">0:00</b></div>
+  <div id="sms"></div>
+  <div id="hint">Drag to look around</div>
+</div>
+
+<!-- phone overlay (scene 2) -->
+<div id="phoneUI" aria-hidden="true">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="pScreen"></div>
+  </div>
+  <div class="ptip" id="pTip">Tap the ad, like Sarah would.</div>
+</div>
+
+<div id="panel"></div>
+<div id="endcard"></div>
+<div id="loader" class="gone"><div class="lspin"></div><div>Building your town…</div></div>
+<script>document.addEventListener("click",function(e){if(e.target.closest("#start,[data-start]"))document.querySelectorAll(".hookvid video").forEach(function(v){v.pause()})},true)</script>
+<script>(function(){function up(){var i=document.getElementById('iTown');var v=(i&&i.value||'').split(',')[0].trim().slice(0,30)||(window.REP&&REP.town)||'your area';document.querySelectorAll('[data-live-town]').forEach(function(e){e.textContent=v});}document.addEventListener('input',function(e){if(e.target&&e.target.id==='iTown')up()});window.addEventListener('load',function(){setTimeout(up,50)});})();</script>
+<script type="module" src="/x3d/app.bundle.js?v=16"></script>
+</body>
+</html>

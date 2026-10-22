@@ -3,6 +3,15 @@
   "rewrites": [
     { "source": "/vera", "destination": "/" },
     { "source": "/vera/", "destination": "/" },
-    { "source": "/vera/:page", "destination": "/:page" }
+    { "source": "/vera/:page", "destination": "/:page" },
+    { "source": "/wisdom", "destination": "/waterproofing" },
+    { "source": "/wisdom/", "destination": "/waterproofing" },
+    { "source": "/wisdom/demo", "destination": "/demo-waterproofing" },
+    { "source": "/wisdom/meet", "destination": "/meet-waterproofing" },
+    { "source": "/wisdom/meet-waterproofing", "destination": "/meet-waterproofing" },
+    { "source": "/wisdom/demo-waterproofing", "destination": "/demo-waterproofing" },
+    { "source": "/wisdom/waterproofing", "destination": "/waterproofing" },
+    { "source": "/wisdom/privacy", "destination": "/privacy" },
+    { "source": "/wisdom/:page", "destination": "/waterproofing" }
   ]
 }

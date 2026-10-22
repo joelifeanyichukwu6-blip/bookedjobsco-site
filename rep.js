@@ -1,16 +1,18 @@
 /* Booked Jobs Co. sales rep switch.
-   /vera/... (or ?rep=vera) shows Vera's calendar, name and keeps links inside /vera.
+   /vera/... and /wisdom/... (or ?rep=vera / ?rep=wisdom) show that rep's calendar, name and keeps links inside /vera.
    Default is Joel. Load this in <head> before other scripts. */
 (function () {
   var JOEL = { key: 'joel', name: 'Joel', cal: 'https://calendly.com/joel-nnamani-bookedjobshq/pilot-chat', email: 'joel.nnamani@bookedjobshq.com', base: '' };
   var REPS = {
-    vera: { key: 'vera', name: 'Vera', cal: 'https://calendly.com/omonyevera/job-call-with-vera', email: '', base: '/vera' }
+    vera: { key: 'vera', name: 'Vera', cal: 'https://calendly.com/omonyevera/job-call-with-vera', email: '', base: '/vera' },
+    wisdom: { key: 'wisdom', name: 'Wisdom', cal: 'https://calendly.com/wvemofficial/30min', email: '', base: '/wisdom', niche: 'waterproofing', mins: 30 }
   };
   var k = '';
   try {
-    var m = location.pathname.match(/^\/(vera)(\/|$)/);
+    var m = location.pathname.match(/^\/(vera|wisdom)(\/|$)/);
     if (m) k = m[1];
     else { var q = new URLSearchParams(location.search).get('rep'); if (q && REPS[q]) k = q; }
+    if (!k) { var d = document.documentElement.getAttribute('data-rep-default'); if (d && REPS[d]) k = d; }
   } catch (e) { }
   var R = window.REP = REPS[k] || JOEL;
   var de = document.documentElement;
