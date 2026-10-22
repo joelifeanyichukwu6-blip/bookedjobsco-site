@@ -156,12 +156,12 @@ export const VOICE_LINES = {
   g_52: 'That\'s how your calendar fills up. New homeowners finding you, on top of your referrals, every single week.',
   g_drag: 'On the call, you pick a time together. Drag Sarah\'s job onto your calendar.',
   g_booked: 'Booked. She gets a confirmation text right away.',
-  g_morning: 'Thursday morning. You head out.',
+  g_morning: 'Job day. You head out.',
   g_truck: 'Your name on the side, rolling through town.',
   g_ontime: 'Right on time. Sarah sees you pull up.',
   g_done: 'Job done. And Sarah now has a company she\'ll call again, and tell her neighbors about.',
   g_report: 'Every Friday, a plain-English report lands in your inbox. New customers, booked jobs, and what they\'re worth. These are example numbers.',
   g_day30: 'Thirty days later. Every light is a booked job from someone who found you on Facebook. People who had never heard your name.',
-  g_final: 'This could be your next thirty days. Extra jobs on top of your referrals, and more money coming in. Keep going, or walk away. Your call.',
+  g_final: 'This could be your next thirty days. Extra jobs on top of your referrals, and more money coming in. And I only work with one company per area, so the first to say yes gets it. Your call.',
 };
 for (const k in NICHES) { VOICE_LINES['p_' + k] = NICHES[k].problem; VOICE_LINES['w_' + k] = NICHES[k].work_line; }

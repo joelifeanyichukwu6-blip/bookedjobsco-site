@@ -17,9 +17,11 @@ const ANY = document.body.dataset.mode === 'any';
 /* ---------- personalization: company, town, trade, country ---------- */
 const qs = new URLSearchParams(location.search);
 let CO = (qs.get('co') || '').trim().slice(0, 30), TOWN = (qs.get('town') || '').trim().slice(0, 30);
-let NK = NICHES[qs.get('niche')] ? qs.get('niche') : 'septic', CK = COUNTRIES[qs.get('country')] ? qs.get('country') : 'us';
+const DEF_NK = NICHES[document.body.dataset.niche] ? document.body.dataset.niche : 'septic';
+let NK = NICHES[qs.get('niche')] ? qs.get('niche') : DEF_NK, CK = COUNTRIES[qs.get('country')] ? qs.get('country') : 'us';
 const N = () => NICHES[NK], C = () => COUNTRIES[CK];
 const co = () => CO || (NK === 'septic' ? 'Laney Septic' : 'Your Company'), town = () => TOWN || C().town, townShort = () => town().split(',')[0];
+const aan = w => (/^(hvac|[aeiou])/i.test(w) ? 'an ' : 'a ') + w;
 const money = v => C().sym + Math.round(v).toLocaleString('en-US');
 const nice = v => { const p = Math.pow(10, Math.max(0, Math.floor(Math.log10(Math.max(1, v))) - 1)); return Math.round(v / p) * p; };
 // landing form
@@ -34,7 +36,13 @@ const TODAY = new Date();
 const fmt = d => d.toLocaleDateString(C().locale === 'en-US' || C().locale === 'en-CA' ? 'en-US' : 'en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
 const START = new Date(TODAY); START.setDate(START.getDate() + 3);
 const dayDate = n => { const d = new Date(START); d.setDate(d.getDate() + n); return d; };
-const shareUrl = () => { const u = new URL(location.origin + (REP.base || '') + (ANY ? '/try' : '/demo')); if (CO) u.searchParams.set('co', CO); if (TOWN) u.searchParams.set('town', TOWN); if (ANY || NK !== 'septic') u.searchParams.set('niche', NK); if (CK !== 'us') u.searchParams.set('country', CK); return u.toString(); };
+// next week's Mon..Fri (the calendar in scene 5), and the slot Sarah ends up booked into
+const NEXT_MON = (() => { const d = new Date(START); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return d; })();
+const weekDay = c => { const d = new Date(NEXT_MON); d.setDate(d.getDate() + c); return d; };
+const SLOT_H = [8, 10, 13, 15]; let PICK = { c: 3, r: 1 };
+const hm = (h, m) => { const H = ((h + 11) % 12) + 1; return `${H}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; };
+const slotT = (dm) => { let t = SLOT_H[PICK.r] * 60 + dm; return hm(Math.floor(t / 60), t % 60); };
+const shareUrl = () => { const u = new URL(location.origin + (REP.base || '') + (ANY ? '/try' : '/demo')); if (CO) u.searchParams.set('co', CO); if (TOWN) u.searchParams.set('town', TOWN); if (ANY || NK !== DEF_NK) u.searchParams.set('niche', NK); if (CK !== 'us') u.searchParams.set('country', CK); return u.toString(); };
 
 /* ---------- audio: sound effects + pre-recorded narrator ---------- */
 let AC = null, muted = false;
@@ -55,8 +63,8 @@ const sfx = {
   tick() { tone(1900, .03, 'square', .02); },
 };
 let voiceMap = null, voiceBuf = null, voiceRaw = null, voiceSrc = null, voiceGain = null;
-fetch('/x3d/assets/voice.json?v=3').then(r => r.json()).then(j => voiceMap = j).catch(() => { });
-fetch('/x3d/assets/voice.mp3?v=3').then(r => r.arrayBuffer()).then(b => { voiceRaw = b; decodeVoice(); }).catch(() => { });
+fetch('/x3d/assets/voice.json?v=4').then(r => r.json()).then(j => voiceMap = j).catch(() => { });
+fetch('/x3d/assets/voice.mp3?v=4').then(r => r.arrayBuffer()).then(b => { voiceRaw = b; decodeVoice(); }).catch(() => { });
 function decodeVoice() { const a = AC; if (!a || !voiceRaw || voiceBuf) return; a.decodeAudioData(voiceRaw.slice(0)).then(b => voiceBuf = b).catch(() => { }); }
 function stopVoice() { try { voiceSrc && voiceSrc.stop(); } catch (e) { } voiceSrc = null; try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) { } }
 // plays a narration line; returns its length in ms (0 when silent)
@@ -167,6 +175,14 @@ function unblock(T, P) {
     W.boxes.forEach(b => { if (b.containsPoint(T)) return; if (_ray.intersectBox(b, _hit)) { const d = _hit.distanceTo(T); if (d < best) best = d; } });
     if (best < L) C = T.clone().addScaledVector(dir, Math.max(.8, best - .35)); }
   return C;
+}
+// side-on shot of two people facing each other, from whichever side has a clear view (no house in the way)
+function twoShot(A, B) {
+  const a = A.root.position.clone().setY(0), b = B.root.position.clone().setY(0); const mid = a.clone().lerp(b, .5); const d = b.clone().sub(a); const len = Math.max(1.5, d.length()); d.normalize();
+  const perp = V(d.z, 0, -d.x), T = mid.clone().add(V(0, 1.15, 0)), dist = 3.2 + len * .9;
+  const clear = sgn => { const C = T.clone().addScaledVector(perp, sgn * dist).add(V(0, .9, 0)); const dir = C.clone().sub(T); const L = dir.length(); dir.normalize(); _ray.set(T, dir); let best = L; (W.boxes || []).forEach(bx => { if (bx.containsPoint(T)) return; if (_ray.intersectBox(bx, _hit)) best = Math.min(best, _hit.distanceTo(T)); }); return best; };
+  const sgn = clear(1) >= clear(-1) ? 1 : -1;
+  return () => [T.clone().addScaledVector(perp, sgn * dist).add(V(0, .9, 0)).addScaledVector(d, .4), T];
 }
 let drag = null;
 canvas.addEventListener('pointerdown', e => { if (mode !== 'story') return; drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); $('#hint').style.opacity = 0; });
@@ -361,7 +377,7 @@ async function scene5(id) {
   setShot(u => { const a = 2.2 + u * .5; return [V(-20 + Math.cos(a) * 70, 34, 10 + Math.sin(a) * 70), V(10, 0, 0)]; }, 16, { linear: true });
   say('7:44 PM · On the call', `You pick a time together. Drag Sarah's job onto your calendar.`, 'g_drag');
   if (!await wait(1400, id)) return;
-  const days = [1, 2, 3, 4, 5].map(n => dayDate(n + 2)); const times = ['8 AM', '10 AM', '1 PM', '3 PM'];
+  const days = [0, 1, 2, 3, 4].map(weekDay); const times = ['8 AM', '10 AM', '1 PM', '3 PM'];
   const names = ['Ellis', 'Park St', 'Gray', 'Webb', 'Diaz', 'Cole', 'Hwy 74', 'Reyes', 'Patel'];
   const keys = ['0,0', '0,2', '1,1', '2,0', '2,3', '3,0', '4,1', '4,2', '1,3'], busy = {}; keys.forEach((k, i) => busy[k] = `${N().busy[i]} · ${names[i]}`);
   let html = `<h3>Your calendar · next week</h3><div class="sub">Busy slots are already blocked. Example jobs.</div>
@@ -370,7 +386,7 @@ async function scene5(id) {
   times.forEach((t, r) => { html += `<div class="tm">${t}</div>`; for (let c = 0; c < 5; c++) { const k = c + ',' + r; html += busy[k] ? `<div class="slot busy">${esc(busy[k])}</div>` : `<div class="slot open" data-k="${k}">open</div>`; } });
   html += '</div>'; panel(html);
   const picked = await dragJob(id, auto ? Math.max(3600, voiceEnd - performance.now() + 500) : 0); if (!alive(id) || !picked) return;
-  const [c, r] = picked.dataset.k.split(',').map(Number); const when = `${days[c].toLocaleDateString('en-US', { weekday: 'long' })} ${times[r].replace(' ', ':00 ')}`;
+  const [c, r] = picked.dataset.k.split(',').map(Number); PICK = { c, r }; const when = `${days[c].toLocaleDateString('en-US', { weekday: 'long' })} ${times[r].replace(' ', ':00 ')}`;
   picked.classList.add('booked'); picked.textContent = 'Sarah M. ✓'; sfx.chime();
   say('Booked', `Booked for ${when}. She gets a confirmation text right away.`, 'g_booked');
   if (!await wait(1300, id)) return; panel('');
@@ -397,22 +413,22 @@ function dragJob(id, autoMs) {
 
 async function scene6(id) {
   eng.setTOD('dawn'); eng.setTOD('day', 9); const S = W.people.sarah, O = W.people.owner, E = extras; W.noTraffic = true;
-  const when = dayDate(5); const work = N().work, sp = V(prop.spot[0], 0, prop.spot[1]), wk = V(prop.work[0], 0, prop.work[1]), lk = V(...prop.look);
-  say(`${fmt(when)} · 9:48 AM`, 'Thursday morning. You head out.', 'g_morning');
+  const when = weekDay(PICK.c); const work = N().work, sp = V(prop.spot[0], 0, prop.spot[1]), wk = V(prop.work[0], 0, prop.work[1]), lk = V(...prop.look);
+  say(`${fmt(when)} · ${slotT(-12)}`, 'Job day. You head out.', 'g_morning');
   O.root.visible = false; sfx.engine(6.5); truckDrive = 1; W.truck.setLights(true);
   setShot(() => { const t = W.truck, f = V(Math.cos(t.rotation.y), 0, -Math.sin(t.rotation.y)); const side = V(-f.z, 0, f.x);
     return [t.position.clone().addScaledVector(f, -13).addScaledVector(side, C().leftDrive ? 6 : -6).add(V(0, 7.5, 0)), t.position.clone().addScaledVector(f, 6).add(V(0, 1.5, 0))]; }, 1);
   await waitV(1200, id); if (!alive(id)) return;
-  say(`${fmt(when)} · 9:52 AM`, `Your name on the side, rolling through ${townShort()}.`, 'g_truck');
+  say(`${fmt(when)} · ${slotT(-8)}`, `Your name on the side, rolling through ${townShort()}.`, 'g_truck');
   if (!await waitV(1800, id)) return;
   // jump ahead: low roadside shot as the truck rolls into Sarah's street
   if (truckU < .7) { placeTruck(.7); const lz = C().leftDrive ? 1 : -1;
-    setShot(() => [V(-4, 1.3, lz > 0 ? -7.2 : 7.2), W.truck.position.clone().add(V(0, 1.6, 0))], 1, { cut: true, fov: 34 }); }
+    setShot(() => [V(-4, 1.4, lz > 0 ? -9.6 : 9.6), W.truck.position.clone().add(V(0, 1.6, 0))], 1, { cut: true, fov: 34 }); }
   while (alive(id) && truckU < TRUCK_END_U) await wait(150, id); if (!alive(id)) return;
   truckDrive = 0; W.truck.setLights(false);
   setShot(fly([-6, 6, 14], [-18, 1.5, 4], [-4, 8, 18], [-14, 1, 14]), 3);
   await waitV(200, id); if (!alive(id)) return;
-  say('10:00 AM sharp', 'Right on time. Sarah sees you pull up.', 'g_ontime');
+  say(`${slotT(0)} sharp`, 'Right on time. Sarah sees you pull up.', 'g_ontime');
   O.root.visible = true; O.root.position.set(-16.5, 0, 5.4); O.set('idle'); O.setMood('smile');
   const st = sarahStart(); S.root.visible = true; S.root.position.copy(st.p); S.yaw = S.yawTarget = st.yaw;
   const sw = prop.front ? V(-21.5, 0, 12.8) : sp.clone().add(V(1.6, 0, 1.2));
@@ -441,12 +457,12 @@ async function scene6(id) {
     setShot(fly(prop.ins, [lk.x, Math.max(.6, lk.y), lk.z], [prop.ins[0] * .98 + wk.x * .02, prop.ins[1] * .9, prop.ins[2] * .98 + wk.z * .02], [lk.x, Math.max(.6, lk.y), lk.z]), 6, { shake: 1 }); }
   if (!alive(id)) return;
   fixGoal = 1;
-  say('10:06 AM', N().work_line, 'w_' + NK);
+  say(slotT(6), N().work_line, 'w_' + NK);
   if (!await waitV(4300, id)) return;
   if (prop.ladder) { O.set('climb'); const y0 = performance.now(); while (alive(id) && performance.now() - y0 < 1600) { O.root.position.y = Math.max(0, prop.ladder.top * (1 - (performance.now() - y0) / 1600)); await wait(40, id); } O.root.position.y = 0; }
   O.set('idle'); O.face(sw.x, sw.z); O.setMood('happy'); show(E.booked, 1); sfx.chime();
-  setShot(closeUp(S, 3.2, .9, 1.7, 1.45), 4, { cut: true, shake: 1 });
-  say('10:41 AM', `Job done. And Sarah now has a ${N().trade} company she'll call again, and tell her neighbors about.`, 'g_done');
+  setShot(twoShot(O, S), 4, { cut: true, shake: 1, fov: 38 });
+  say(slotT(41), `Job done. And Sarah now has ${aan(N().trade)} company she'll call again, and tell her neighbors about.`, 'g_done');
   return await waitV(4200, id);
 }
 
@@ -479,8 +495,8 @@ async function scene8(id) {
    <div class="roi"><div><label>Extra jobs a month <b id="rb"></b></label><input type="range" id="rB" min="1" max="15" step="1" value="4"><label>Average job value <b id="rj"></b></label><input type="range" id="rJ" min="${nice(j0 * .3)}" max="${nice(j0 * 3)}" step="${nice(j0 * .05)}" value="${j0}"></div>
    <div class="out"><div><b id="oV">0</b><span>extra jobs a year</span></div><div><b id="oJ">0</b><span>extra a month</span></div><div><b id="oR">0</b><span>extra a year</span></div></div></div>
    <div class="ex">Example math only, on top of your referrals. Not a promise. Real results depend on your area and your prices.</div>
-   <div class="arealock"><b>One ${esc(N().trade)} company per area.</b> Once a ${esc(N().trade)} company in ${esc(TOWN ? townShort() : 'your area')} says yes, that area is taken. Claim ${esc(TOWN ? townShort() : 'your area')} before someone else does.</div>
-   <div class="ctas"><a class="pill-btn big" href="${CAL}" target="_blank" rel="noopener">${TOWN ? 'Claim ' + esc(townShort()) + ': book' : 'Book'} a 15-min call</a><button class="pill-btn ghost big" id="replay">↺ Watch again</button><button class="pill-btn ghost big" id="copy">Copy this demo link</button></div>`);
+   <div class="arealock"><b>One ${esc(N().trade)} company per area.</b> Once ${esc(aan(N().trade))} company in ${esc(TOWN ? townShort() : 'your area')} says yes, that area is taken. Claim ${esc(TOWN ? townShort() : 'your area')} before someone else does.</div>
+   <div class="ctas"><a class="pill-btn big" href="${CAL}" target="_blank" rel="noopener">${TOWN ? 'Claim ' + esc(townShort()) + ': book' : 'Book'} ${REP.mins ? 'a call' : 'a 15-min call'}</a><button class="pill-btn ghost big" id="replay">↺ Watch again</button><button class="pill-btn ghost big" id="copy">Copy this demo link</button></div>`);
   const roi = () => { const x = +$('#rB').value, j = +$('#rJ').value; $('#rb').textContent = x; $('#rj').textContent = money(j); $('#oV').textContent = x * 12; $('#oJ').textContent = money(nice(x * j)); $('#oR').textContent = money(nice(x * j * 12)); };
   $('#rB').oninput = roi; $('#rJ').oninput = roi; roi();
   waitV(300, id).then(ok => { if (ok) $('#caption').classList.add('quiet'); });
